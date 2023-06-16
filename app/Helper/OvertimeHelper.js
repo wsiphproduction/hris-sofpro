@@ -1,0 +1,333 @@
+const $env 	= require('dotenv').config();
+const moment= require('moment-timezone');
+	moment.tz.setDefault($env.parsed.moment_timezone);
+const NightDiffHelper = require('./NightDiffHelper');
+const {
+	sequelize,
+	Op,
+	ShiftsModel,
+	ShiftType,
+	BiometricLog,
+	UsersModel,
+	BiometricNumberModel,
+	BiometricModel,
+	OvertimesModel
+} = require('../../config/Sequelize');
+
+function OvertimeHelper(){
+
+	this.process = function(target_date = null,overtime_id = null,ot_id=null){
+		console.log("Proccessing Overtime Helper")
+		let date = null;
+		let END_DATE = null;
+		let DATE_DIFF_TO = $env.parsed.DATE_DIFF_TO ? $env.parsed.DATE_DIFF_TO : 1;
+
+		if(target_date != null) {
+			if(Array.isArray(target_date)) { 
+				date 			= target_date[0];
+				END_DATE		= target_date.pop();
+			} else {
+				date 			= target_date;
+				END_DATE 		= target_date;
+			}
+		} else {
+			let DATE_DIFF = $env.parsed.DATE_DIFF ? $env.parsed.DATE_DIFF : 5;
+
+			date = moment().subtract(DATE_DIFF,'days').format('YYYY-MM-DD');
+			END_DATE = moment().subtract(Number(DATE_DIFF)-Number(DATE_DIFF_TO),'days').format('YYYY-MM-DD');
+		}
+
+		console.log(date + " --- " + END_DATE);
+
+
+		// CHANGE WHERE STATUS IF FROM APPROVAL FOR AUTOMATIC PROCESSING
+		let where = {
+			start_date:{
+				[Op.gte]: date,
+				[Op.lte]: END_DATE
+			},
+			// [Op.or]: [
+			// 	{
+			// 		actual_check_in: {
+			// 			[Op.eq]: null
+			// 		}
+			// 	},
+			// 	{
+			// 		actual_check_out: {
+			// 			[Op.eq]: null
+			// 		}
+			// 	}
+			// ]
+				
+		};
+
+		if(overtime_id){
+			where= {
+				id: overtime_id,
+			};
+		}
+		if(ot_id){
+			console.log("REPROCESS WITH OT");
+			where= {
+				id: {[Op.in]:ot_id}
+			};
+		}
+
+		OvertimesModel.findAll({
+			where:where,
+			include:[
+				{
+					model: UsersModel,
+					as: 'applicant',
+					attributes: ['id','first_name','last_name'],
+					include: [
+						{
+							model: BiometricNumberModel,
+							as: 'biometric_number',
+							attributes: ['id','biometric_id','biometric_number'],
+							separate: true,
+							include: [
+								{
+									model: BiometricModel
+								}
+							]
+						}
+					]
+				}
+			],
+			raw: false,
+			// logging: true
+		}).then(data=>{
+			overtime = data;
+			if(overtime && overtime.length){
+				for(let i in overtime){
+					this.proccess_overtime(overtime[i]);
+				}
+			}
+		});
+	}
+
+	this.proccess_overtime = function(obj, shift){
+		// console.log(obj);
+		try {
+			if(typeof obj.id != 'undefined'){
+				// let shiftIN = shift ? shift.date +' '+ moment(shift.check_in).utc().format('HH:mm:ss'): null;
+				// let shiftOUT = shift ? shift.date +' '+ moment(shift.check_out).utc().format('HH:mm:ss'): null;
+					// shiftOUT = shiftIN > shiftOUT ? moment(shiftOUT).add(1,'days').format('YYYY-MM-DD HH:mm:ss') : shiftOUT;
+				let shift_id = obj.id;
+				let shifts = obj.shift_id;
+				let date = obj.start_date;
+				let check_in = moment(obj.start_time).utc().format('HH:mm:ss');
+				let check_out = moment(obj.end_time).utc().format('HH:mm:ss');
+				let actual_check_in = obj.actual_check_in;
+				let actual_check_out = obj.actual_check_out;
+				let break_hours = obj.break_hours ? obj.break_hours : 0;
+				// return new Promise( async( resolve, reject )=>{
+				if(obj.applicant && obj.applicant.biometric_number){
+					let biometric_number = obj.applicant.biometric_number;
+
+					let starDate = obj.start_date+' '+check_in;
+					let endDate = obj.end_date+' '+check_out;
+
+					this._getTimeIn(shift_id, starDate, endDate, biometric_number);
+					this._getTimeOut(shifts, shift_id, starDate, endDate, biometric_number);
+					
+					if (!obj.shift_id){
+						this._setShiftID(shift_id, obj.user_id, obj.start_date);
+					}
+
+					if (!obj.no_of_hours){
+						this._setNumHours(shift_id, starDate, endDate, break_hours);
+					}
+					
+				}
+			}
+		} catch (err){
+			console.log(err);
+		}
+		// });
+	}
+	this._setShiftID = function(id, user_id, date){
+		ShiftsModel.findOne({
+			where:{
+				user_id: user_id,
+				date: date
+			}
+		}).then(data=>{
+			shift = data;
+			if(shift){
+				let reqData = {
+					shift_id: shift.id
+				}
+				OvertimesModel.update(reqData,{
+					where:{
+						id: id
+					}
+				});
+			}
+		});
+	}
+
+	this._setNumHours = function(id, starDate, endDate, break_hours){
+		let start = moment(starDate);
+		let end = moment(endDate);
+
+		let no_of_hours = end.diff(start, 'hours');
+		let OTMins = parseInt(moment(end).diff(moment(start), 'minutes')) - no_of_hours * 60;
+		    OTMins = (OTMins/60) * 100;
+			no_of_hours = no_of_hours+'.'+OTMins;
+			no_of_hours = no_of_hours - break_hours;
+		let data = {
+			night_diff: NightDiffHelper.init(starDate, endDate),
+			no_of_hours: no_of_hours ? no_of_hours : 0,
+		}
+		
+		OvertimesModel.update(data,{
+			where:{
+				id: id
+			}
+		});
+	}
+
+	this._getTimeIn = function(shift_id, start_date, end_date, biometric_number){
+		// console.log(date,check_in,check_out);
+		let time = null;
+		let userId 		= biometric_number.map(el => el.biometric_number);
+		let ip_address 	= biometric_number.map(el => el.biometric.site);
+
+
+		let startDate = moment(start_date).subtract(5,'hours').format('YYYY-MM-DD HH:mm:ss');
+		let endDate = end_date;
+			endDate = startDate > endDate ? moment(endDate).add(1,'days').format('YYYY-MM-DD HH:mm:ss') : endDate;
+
+		BiometricLog.findOne({
+			where: {
+				ip_address: {[Op.in]:ip_address},
+				userId: {[Op.in]:userId},
+				status: 0,
+				date:{
+					[Op.between]:[startDate, endDate]
+				}
+			},
+			order:[
+				['date','asc']
+			],
+			raw: true
+		}).then(data=>{
+			log = data;
+
+			if(log){
+				time = log.date ? moment(log.date).utc().format('HH:mm:ss') : null;
+				OvertimesModel.findOne({
+					where: {
+						id: shift_id
+					}
+				}).then(data=>{
+					shift = data;
+					let reqData = {
+						actual_check_in: time
+					}
+					OvertimesModel.update(reqData,{
+						where:{
+							id: shift_id
+						}
+					});
+				});
+			}
+		});
+
+	}
+
+	this._getTimeOut = function(shifts, shift_id, start_date, end_date, biometric_number){
+		let time = null;
+		let userId 		= biometric_number.map(el => el.biometric_number);
+		let ip_address 	= biometric_number.map(el => el.biometric.site);
+
+		let startDate = start_date;
+		let endDate = end_date;
+			endDate = startDate > endDate ? moment(endDate).add(1,'days').format('YYYY-MM-DD HH:mm:ss') : endDate;
+		    endDate = moment(endDate).add(4,'hours').format('YYYY-MM-DD HH:mm:ss');
+
+		BiometricLog.findOne({
+			where: {
+				ip_address: {[Op.in]:ip_address},
+				userId: {[Op.in]:userId},
+				status: 1,
+				date:{
+					[Op.between]:[startDate, endDate]
+				}
+			},
+			order:[
+				['date','desc']
+			],
+			raw: true
+		}).then(async data=>{
+			let log = data;
+			let shift_log;
+			try {
+				shift_log = await new Promise((resolve, reject) => {
+					ShiftsModel.findOne({
+						where: {
+							id: shifts
+						}, 
+						attributes: ['user_id','date', 'actual_check_out'],
+						// include: [
+						// 	{
+						// 		model: ShiftType,
+						// 		as: 'type_of_shift',
+						// 		attributes: ['is_from_previous'],
+						// 	}
+						// ]
+					}).then(data => {
+						resolve(data);
+					});
+				});
+			} catch (error) {
+				console.error(error);
+			}
+			
+			if(log){
+				time = log.date ? moment(log.date).utc().format('HH:mm:ss') : null;
+				// console.log(userId,shift_id, endDate, time);
+				OvertimesModel.findOne({
+					where: {
+						id: shift_id
+					}
+				}).then(data=>{
+					shift = data;
+					let reqData = {
+						actual_check_out: time
+					}
+					OvertimesModel.update(reqData,{
+						where:{
+							id: shift_id
+						}
+					});
+				});
+			}
+
+			else if(shift_log){
+				let change_log = shift_log.actual_check_out;
+				let hour = moment(change_log).utc().format("HH:mm:ss");
+
+				OvertimesModel.findOne({
+					where: {
+						id: shift_id
+					}
+				}).then(data=>{
+					shift = data;
+					let reqData = {
+						actual_check_out: hour
+					}
+					OvertimesModel.update(reqData,{
+						where:{
+							id: shift_id
+						}
+					});
+				});
+			}
+		});		
+	}
+}
+
+module.exports = new OvertimeHelper();

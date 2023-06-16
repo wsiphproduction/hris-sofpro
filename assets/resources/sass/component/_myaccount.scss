@@ -1,0 +1,91 @@
+.myaccount{
+	& .account-cover{
+		border-bottom: $grey-lighten-2 solid 2px;
+		display: table;
+		width: 100%;
+		margin-bottom: 15px;
+		& .image,
+		& .info,
+		& .social_network{
+			display: table-cell;
+			vertical-align: top;
+			text-align: left;
+			padding-bottom: 40px;
+		}
+		& .image{
+			width: 170px;
+			& .box{
+				display: inline-block;
+				width: 150px;
+				height: 150px;
+				overflow: hidden;
+				border-radius: 50%;
+				& img{
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+			}
+			& .avatar{
+				display: inline-block;
+				width: 150px;
+				height: 150px;
+				position: relative;
+				& span.camera{
+					display: inline-block;
+					position: absolute;
+					right: 5px;
+					bottom: 5px;
+					z-index: 99;
+					border: $white solid 3px;
+					width: 33px;
+					height: 33px;
+					text-align: center;
+					font-size: 18px;
+					border-radius: 50%;
+					background: $blue-lighten-4;
+					line-height: 26px;
+					cursor: pointer;
+					&:hover{
+						background: $blue-lighten-3;
+					}
+				}
+			}
+		}
+		& .info{
+			& ul{
+				margin: 0;
+				padding: 0;
+				& li{
+					list-style: none;
+				}
+			}
+		}
+		& .social_network{
+			text-align: right;
+			width: 180px;
+			& h3{
+				font-size: 14px;
+			}
+			& a{
+				display: inline-block;
+				width: 40px;
+				height: 40px;
+				border: $grey-lighten-1 solid 1px;
+				border-radius: 50%;
+				text-align: center;
+				font-size: 18px;
+				line-height: 35px;
+				color: $grey;
+				margin: 0 2px;
+				&:hover{
+					color: $primary;
+					border: $primary solid 1px;
+				}
+			}
+		}
+	}
+	& .tab-content{
+		padding-top: 15px;
+	}
+}

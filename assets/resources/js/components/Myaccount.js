@@ -1,0 +1,1 @@
+Vue.component('myaccount', require('./myaccount/Index.vue'));

@@ -1,0 +1,17 @@
+Vue.component('setting-holiday', require('./settings/Holiday.vue'));
+Vue.component('setting-company', require('./settings/Company.vue'));
+Vue.component('setting-branch', require('./settings/Branch.vue'));
+Vue.component('setting-approvers', require('./settings/Approver.vue'));
+Vue.component('setting-approvers-custom', require('./settings/CustomApprover.vue'));
+Vue.component('setting-taxonomy', require('./settings/Taxonomy.vue'));
+Vue.component('setting-role', require('./settings/Role.vue'));
+Vue.component('setting-role-manage', require('./settings/RoleManagement.vue'));
+Vue.component('setting-biometric', require('./settings/Biometric.vue'));
+Vue.component('setting-config', require('./settings/Configuration.vue'));
+Vue.component('setting-leave-policy', require('./settings/LeavePolicy.vue'));
+Vue.component('setting-division', require('./settings/Division.vue'));
+Vue.component('setting-branding', require('./settings/Branding.vue'));
+Vue.component('setting-department', require('./settings/Department.vue'));
+Vue.component('setting-section', require('./settings/Section.vue'));
+Vue.component('setting-shift-management', require('./settings/ShiftManagement.vue'));
+Vue.component('setting-cron-management', require('./settings/CronManagement.vue'));

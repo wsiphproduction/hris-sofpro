@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> TSS</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-tss inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Attendance</span></li>
+						<li class="breadcrumb-item"><span class="active">TSS</span></li>
+					</ol>
+					<% if(user_role.modify){ %>
+					<a href="./attendance/tss/posted/" class="btn btn-primary btn-sm" v-on:click="view()">View Posted</a>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="posting()">Post</a>
+					<% } %>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							
+						</div>
+						<div class="col-sm-12">
+
+							<h5>TSS</h5>
+							<form class="form-inline">
+								<date-picker-2 type="month" v-model="param.month_date" format="YYYY-MM" style="width: 150px;"></date-picker-2>
+								<div class="form-group col-sm-6 col-md-2">
+									<select class="form-control" v-model="param.period">
+										<option value="">Select Period</option>
+										<option value="A">Period A</option>
+										<option value="B">Period B</option>
+									</select>
+								</div>
+							</form>
+							<h5> </h5>
+							<div v-if="!fetching && records.length">
+								<div class="table-scrollable">
+									<table class="table table-bordered">
+										<thead class="bg-light noPadding">
+											<tr>
+												<th width="200" class="align-middle text-center nowrap">Employee</th>
+												<th width="100" class="text-center nowrap">RegHrs</th>
+												<th width="100" class="text-center nowrap">LateHrs</th>
+												<th width="100" class="text-center nowrap">UndertimeHrs</th>
+												<th width="100" class="text-center nowrap">NDHrs</th>
+												<th width="100" class="text-center nowrap">Absent</th>
+												<th width="100" class="text-center nowrap">Leave01</th>
+												<th width="100" class="text-center nowrap">Leave02</th>
+												<th width="100" class="text-center nowrap">Leave03</th>
+												<th width="100" class="text-center nowrap">Leave04</th>
+												<th width="100" class="text-center nowrap">Leave05</th>
+												<th width="100" class="text-center nowrap">Leave06</th>
+												<th width="100" class="text-center nowrap">Leave07</th>
+												<th width="100" class="text-center nowrap">Leave08</th>
+												<th width="100" class="text-center nowrap">Leave09</th>
+												<th width="100" class="text-center nowrap">Leave10</th>
+												<th width="100" class="text-center nowrap">Leave11</th>
+												<th width="100" class="text-center nowrap">Leave12</th>
+												<th width="100" class="text-center nowrap">Leave13</th>
+												<th width="100" class="text-center nowrap">Leave14</th>
+												<th width="100" class="text-center nowrap">Leave15</th>
+												<th width="100" class="text-center nowrap">Leave16</th>
+												<th width="100" class="text-center nowrap">Leave17</th>
+												<th width="100" class="text-center nowrap">Leave18</th>
+												<th width="100" class="text-center nowrap">Leave19</th>
+												<th width="100" class="text-center nowrap">Leave20</th>
+												<th width="100" class="text-center nowrap">OTHrs01</th>
+												<th width="100" class="text-center nowrap">OTHrs02</th>
+												<th width="100" class="text-center nowrap">OTHrs03</th>
+												<th width="100" class="text-center nowrap">OTHrs04</th>
+												<th width="100" class="text-center nowrap">OTHrs05</th>
+												<th width="100" class="text-center nowrap">OTHrs06</th>
+												<th width="100" class="text-center nowrap">OTHrs07</th>
+												<th width="100" class="text-center nowrap">OTHrs08</th>
+												<th width="100" class="text-center nowrap">OTHrs09</th>
+												<th width="100" class="text-center nowrap">OTHrs10</th>
+												<th width="100" class="text-center nowrap">OTHrs11</th>
+												<th width="100" class="text-center nowrap">OTHrs12</th>
+												<th width="100" class="text-center nowrap">OTHrs13</th>
+												<th width="100" class="text-center nowrap">OTHrs14</th>
+												<th width="100" class="text-center nowrap">OTHrs15</th>
+												<th width="100" class="text-center nowrap">OTHrs16</th>
+												<th width="100" class="text-center nowrap">OTHrs17</th>
+												<th width="100" class="text-center nowrap">OTHrs18</th>
+												<th width="100" class="text-center nowrap">OTHrs19</th>
+												<th width="100" class="text-center nowrap">OTHrs20</th>
+												<th width="100" class="text-center nowrap">OTHrs21</th>
+												<th width="100" class="text-center nowrap">OTHrs22</th>
+												<th width="100" class="text-center nowrap">OTHrs23</th>
+												<th width="100" class="text-center nowrap">OTHrs24</th>
+												<th width="100" class="text-center nowrap">OTHrs25</th>
+												<th width="100" class="text-center nowrap">Rate</th>
+												<th width="100" class="text-center nowrap">UnpaidRegHrs</th>
+												<th width="100" class="text-center nowrap">UnpaidSL</th>
+												<th width="100" class="text-center nowrap">UnpaidTaxSL</th>
+												<th width="100" class="text-center nowrap">UnpaidVL</th>
+												<th width="100" class="text-center nowrap">UnpaidTaxVL</th>
+												<th width="100" class="text-center nowrap">UnpaidEL</th>
+												<th width="100" class="text-center nowrap">EffectivityDate</th>
+												<th width="100" class="text-center nowrap">EmpStatus</th>
+												<th width="100" class="text-center nowrap">EffectivityDateResign</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(record, index) in records">
+												<!-- <td class="nowrap" v-text="records[index].First_name"></td> -->
+												<td class="nowrap" v-text="records[index].First_name+' '+records[index].Last_name "></td>
+												<!-- <td class="nowrap"v-text="records[i].user ? records[i].user.first_name+' '+records[i].user.last_name : ''"></td> -->
+												<td v-text="records[index].RegHrs"></td>
+												<td v-text="records[index].LateHrs"></td>
+												<td v-text="records[index].UndertimeHrs"></td>
+												<td v-text="records[index].NDHrs"></td>
+												<td v-text="records[index].Absent"></td>
+												<td v-text="records[index].Leave01"></td>
+												<td v-text="records[index].Leave02"></td>
+												<td v-text="records[index].Leave03"></td>
+												<td v-text="records[index].Leave04"></td>
+												<td v-text="records[index].Leave05"></td>
+												<td v-text="records[index].Leave06"></td>
+												<td v-text="records[index].Leave07"></td>
+												<td v-text="records[index].Leave08"></td>
+												<td v-text="records[index].Leave09"></td>
+												<td v-text="records[index].Leave10"></td>
+												<td v-text="records[index].Leave11"></td>
+												<td v-text="records[index].Leave12"></td>
+												<td v-text="records[index].Leave13"></td>
+												<td v-text="records[index].Leave14"></td>
+												<td v-text="records[index].Leave15"></td>
+												<td v-text="records[index].Leave16"></td>
+												<td v-text="records[index].Leave17"></td>
+												<td v-text="records[index].Leave18"></td>
+												<td v-text="records[index].Leave19"></td>
+												<td v-text="records[index].Leave20"></td>
+												<td v-text="records[index].OTHrs01"></td>
+												<td v-text="records[index].OTHrs02"></td>
+												<td v-text="records[index].OTHrs03"></td>
+												<td v-text="records[index].OTHrs04"></td>
+												<td v-text="records[index].OTHrs05"></td>
+												<td v-text="records[index].OTHrs06"></td>
+												<td v-text="records[index].OTHrs07"></td>
+												<td v-text="records[index].OTHrs08"></td>
+												<td v-text="records[index].OTHrs09"></td>
+												<td v-text="records[index].OTHrs10"></td>
+												<td v-text="records[index].OTHrs11"></td>
+												<td v-text="records[index].OTHrs12"></td>
+												<td v-text="records[index].OTHrs13"></td>
+												<td v-text="records[index].OTHrs14"></td>
+												<td v-text="records[index].OTHrs15"></td>
+												<td v-text="records[index].OTHrs16"></td>
+												<td v-text="records[index].OTHrs17"></td>
+												<td v-text="records[index].OTHrs18"></td>
+												<td v-text="records[index].OTHrs19"></td>
+												<td v-text="records[index].OTHrs20"></td>
+												<td v-text="records[index].OTHrs21"></td>
+												<td v-text="records[index].OTHrs22"></td>
+												<td v-text="records[index].OTHrs23"></td>
+												<td v-text="records[index].OTHrs24"></td>
+												<td v-text="records[index].OTHrs25"></td>
+												<td v-text="records[index].Rate"></td>
+												<td v-text="records[index].UnpaidRegHrs"></td>
+												<td v-text="records[index].UnpaidSL"></td>
+												<td v-text="records[index].UnpaidTaxSL"></td>
+												<td v-text="records[index].UnpaidVL"></td>
+												<td v-text="records[index].UnpaidTaxVL"></td>
+												<td v-text="records[index].UnpaidEL"></td>
+												<td v-text="records[index].EffectivityDate"></td>
+												<td v-text="records[index].EmpStatus"></td>
+												<td v-text="records[index].EffectivityDateResign"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+
+							<ul class="pagination" v-if="counts">
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+								</li>
+								<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+									<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+								</li>
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+								</li>
+							</ul>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+					<div class="widget custom-modal" v-if="modal">
+						<div class="modal-container">
+							<div class="heading">
+								<h4 v-text="modalText"></h4>
+								<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+							</div>
+
+							<form action="<%= baseUrl %>/attendance/tss" method="post" @submit.prevent="onSubmit">
+								<div class="body">
+									<div class="form-row">
+										<div class="form-group col-md-6">
+											<label for="label">Label</label>
+											<input type="text" class="form-control" v-model="form.label">
+											<div class="form-text form-error" v-if="!! errors.label" v-text="errors.label"></div>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-md-6">
+											<label for="start_date" class="isRequired">Month Year</label>
+											<div style="clear: both;"></div>
+											<date-picker-2 type="month" v-model="form.month_date" format="YYYY-MM" style="width: 100%;"></date-picker-2>
+											<div class="form-text form-error" v-if="!! errors.month_date" v-text="errors.month_date"></div>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="end_date" class="isRequired">Cutoff Period</label>
+											<select class="form-control" v-model="form.period">
+												<option value="">Select Period</option>
+												<option value="A">Period A</option>
+												<option value="B">Period B</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.period" v-text="errors.period"></div>
+										</div>
+									</div>
+								</div>
+								<div class="footer">
+									<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+									<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+									<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<% include ../../Include/alert %>
+			</div>
+		</attendance-tss>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

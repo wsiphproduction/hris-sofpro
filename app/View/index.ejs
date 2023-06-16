@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		.team_logs{
+			padding-top: 30px;
+		}
+		.table-responsive {
+			max-height:300px;
+		}
+	</style>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard</title>
+	<% include ./Include/head %>
+	<link type="text/css" rel="stylesheet" href="<%= baseUrl +'/vendor/lightSlider/css/lightslider.min.css'%>" /> 
+</head>
+<body>
+	<div id="app">
+	<% include ./Include/header %>
+	
+	<% include ./Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<home inline-template>
+		<div class="wrapper">
+			<div class="app-container home">
+				<div class="row">
+					<div class="col-sm-12 col-md-12 col-lg-9">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-6">
+										<% if(announcement.length){ %>
+										<div class="menuSlider">
+											<ul id="announcement">
+												<% for(let x in announcement){ %>
+												<li>
+													<a href="<%= baseUrl +'/public/'+ announcement[x]['slug'] %>" class="content" target="_blank">
+														<div class="quote">
+															<img src="<%= baseUrl %>/img/quote.png">
+														</div>
+														<div class="info">
+															<h4><%= announcement[x]['subject'] %></h4>
+															<p>
+																<%= announcement[x]['short_description'] %>
+															</p>
+														</div>
+													</a>
+												</li>
+												<% } %>
+											</ul>
+										</div>
+										<% } %>
+									</div>
+									<div class="col-sm-12 col-md-12 col-lg-6 hide-on-sm">
+										<apexchart type="bar" height="250" :options="chartOptions" :series="series"></apexchart>
+										
+									</div>
+								</div>
+							</div>
+
+							<!-- incomplete shift notification -->
+							<div class="alert alert-danger" role="alert" v-if="!complete_shift">
+								<strong>NOTE:</strong> There are employees with no shift schedules. Please check which employees and update their shift schedules.
+							</div>
+			
+							<!-- To Resolve -->
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-lg-7 col-sm-12 mt-2">
+										<h5>Log Issue Monitoring</h5>
+									</div>
+									<div class="col-lg-5 col-sm-12 pb-3 d-flex justify-content-end">
+										<a class="btn btn-outline-primary" href="<%= baseUrl + '/log-issue-monitoring' %>">View More <i class="mdi mdi-arrow-right"></i></a>
+									</div>
+								</div>
+								<div class="row">
+								 	<div class="panel-body table-responsive">
+									<!--<div v-if="!fetching && records.length" class="col-sm-12 time_keeping">-->
+										<div class="col-sm-12 col-lg-12 time_keeping">
+											<!--<div class="table-scrollable" v-for="record in records">-->
+											<div class="table-scrollable">
+												<table class="table table-bordered">
+													<thead class="bg-light">
+														<tr>
+															<td class="nowrap">Emp No</td>
+															<td class="nowrap">Employee </td>
+															<td class="text-center nowrap">DTR Date</td>
+															<td class="text-center nowrap">ShiftID</td>
+															<td class="text-center nowrap">Issue</td>
+															
+														</tr>
+													</thead>
+													<tbody>
+														<tr v-for="tss in logMonitors">
+															<td class="nowrap" v-text="tss.employee_number"></td>
+															<td class="nowrap" v-text="tss.employee_name"></td>
+															<td class="nowrap" v-text="tss.dtr_date"></td>
+															<td class="nowrap" v-text="tss.shift_type"></td>
+															<td class="nowrap" v-text="tss.reason"></td>
+															
+														</tr>
+													</tbody>
+												</table>
+											</div>
+
+										</div>
+									<!--
+									<div class="col-sm-12">
+										<ul class="pagination" v-if="counts">
+											<li class="page-item">
+												<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+											</li>
+											<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+												<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+											</li>
+											<li class="page-item">
+												<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+											</li>
+										</ul>
+										<div class="loading" v-if="fetching">
+											<img src="<%= baseUrl + '/img/loading.gif' %>">
+											<p>Loading.....</p>
+										</div>
+										<div class="norecord" v-if="!fetching && !records.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+									-->
+									</div>
+								</div>
+							</div>
+
+							<!-- Approval Monitoring -->
+							<div class="col-sm-12 mt-4" v-if="isApprover">
+								<div class="row">
+									<div class="col-lg-7 col-sm-12 mt-2">
+										<h5 v-text="'Approval Monitoring (Cut-off: ' + moment(approval_month_date).format('YYYY-MM') + ' - \'' + approval_period + '\' )'"></h5>
+									</div>
+									<div class="col-lg-5 col-sm-12 pb-3 d-flex justify-content-end">
+										<a class="btn btn-outline-primary" href="<%= baseUrl + '/approvals/leave' %>">View More <i class="mdi mdi-arrow-right"></i></a>
+									</div>
+								</div>	
+								<div class="row">
+									<!--<div v-if="!fetching && records.length" class="col-sm-12 time_keeping">-->
+									<div class="col-sm-12 col-lg-12 time_keeping">
+										<!--<div class="table-scrollable" v-for="record in records">-->
+										 <div class="panel-body table-responsive">
+											<table class="table table-bordered">
+												<thead class="bg-light">
+													<tr>
+														<td class="nowrap">Emp No</td>
+														<td class="nowrap">Employee </td>
+														<td class="text-center nowrap">Date</td>
+														<td class="text-center nowrap">Time</td>
+														<td class="text-center nowrap">Request Type</td>
+														
+													</tr>
+												</thead>
+												<tbody>
+													<tr v-for="approval in approvalMonitors">
+														<td class="nowrap" v-text="approval.employee_number"></td>
+														<td class="nowrap" v-text="approval.employee_name"></td>
+														<td class="nowrap" v-text="approval.date"></td>
+														<td class="nowrap" v-text="approval.time"></td>
+														<td class="withTable">
+															<a v-bind:href="'<%= baseUrl %>'+ approval.request_type_page">
+																<div class="info">
+																	{{ approval.request_type}}
+																</div>
+															</a>
+														</td>
+														
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
+									</div>
+								</div>
+
+							</div>
+
+							<p></p>
+							<p></p>
+
+							<!-- Team logs -->
+							<div class="team_logs col-sm-12">
+								<div class="row">
+									<div class="col-lg-7 col-sm-12 mt-2">
+										<h5>Team Logs (<%= moment().format('dddd') + ' - ' + moment().format('MM/DD/YYYY')%>)</h5>	
+									</div>
+									<div class="col-lg-5 col-sm-12 pb-3 d-flex justify-content-end">
+										<a class="btn btn-outline-primary"href="<%= baseUrl + '/team-logs' %>">View More <i class="mdi mdi-arrow-right"></i></a>
+									</div>
+								</div>
+								<div class="row">
+									<!--<div v-if="!fetching && records.length" class="col-sm-12 time_keeping">-->
+									<div class="col-sm-12 col-lg-12 time_keeping">
+										<!--<div class="table-scrollable" v-for="record in records">-->
+										<!-- <div class="table-scrollable"> -->
+										<div class="panel-body table-responsive">
+											<table class="table table-bordered">
+												<thead class="bg-light">
+													<tr>
+														<td class="nowrap">Emp No</td>
+														<td class="nowrap">Name</td>
+														<td class="text-center nowrap">ShiftID</td>
+														<td class="text-center nowrap">Shift TI</td>
+														<td class="text-center nowrap">Shift TO</td>
+														<td class="text-center nowrap">Actual TI</td>
+														<td class="text-center nowrap">Actual TO</td>
+													</tr>
+												</thead>
+												<tbody v-for="(record,index) in users" v-if="index < number_of_records">
+													<tr v-for="shift in record.shifts" v-if="shift.date == moment().format('YYYY-MM-DD')">
+														<td class="nowrap" v-text="record.employee_number ? record.employee_number : '--'"></td>
+														<td class="nowrap" v-text="record.last_name+', '+record.first_name"></td>
+														<td class="nowrap" v-text="shift.shift_type ? shift.shift_type : ''"></td>
+														<td class="nowrap" v-text="shift.check_in ? moment(shift.check_in).utc().format('HH:mm:ss'):''"></td>
+														<td class="nowrap" v-text="shift.check_out ? moment(shift.check_out).utc().format('HH:mm:ss'):''"></td>
+														<td class="nowrap" v-text="shift.actual_check_in ? moment(shift.actual_check_in).utc().format('HH:mm:ss'):''"></td>
+														<td class="nowrap" v-text="shift.actual_check_out ? moment(shift.actual_check_out).utc().format('HH:mm:ss'):''"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-12" hidden>
+								<div class="card">
+									<div class="card-body">
+										<div class="row">
+											<div class="col-sm-6">
+												<div class="form-inline">
+													<label class="mb-2 mr-sm-2">Select Employee</label>
+													<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="calendar.user" @change="changeUser">
+														<option v-for="user in users" v-bind:value="user.id" v-text="user.first_name+' '+user.last_name">-Select-</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<h6>Legends</h6>
+												<hr>
+												<ul class="legend">
+													<li class="event">
+														<span></span> Event
+													</li>
+													<li class="leave">
+														<span></span> Leave
+													</li>
+													<li class="holiday">
+														<span></span> Holiday
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+								<calendar :events="calendarEvents"></calendar>
+							</div>
+							
+						</div>
+					</div>
+					
+					<div class="col-sm-12 col-md-12 col-lg-3 panel-right hide-on-sm">
+						<div class="digital-clock" v-html="datenow"></div>
+						
+						<div class="row card-time">
+							<% if(config && config.manual_log == 'yes'){ %>
+							<div class="col-sm-6">
+								<button class="btn btn-outline-primary btn-lg btn-block" v-on:click="setLog('timein')">Time In</button>
+							</div>
+							<div class="col-sm-6">
+								<button class="btn btn-outline-primary btn-lg btn-block" v-on:click="setLog('timeout')">Time Out</button>
+							</div>
+							<% } %>
+						</div>
+						
+						<h5>Work Schedule</h5>
+						<div class="card shadow-sm">
+						<table class="table table-borderless">
+							<thead>
+								<tr class="bg-light">
+									<th>Date</th>
+									<th width="100">Time In</th>
+									<th width="100">Time Out</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="res in schedule">
+									<td v-text="moment(res.date).format('LL')"></td>
+									<td v-text="res.actual_check_in ? moment(res.actual_check_in).utc().format('hh:mmA') : '--'"></td>
+									<td v-text="res.actual_check_out ? moment(res.actual_check_out).utc().format('hh:mmA') : '--'"></td>
+								</tr>
+							</tbody>
+						</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">Event Details</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+
+						<table class="table table-borderless" v-if="eventData.type == 'event'">
+							<tbody>
+								<tr>
+									<td width="80" class="align-text-top">Date</td>
+									<td>
+										{{ eventData.date }}
+										<div class="btn-group float-right" v-if="sessionUserId == calendar.user">
+											<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												Action
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="javascript:void(0)" @click="editEvent">Edit</a>
+												<a class="dropdown-item" href="javascript:void(0)" @click="deleteEvent">Delete</a>
+												
+											</div>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td class="align-text-top">Type</td>
+									<td v-text="eventData.etype"></td>
+								</tr>
+								<tr>
+									<td class="align-text-top">Note</td>
+									<td v-text="eventData.note"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Toast -->
+			<div class="j-toast" v-html="toast"></div><!-- Toast -->
+			<% include ./form %>
+			<% include ./Include/alert %>
+		</div>
+		</home>
+	</main>
+	</div>
+	
+	<% include ./Include/javascript %>
+	
+	<script src="<%= baseUrl + '/vendor/lightSlider/js/lightslider.js' %>"></script>
+	<script>
+	$(document).ready(function(){
+		$("#announcement").lightSlider({
+			item: 1,
+			auto: true,
+			pause: 10000,
+	        pager: true,
+	        controls: false,
+	        adaptiveHeight:true
+		});
+	});
+	</script>
+</body>
+</html>

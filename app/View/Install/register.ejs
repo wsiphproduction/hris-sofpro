@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Login</title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<!-- <div id="overlay">
+		<div class="lds-ripple"><div></div><div></div></div>
+		<div class="loading">Loading, please wait...</div>
+	</div> -->
+	<div class="container" id="app">
+		<div class="row">
+			<div class="col col-sm-8 offset-sm-2">
+				<install-register inline-template>
+
+					<div class="form-default">
+						
+						<div class="header">
+							<img src="./img/logo.png" alt="">
+							<h1>Register User</h1>
+							<div class="error" v-if="!! errors.server" v-text="errors.server"></div>
+						</div>
+						<div class="content">
+							<form action="<%= baseUrl %>/install/register" method="post" @submit.prevent="onSubmit">
+								<div class="form-row">
+									<div class="form-group col-md-6">
+										<label for="first_name">First Name</label>
+										<input type="text" class="form-control" id="first_name" v-model="form.first_name">
+										<div class="form-text form-error" v-if="!! errors.first_name" v-text="errors.first_name"></div>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="last_name">Last Name</label>
+										<input type="text" class="form-control" id="last_name" v-model="form.last_name">
+										<div class="form-text form-error" v-if="!! errors.last_name" v-text="errors.last_name"></div>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="gender">Gender</label>
+										<select class="form-control" id="gender" v-model="form.gender">
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+										</select>
+										<div class="form-text form-error" v-if="!! errors.gender" v-text="errors.gender"></div>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="nationality">Nationality</label>
+										<select class="form-control" id="nationality" v-model="form.nationality">
+											<option value="">--Select--</option>
+											<option v-for="res in nationalities" v-bind:value="res.id" v-text="res.name"></option>
+										</select>
+										<div class="form-text form-error" v-if="!! errors.nationality" v-text="errors.nationality"></div>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="form-group col-md-6">
+										<label for="email">Email</label>
+										<input type="email" class="form-control" id="email" v-model="form.email">
+										<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+									</div>
+									<div class="form-group col-md-6">
+										<label for="password">Password</label>
+										<input type="password" class="form-control" id="password" v-model="form.password">
+										<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+									</div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary">
+										<span v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Logging in...</span>
+										<span v-if="! loading">Register</span>
+									</button>
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</install-register>
+			</div>
+		</div>
+
+	</div>
+	
+	<% include ../Include/javascript %>
+	
+</body>
+</html>

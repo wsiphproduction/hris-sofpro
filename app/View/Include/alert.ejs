@@ -1,0 +1,57 @@
+<!-- Alert Success -->
+<div class="widget alerts" v-if="alert.success">
+	<div class="alert-body success">
+		<div class="icon">
+			<i class="mdi mdi-check-circle-outline"></i>
+		</div>
+		<div class="content">
+			<h4>Success!</h4>
+			<p v-text="alert.success"></p>
+			<button class="btn btn-success" v-on:click="closeAlert()">Close</button>
+		</div>
+	</div>
+</div><!-- Alert Success -->
+
+<!-- Alert Success Fetch -->
+<div class="widget alerts" v-if="alert.successFetch">
+	<div class="alert-body success">
+		<div class="icon">
+			<i class="mdi mdi-check-circle-outline"></i>
+		</div>
+		<div class="content">
+			<h4>Success!</h4>
+			<p v-text="alert.success"></p>
+			<p v-text="alert.successFetch"></p>
+			<button class="btn btn-success" v-on:click="closeOnly()">Close</button>
+		</div>
+	</div>
+</div><!-- Alert Success Fetch -->
+
+<!-- Alert Error -->
+<div class="widget alerts" v-if="alert.error">
+	<div class="alert-body warning">
+		<div class="icon">
+			<i class="mdi mdi-alert-outline"></i>
+		</div>
+		<div class="content">
+			<h4>Error!</h4>
+			<p v-text="alert.error"></p>
+			<button class="btn btn-warning" v-on:click="closeOnly()">Close</button>
+		</div>
+	</div>
+</div><!-- Alert Error -->
+
+<!-- Alert Confirm -->
+<div class="widget alerts" v-if="alert.confirm">
+	<div class="alert-body info">
+		<div class="icon">
+			<i class="mdi mdi-information-outline"></i>
+		</div>
+		<div class="content">
+			<h4>Confirm!</h4>
+			<p v-text="alert.confirm"></p>
+			<button class="btn btn-secondary" v-on:click="closeOnly()">Cancel</button>
+			<button class="btn btn-primary" v-on:click="Confirm()">Confirm  </button>
+		</div>
+	</div>
+</div><!-- Alert Confirm -->

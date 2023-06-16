@@ -1,0 +1,103 @@
+<ul class="tabs">
+	<% if(usrRole['employee-detail']){ %>
+	<li <%- segment == 'general' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/general/'+ employee.shortid %>"><i class="mdi mdi-account-circle"></i> General</a>
+	</li>
+	<% } %>
+	<% if(usrRole['employee-attendance']){ %>
+	<li <%- segment == 'attendance' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/attendance/'+ employee.shortid %>"><i class="mdi mdi-check-decagram"></i> Attendance</a>
+	</li>
+	<% } %>
+	<% if(usrRole['employee-salary']){ %>
+	<li <%- segment == 'salary' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/salary/'+ employee.shortid %>"><i class="mdi mdi-cash-multiple"></i> Salary/Incentive</a>
+	</li>
+	<% } %>
+	<% if(usrRole['payroll-information']){ %>
+		<li <%- segment == 'information' ? 'class="active"':'' %>>
+			<a href="<%= baseUrl + '/employee/payroll-information/'+ employee.shortid %>"><i class="mdi mdi-bank"></i> Payroll Information</a>
+		</li>
+		<% } %>
+	<% if(usrRole['employee-loan']){ %>
+	<li <%- segment == 'loan' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/loan/'+ employee.shortid %>"><i class="mdi mdi-bookmark-check"></i> Loans</a>
+	</li>
+	<% } %>
+	<% if(usrRole['employee-document']){ %>
+	<li <%- segment == 'document' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/document/'+ employee.shortid %>"><i class="mdi mdi-file-document-outline"></i> Documents</a>
+	</li>
+	<% } %>
+	<% if(usrRole['family-background']){ %>
+	<li <%- segment == 'background' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/family-background/'+ employee.shortid %>"><i class="mdi mdi-home"></i> Family Background</a>
+	</li>
+	<% } %>
+	<% if(usrRole['employment-history']){ %>
+	<li <%- segment == 'employment-history' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/employment-history/'+ employee.shortid %>"><i class="mdi mdi-history"></i> Employment History</a>
+	</li>
+	<% } %>
+	<% if(usrRole['academic-background']){ %>
+	<li <%- segment == 'academic-background' ? 'class="active"':'' %>>
+		<a href="<%= baseUrl + '/employee/academic-background/'+ employee.shortid %>"><i class="mdi mdi-school"></i> Academic Background & Qualifications</a>
+	</li>
+	<% } %>
+	<% if(usrRole['certifications']){ %>
+		<li <%- segment == 'certifications' ? 'class="active"':'' %>>
+			<a href="<%= baseUrl + '/employee/certifications/'+ employee.shortid %>"><i class="mdi mdi-certificate"></i>Certifications</a>
+		</li>
+		<% } %>
+	<% if(usrRole['employee-leave'] || usrRole['employee-overtime'] || usrRole['employee-undertime'] || usrRole['employee-business-trip'] || usrRole['employee-shift']){ %>
+	<li <%- segment == 'leave' || segment == 'overtime' || segment == 'undertime' || segment == 'business-trip' || segment == 'shift'? 'class="active"':'' %>>
+		<div class="dropdown">
+			<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown"><i class="mdi mdi-file-send"></i> Applications</a>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+				<% if(usrRole['employee-shift']){ %>
+				<a class="dropdown-item" href="<%= baseUrl + '/employee/shift/'+ employee.shortid %>"><i class="mdi mdi-calendar-text"></i> Shift</a>
+				<% } %>
+				<% if(usrRole['employee-leave']){ %>
+				<a class="dropdown-item" href="<%= baseUrl + '/employee/leave/'+ employee.shortid %>"> <i class="mdi mdi-airplane"></i> Leave</a>
+				<% } %>
+				<% if(usrRole['employee-overtime']){ %>
+				<a class="dropdown-item" href="<%= baseUrl + '/employee/overtime/'+ employee.shortid %>"><i class="mdi mdi-laptop"></i> Overtime</a>
+				<% } %>
+				<% if(usrRole['employee-undertime']){ %>
+				<a class="dropdown-item" href="<%= baseUrl + '/employee/undertime/'+ employee.shortid %>"><i class="mdi mdi-clock-outline"></i> Undertime</a>
+				<% } %>
+				<% if(usrRole['employee-business-trip']){ %>
+				<a class="dropdown-item" href="<%= baseUrl + '/employee/business-trip/'+ employee.shortid %>"><i class="mdi mdi-briefcase-check"></i> Business Trip</a>
+				<% } %>
+			</div>
+		</div>
+	</li>
+	<% } %>
+	<% if(usrRole['employee-config']){ %>
+	<li <%- segment == 'config' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/config/'+ employee.shortid %>"><i class="mdi mdi-fingerprint"></i> Settings</a></li>
+	<% } %>
+	<% if(usrRole['employee-training']){ %>
+		<li <%- segment == 'training' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/training/'+ employee.shortid %>"><i class="mdi mdi-trophy"></i> Trainings</a></li>
+	<% } %>
+	<% if(usrRole['employee-performance-review']){ %>
+		<li <%- segment == 'performance-review' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/performance-review/'+ employee.shortid %>"><i class="mdi mdi-comment-processing"></i> Performance Review</a></li>
+	<% } %>
+	<% if(usrRole['employee-license']){ %>
+		<li <%- segment == 'license' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/license/'+ employee.shortid %>"><i class="mdi mdi-contacts"></i> License</a></li>
+	<% } %>
+	<% if(usrRole['employee-disciplinary-cases']){ %>
+		<li <%- segment == 'disciplinary-cases' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/disciplinary-cases/'+ employee.shortid %>"><i class="mdi mdi-school"></i> Disciplinary Entries </a></li>
+	<% } %>
+	<% if(usrRole['employee-memorandum']){ %>
+		<li <%- segment == 'memorandum' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/memorandum/'+ employee.shortid %>"><i class="mdi mdi-calendar-multiple-check"></i> Memorandum </a></li>
+	<% } %>
+	<% if(usrRole['employee-award']){ %>
+		<li <%- segment == 'award' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/award/'+ employee.shortid %>"><i class="mdi mdi-star"></i> Award </a></li>
+	<% } %>
+	<% if(usrRole['employee-skill']){ %>
+		<li <%- segment == 'skill' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/skill/'+ employee.shortid %>"><i class="mdi mdi-school"></i> Skill </a></li>
+	<% } %>
+	<% if(usrRole['employee-attachments']){ %>
+		<li <%- segment == 'attachments' ? 'class="active"':'' %>><a href="<%= baseUrl + '/employee/attachment/'+ employee.shortid %>"><i class="mdi mdi-folder"></i> Attachments </a></li>
+	<% } %>
+</ul>

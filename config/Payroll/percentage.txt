@@ -1,0 +1,20 @@
+{
+	"NightShift": 10,
+	"RestDay":	130,
+	"SpecialNonWorkingDay":	130,
+	"SpecialNonWorkingDayAndRestDay":	150,
+	"RegularHoliday":	200,
+	"RegularHolidayAndRestDay":	260,
+	"OvertimeNormalDay":	125,
+	"OvertimeRestDay"	169,
+	"OvertimeSpecialNonWorkingDay":	169,
+	"OvertimeSpecialNonWorkingDayAndRestDay":	195,
+	"OvertimeRegularHoliday":	260,
+	"OvertimeRegularHolidayAndRestDay":	338,
+	"NightShiftOvertimeNormalDay":	137.50,
+	"NightShiftOvertimeRestDay":	185.90,
+	"NightShiftOvertimeSpecialNonWorkingDay":	185.90,
+	"NightShiftOvertimeSpecialNonWorkingDayAndRestDay":	214.50,
+	"NightShiftOvertimeRegularHoliday":	286
+	"NightShiftOvertimeRegularHolidayAndRestDay": 371.80
+}

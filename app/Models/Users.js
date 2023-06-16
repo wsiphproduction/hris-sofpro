@@ -1,0 +1,282 @@
+module.exports = (sequelize, type) => {
+    const Users = sequelize.define('users', {
+        id: {
+			type: type.INTEGER,
+			primaryKey: true,
+			autoIncrement: true
+        },
+        parent_id: {
+        	type: type.INTEGER,
+        	allowNull: false,
+        	defaultValue: 0
+        },
+        shortid: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        employee_number: {
+            type: type.STRING,
+            allowNull: true
+        },
+        old_employee_number: {
+            type: type.STRING,
+            allowNull: true
+        },
+        first_name: {
+        	type: type.STRING,
+        	allowNull: false
+        },
+        middle_name: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        last_name: {
+        	type: type.STRING,
+        	allowNull: false
+        },
+        suffix: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        nick_name: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        gender: {
+        	type: type.STRING,
+        	allowNull: false
+        },
+        birthdate: {
+        	type: type.DATEONLY,
+        	allowNull: true
+        },
+        avatar: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        present_address: {
+            type: type.STRING,
+            allowNull: true
+        },
+        permanent_address: {
+            type: type.STRING,
+            allowNull: true
+        },
+        nationality: {
+        	type: type.INTEGER,
+        	allowNull: true
+        },
+        marital_status: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        contact_number: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        email: {
+        	type: type.STRING,
+        	allowNull: true,
+            unique: true
+        },
+        username: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        password: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        employee_type: {
+        	type: type.INTEGER,
+        	allowNull: false,
+        },
+        status: {
+        	type: type.INTEGER,
+        	allowNull: false,
+        	defaultValue: 1,
+        	comment: '1 = Active, 2 = Inactive, 3 = Resigned, 4 = Terminated'
+        },
+        user_role: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        note: {
+        	type: type.INTEGER,
+        	allowNull: true
+        },
+        sss_number: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        pagibig_number: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        tin_number: {
+        	type: type.STRING,
+        	allowNull: true
+        },
+        
+        philhealth_number: {
+            type: type.STRING,
+            allowNull: true
+        },
+
+
+        street: {
+            type: type.STRING,
+            allowNull: true
+        },
+        barangay: {
+            type: type.STRING,
+            allowNull: true
+        },
+        city: {
+            type: type.STRING,
+            allowNull: true
+        },
+        province: {
+            type: type.STRING,
+            allowNull: true
+        },
+        region: {
+            type: type.STRING,
+            allowNull: true
+        },
+
+        company_branch_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        department_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        job_title_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        team_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        date_entry: {
+            type: type.DATEONLY,
+            allowNull: true
+        },
+        resignation_date: {
+            type: type.DATEONLY,
+            allowNull: true
+        },
+        approver_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        secondary_approver_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        secretary_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        alternate_secretary: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        reset_token:{
+            type: type.STRING,
+            allowNull: true
+        },
+        created_by: {
+        	type: type.INTEGER,
+        	allowNull: true,
+        	defaultValue: 0
+        },
+        updated_by: {
+        	type: type.INTEGER,
+        	allowNull: true,
+        	defaultValue: 0
+        },
+        created_at: {
+        	type: 'TIMESTAMP',
+        	allowNull: false,
+        	defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        },
+        updated_at: {
+        	type: 'TIMESTAMP',
+        	allowNull: false,
+        	defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+        },
+        hr_generalist_id: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        salary_type: {
+            type: type.INTEGER,
+            allowNull: true
+        },
+        tribe: {
+            type: type.STRING,
+            allowNull: true
+        },
+        height: {
+            type: type.STRING,
+            allowNull: true
+        },
+        weight: {
+            type: type.STRING,
+            allowNull: true
+        },
+        religion: {
+            type: type.STRING,
+            allowNull: true
+        },
+        blood_type: {
+            type: type.STRING,
+            allowNull: true
+        },
+        is_solo_parent: {
+            type: type.BOOLEAN,
+            allowNull: true
+        },
+        is_with_disability: {
+            type: type.BOOLEAN,
+            allowNull: true
+        },
+        citizenship: {
+            type: type.STRING,
+            allowNull: false,
+            defaultValue: 'Filipino'
+        },
+        destination_entitlement: {
+            type: type.STRING,
+            allowNull: true,
+        },
+        birthplace: {
+            type: type.STRING,
+            allowNull: true,
+            
+        },
+        type_of_disability: {
+            type: type.STRING,
+            allowNull: true
+        },
+        address_id: {
+            type: type.INTEGER,
+            allowNull: true
+        }
+    },
+    {
+    	timestamps: false
+    });
+
+    Users.beforeCreate((user, options) => {
+        if (!user.destination_entitlement && user.permanent_address) {
+        user.destination_entitlement = user.permanent_address;
+        }
+    });
+
+    return Users;
+}

@@ -1,0 +1,37 @@
+
+@import "component/colors";
+@import "component/variables";
+@import "component/fonts";
+@import "component/extends";
+@import "component/global";
+@import "component/home";
+
+@import "component/header";
+@import "component/aside";
+@import "component/main";
+
+@import "component/bootstrap";
+@import "component/forms";
+@import "component/widget";
+@import "component/errors";
+@import "component/tables";
+@import "component/full-calendar";
+@import "component/calendarMultiple";
+@import "component/myaccount";
+@import "component/approval";
+@import "component/time_keeping";
+@import "component/payment";
+@import "component/announcement";
+@import "component/toast";
+@import "component/yearCalendar";
+@import "component/accounts";
+@import "component/utilities";
+
+//@import "component/monthpicker";
+//Pages
+@import "component/employee-account";
+//Package
+@import '~vue-datetime/dist/vue-datetime.min.css';
+@import '~pretty-checkbox/src/pretty-checkbox.scss';
+@import '~@fullcalendar/core/main.css';
+@import '~vue2-datepicker/index.css';

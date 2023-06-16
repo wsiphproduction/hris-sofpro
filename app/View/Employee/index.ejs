@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Employee</title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../Include/header %>
+	
+	<% include ../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Employee</span></li>
+						<li class="search">
+							<div class="search-container">
+								<div class="input-group">
+									<input type="search" class="form-control form-control-sm" v-on:keyup="find()" v-on:click="clear()" v-model="keyword" placeholder="Search employees">
+								</div>
+							</div>
+							<div class="search-result" v-if="showResult">
+								<ul>
+									<li class="blank" v-if="!searchResult.length">
+										<i class="mdi mdi-information-outline"></i>
+										<div>No record found!</div>
+									</li>
+									<li class="tbl" v-for="result in searchResult">
+										<a v-bind:href="'./employee/general/'+ result.shortid">
+											<div class="image">
+												<span>
+													<img v-if="result.avatar" v-bind:src="'./uploads/avatar/'+ result.avatar">
+													<img v-else="result.avatar" v-bind:src="'./uploads/avatar/'+result.gender+'.png'">
+												</span>
+											</div>
+											<div class="content">
+												<div v-text="result.last_name+', '+result.first_name"></div>
+												<small v-text="result.email"></small>
+											</div>
+										</a>
+									</li>
+									<!-- <li class="default"><a href="">The best part is you can do this with any button variant, too:</a></li> -->
+								</ul>
+							</div>
+						</li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openAccount('new')"><i class="mdi mdi-plus"></i> New</a>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openAccount('import')"><i class="mdi mdi-download"></i> Import</a>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="exportEmp()"><i class="mdi mdi-upload"></i> Export</a>
+					
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Employees</h5>
+
+							<form class="form-inline">
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.company" style="max-width: 150px !important;">
+									<option value="">Company</option>
+									<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.location" style="max-width: 150px !important;">
+									<option value="">Location</option>
+									<option v-for="location in locations" v-bind:value="location.id" v-text="location.location" style="max-width: 150px !important;"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.division" style="max-width: 150px !important;">
+									<option value="">Division</option>
+									<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.department" style="max-width: 150px !important;">
+									<option value="">Department</option>
+									<option v-for="department in departments" v-bind:style="param.division == department.division_id ? '': 'display: none;'" v-bind:value="department.id" v-text="department.department_name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2  form-control-sm" v-model="param.section" style="max-width: 150px !important;">
+									<option value="">Section</option>
+									<option v-for="section in sections" v-bind:style="param.department == section.department_id ? '': 'display: none;'" v-bind:value="section.id" v-text="section.section_name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" style="max-width: 150px !important;" v-model="param.position">
+									<option value="">Position</option>
+									<option v-for="position in positions" v-bind:value="position.id" v-text="position.name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.status">
+									<option value="">Status</option>
+									<option value="1">Active</option>
+									<option value="2">Inactive</option>
+								</select>
+								<label class="mb-2 mr-sm-2">Limit</label>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="75">75</option>
+									<option value="100">100</option>
+								</select>
+								<button type="reset" class="btn btn-light mb-2" v-on:click="reset">Reset</button>
+							</form>
+							<div class="table-responsive" v-if="!fetching && records.length">
+								<table class="table table-bordered table-hover">
+									<thead class="bg-light">
+										<tr>
+											<th class="text-center">Employee No</th>
+											<th class="text-center" width="250">Employee</th>
+											<th class="text-center">Company</th>
+											<th class="text-center">Division</th>
+											<th class="text-center">Department</th>
+											<th class="text-center">Section</th>
+											<th class="text-center">Position</th>
+											<th class="text-center" width="100">Status</th>
+											<% if(empRole.modify){ %>
+											<th class="text-center" width="120">Role</th>
+											<% } %>
+											<th class="text-center" width="150" class="text-center">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(record, index) in records">
+											<td v-text="record.employments && record.employments.length && record.employee_number ? record.employee_number :'' "></td>
+											<td class="withTable">
+												<a v-bind:href="'<%= baseUrl + '/employee/general/' %>'+ record.shortid">
+													<div class="img">
+														<span class="image">
+															<img v-bind:src="'<%= baseUrl + '/uploads/avatar/' %>'+ record.avatar" v-if="record.avatar">
+															<img v-bind:src="'<%= baseUrl + '/uploads/avatar/' %>' + record.gender + '.png'" v-if="!record.avatar">
+														</span>
+													</div>
+													<div class="info">
+														{{ record.last_name  + ', '}}
+														{{ record.first_name + ' '}}
+														{{ record.middle_name ? record.middle_name.substring(0,1) : '' }}
+														<small v-text="record.email"></small>
+													</div>
+												</a>
+											</td>
+											<td v-text="record.employments && record.employments.length && record.employments[0].company ? record.employments[0].company.name :'' "></td>
+											<td v-text="record.employments && record.employments.length && record.employments[0].division ? record.employments[0].division.name :'' "></td>
+											<td v-text="record.employments && record.employments.length && record.employments[0].department ? record.employments[0].department.department_name :'' "></td>
+											<td v-text="record.employments && record.employments.length && record.employments[0].section ? record.employments[0].section.section_name :'' "></td>
+											<td v-text="record.employments && record.employments.length && record.employments[0].position ? record.employments[0].position.name :'' "></td>
+											<td class="text-center">
+												<div v-if="record.status == '1'"><span class="status active"></span> Active</div>
+												<div v-if="record.status == '2'"><span class="status"></span> Inactive</div>
+											</td>
+											<% if(empRole.modify){ %>
+											<td class="text-center">
+												<button class="btn btn-sm btn-outline-primary" v-on:click="editRole(record.id, record.user_role)">Edit Role</button>
+											</td>
+											<% } %>
+											<td class="text-center nowrap">
+												<a v-bind:href="'<%= baseUrl + '/employee/general/' %>'+ record.shortid" class="btn btn-sm btn-outline-primary" title="Show details">
+													<i class="mdi mdi-information-variant"></i>
+												</a>&nbsp;
+												<button :disabled='checkHRGeneralist(record, "modify")' title="Edit" class="btn btn-sm btn-outline-primary" v-on:click="editAccount(record.id)"> 
+													<i class="mdi mdi-lead-pencil"></i>
+												</button>&nbsp;
+												<button :disabled='checkHRGeneralist(record, "destroy")' title="Login" class="btn btn-sm btn-outline-warning" v-on:click="editLogin(record.id)">
+													<i class="mdi mdi-security-account"></i>
+												</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<ul class="pagination" v-if="counts">
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+									</li>
+									<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+										<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+									</li>
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+									</li>
+								</ul>
+							</div>
+
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal -->
+					
+					<% include ./form %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</employee> <!-- Inline Template -->
+		
+	</main>
+	</div>
+	
+	<% include ../Include/javascript %>
+
+</body>
+</html>

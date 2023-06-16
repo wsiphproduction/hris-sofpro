@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+</head>
+<body>
+	<div id="app">	
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-training inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<button class="btn btn-primary btn-sm" v-on:click=""><i class="mdi mdi-download"></i> Export </button>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col col-sm">
+										<div class="card">
+											<div class="card-header">
+												Training
+												<% if(user_role.modify){ %>
+													<button class="btn btn-primary" v-on:click="addTraining('<%= employee.id %>')">Add New</button>
+												<% } %>
+											</div>
+											<div class="table-responsive">
+												<table class="table table-bordered noBorderLeftRight" v-if="trainings.length">
+													<tbody>
+														<tr>
+															<td class="text-center">Title</td>
+															<td class="text-center">Description</td>
+															<!-- <td class="text-center">Classification</td> -->
+															<!-- <td class="text-center">Type</td> -->
+                                                            <td class="text-center">Start Date</td>
+                                                            <td class="text-center">End Date</td>
+                                                            <td class="text-center">No. of days</td>
+                                                            <td class="text-center">Training Provider</td>
+                                                            <!-- <td class="text-center">Address</td> -->
+                                                            <!-- <td class="text-center">Service Bond</td> -->
+                                                            <td class="text-center">CPD Points Earned</td>
+                                                            <!-- <td class="text-center">Training Venue</td> -->
+															<!-- <td class="text-center">Post Evaluation Form</td> -->
+															<td class="text-center">Assessment Report</td>
+															<% if(user_role.modify){ %>
+																<td class="text-center">Action</td>
+															<% } %>
+														</tr>
+														<tr v-for="(tr, index) in trainings">
+															<td>{{tr.title}}</td>
+															<td>{{tr.description}}</td>
+                                                            <td>{{tr.start_date}}</td>
+                                                            <td>{{tr.end_date}}</td>
+                                                            <td>{{tr.no_days}}</td>
+                                                            <td>{{tr.training_provider}}</td>
+                                                            <td>{{tr.cdp_points}}</td>
+                                                            <td>{{tr.training_report}}</td>
+															<% if(user_role.modify){ %>
+															<td class="text-center">
+																<button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="editTraining(index)">
+																	<i class="mdi mdi-lead-pencil"></i>
+																</button>
+																<button class="btn btn-sm btn-outline-primary" title="Archive" v-on:click="archive(tr.id, 'employee/training/archive')">
+																	<i class="uil uil-trash-alt"></i>
+																</button>
+															</td>
+															<% } %>
+														</tr>
+													</tbody>
+												</table>
+												<div class="norecord" v-if="!trainings.length">
+													<img src="<%= baseUrl + '/img/info.png' %>">
+													<p>Sorry, we couldn't find any matches.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% include ./form %>
+					<% include ../../Include/alert %>
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-training>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= title %></title>
+	<% include ../Include/head %>
+
+</head>
+<body class="bg-light">
+	<div class="approval">
+		<div class="icon">
+			<% if(status == 'success'){ %>
+			<img src="<%= baseUrl %>/img/trophy.png">
+			<% }else{ %>
+			<img src="<%= baseUrl %>/img/error.png">
+			<% } %>
+		</div>
+		<h1><%= title %></h1>
+		<p><%= message %></p>
+		<a href="<%= baseUrl %>">Continue</a>
+		<div class="app_name">
+			Copyright <%= year %> &copy; <%= app_name %>.<br>All rights reserved
+		</div>
+	</div>
+</body>
+</html>

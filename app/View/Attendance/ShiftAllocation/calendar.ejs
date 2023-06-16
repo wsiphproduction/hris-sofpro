@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Shift Management</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-shift-calendar inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/attendance/shift-management' %>">Shift Management</a></li>
+						<li class="breadcrumb-item"><span class="active"><strong><%= userData.first_name +' '+ userData.last_name %></span></strong></li>
+					</ol>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="yearcalendar">
+								<yearcalendar :data-source="dataSource" v-on:year-changed="yearChanged" v-on:mouse-on-day="mouseOnDay" v-on:mouse-out-day="mouseOutDay"></yearcalendar>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				
+			</div>
+		</attendance-shift-calendar>
+	</main>
+	
+	</div>
+
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

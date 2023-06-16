@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Announcement</title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../Include/header %>
+	
+	<% include ../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<accounts inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Accounts</span></li>
+					</ol>
+					<div class="buttons">
+						<% if(user_role.write){ %>
+						<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+						<% } %>
+					</div>
+				</div>
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<!-- <div class="">
+								<form class="form-inline">
+									<datetime type="date" input-class="form-control mb-2 mr-sm-2 form-control-sm" placeholder="Start Date" v-model="param.start"></datetime>
+									<datetime type="date" input-class="form-control mb-2 mr-sm-2 form-control-sm" placeholder="End Date" v-model="param.end" :min-datetime="minDate"></datetime>
+								</form>
+							</div> -->
+							
+							<div class="row accounts">
+								<div class="col-sm-3">
+									<div class="cards chase">
+										<div class="header">
+											<span>Chase</span>
+											<a href="javascript:void(0);" class="filter"><i class="mdi mdi-magnify"></i> Search</a>
+											<img src="<%= baseUrl %>/img/icons/survey.png">
+										</div>
+										<div class="collection">
+											<div class="list-group-item" v-for="(chase, index) in chase" v-on:dragstart="drag(index, $event)" draggable="true">
+												<div class="items">
+													<div class="label">Account</div>
+													<div class="text" v-text="chase.account"></div>
+												</div>
+												<div class="items">
+													<div class="label">Project Site</div>
+													<div class="text" v-text="chase.project_site"></div>
+												</div>
+												<div class="items">
+													<div class="label">Type</div>
+													<div class="text">
+														<span v-if="chase.type == 1">Fit out</span>
+														<span v-if="chase.type == 2">Renovation</span>
+														<span v-if="chase.type == 3">Reconfig</span>
+														<span v-if="chase.type == 4">Others</span>
+													</div>
+												</div>
+												<div class="items">
+													<div class="label">Revenue</div>
+													<div class="text" v-text="$Global.currencyFormat(chase.revenue)"></div>
+												</div>
+												<div class="items">
+													<div class="label">Sales</div>
+													<div class="text" v-text="chase.sales"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="cards win">
+										<div class="header">
+											<span>Win</span>
+											<img src="<%= baseUrl %>/img/icons/increase.png">
+										</div>
+										<div class="collection" id="win" v-on:drop="drop($event)" v-on:dragover="allowDrop($event)" v-on:dragenter="dragenter($event)" v-on:dragleave="dragleave($event)">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="cards loss">
+										<div class="header">
+											<span>Loss</span>
+											<img src="<%= baseUrl %>/img/icons/decrease.png">
+										</div>
+										<div class="collection" id="loss" v-on:drop="drop($event)" v-on:dragover="allowDrop($event)" v-on:dragenter="dragenter($event)" v-on:dragleave="dragleave($event)">
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3">
+									<div class="cards drop">
+										<div class="header">
+											<span>Drop</span>
+											<img src="<%= baseUrl %>/img/icons/trash.png">
+										</div>
+										<div class="collection" id="drop" v-on:drop="drop($event)" v-on:dragover="allowDrop($event)" v-on:dragenter="dragenter($event)" v-on:dragleave="dragleave($event)">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% include ./form %>
+				</div>
+				
+				<% include ../Include/alert %>
+
+			</div>
+		</accounts>
+	</main>
+	
+	</div>
+
+	<% include ../Include/javascript %>
+
+</body>
+</html>

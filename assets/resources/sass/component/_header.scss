@@ -1,0 +1,246 @@
+div.app-header{
+	height: 55px;
+	border-bottom: $grey-lighten-1 solid 1px;
+	background: $white;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	display: table;
+	& .links{
+		display: table-cell;
+		vertical-align: middle;
+		position: relative;
+		padding: 0;
+	}
+	& .logo{
+		display: inline-block;
+		width: 200px;
+		padding-left: 15px;
+		float: left;
+		& img{
+			height: 35px;
+			float: left;
+			margin-top: 10px;
+			margin-right: 10px;
+		}
+		& span{
+			font-size: 24px;
+			display: inline-block;
+			height: 54px;
+			line-height: 54px;
+		}
+	}
+	& .links{
+		& span.burger{
+			display: inline-block;
+			height: 50px;
+			line-height: 50px;
+			font-size: 24px;
+			width: 50px;
+			text-align: center;
+			cursor: pointer;
+			float: left;
+			&:hover{
+				color: $primary;
+			}
+		}
+		& ul{
+			margin: 0 0.75rem 0 0;
+			padding: 0;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-wrap: wrap;
+			flex-wrap: wrap;
+			list-style: none;
+			float: right;
+			& li{
+				height: 54px;
+				padding:0 0;
+				&:last-child{
+					padding-left: 20px;
+					padding-right: 5px;
+				}
+				& a.item-link{
+					padding:0 15px;
+					display: inline-block;
+					height: 55px;
+					line-height: 55px;
+					color: $secondary;
+					position: relative;
+					& i.mdi{
+						font-size: 18px;
+					}
+					&:hover{
+						color: $primary;
+					}
+					& small{
+						background: $green;
+						color: $white;
+						font-size: 10px;
+						position: absolute;
+						top: 10px;
+						right: -10px;
+						display: inline-block;
+						z-index: 1099;
+						height: 15px;
+						line-height: 15px;
+						padding: 0 5px;
+						border-radius: 10px;
+						text-align: center;
+					}
+				}
+				& .dropdown{
+					height: 54px !important;
+					cursor: pointer;
+					& .dropdown-menu{
+						border-radius: 0;
+						//padding: 0;
+						min-width: 200px;
+						& a.dropdown-item{
+							padding: 10px 1rem;
+							font-size: 14px;
+							&:hover{
+								background: $primary;
+								color: $white;
+							}
+
+						}
+						&.notification{
+							padding: 0;
+							min-width: 300px;
+							& ul{
+								margin: 10px 0;
+								width: 100%;
+								& li{
+									padding: 0;
+									margin: 0;
+									line-height: 1.5em;
+									height: auto;
+									width: 100%;
+									display: block;
+									&.heading{
+										padding: 10px 10px;
+										border-bottom: $grey-lighten-3 solid 1px;
+									}
+									& .info{
+										text-align: center;
+										padding: 10px 0;
+										& i{
+											font-size: 24px;
+										}
+										& p{
+											font-size: 13px;
+											margin-bottom: 0;
+										}
+									}
+									& a.more{
+										border-top: $grey-lighten-3 solid 1px;
+										text-align: center;
+										font-size: 13px;
+										padding: 10px 10px 5px 10px;
+										width: 100%;
+										display: block;
+										color: $grey-darken-2;
+										&:hover{
+											color: $grey-darken-4;
+											text-decoration: none;
+										}
+									}
+									& a.list{
+										display: table;
+										width: 100%;
+										color: $grey-darken-2;
+										&:hover{
+											color: dark;
+											text-decoration: none;
+										}
+										& .image,
+										& .text{
+											display: table-cell;
+											vertical-align: top;
+											padding-top: 10px;
+											padding-bottom: 10px;
+										}
+										& .image{
+											width: 50px;
+											padding-left: 10px;
+											& span{
+												display: inline-block;
+												width: 45px;
+												height: 45px;
+												overflow: hidden;
+												border-radius: 50%;
+												& img{
+													width: 100%;
+													height: 100%;
+													object-fit: cover;
+												}
+											}
+										}
+										& .text{
+											font-size: 13px;
+											line-height: 1.5em;
+											padding-right: 10px;
+											padding-left: 10px;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				& .dropdown-toggle{
+					display: table;
+					width: 100%;
+					height: 54px !important;
+					&:after{
+						display: none !important;
+					}
+					& .avatar,
+					& .name{
+						display: table-cell;
+						vertical-align: middle;
+						height: 54px !important;
+					}
+					& .avatar{
+						width: 40px;
+						& span{
+							height: 35px;
+							width: 35px;
+							display: inline-block;
+							overflow: hidden;
+							border-radius: 50%;
+							margin-top: 2px;
+							& img{
+								width: 100%;
+								height: 100%;
+								object-fit: cover;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	div.app-header{
+		position: fixed;
+		& .logo{
+			float: none;
+			width: auto;
+			padding-left: 0;
+		}
+		& .links{
+			text-align: center;
+			& ul{
+				display: none;
+			}
+			
+		}
+	}
+}

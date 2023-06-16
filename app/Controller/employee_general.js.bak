@@ -1,0 +1,897 @@
+const bcrypt = require('bcryptjs');
+const shortid = require('shortid');
+const Global 			= require('../Models/Global');
+const GlobalHelper = require('../Helper/GlobalHelper');
+const UserRole = require('../Helper/UserRole');
+const fs = require('fs');
+var { Parser } = require('json2csv');
+const { 
+	Op,
+	EducationsModel,
+	CountryModel,
+	UsersModel,
+	CompanyModel, 
+	TaxonomyModel,
+	EmploymentsModel,
+	BranchesModel,
+	ApproversModel,
+	Division,
+	Department,
+	Section,
+	Position,
+	PositionClassification,
+	PositionCategory,
+	WorkArea,
+	EmployeeType,
+	Location,
+	EmergencyContactModel,
+	AddressModel,
+	BiometricNumberModel
+} = require('../../config/Sequelize');
+
+exports.export = function(req, res){
+	UsersModel.findOne({
+		where: {
+			id: req.body.userID
+		}
+	}).then(data => {
+		user = data;
+		let fields = [
+			'first_name',
+			'middle_name',
+			'last_name',
+			'nick_name',
+			'suffix',
+			'birthdate',
+			'marital_status',
+			'gender',
+			'tribe',
+			'height',
+			'weight',
+			'citizenship',
+			'permanent_address',
+			'present_address',
+			'contact_number',
+			'email',
+			'is_solo_parent',
+			'is_with_disability',
+		];
+		let json2csvParser = new Parser({ fields });
+		let csv = json2csvParser.parse(user);
+		res.attachment('data.csv');
+		res.send(csv);
+	})
+	
+}
+
+exports.index = function(req, res){
+	let user = res.locals.user;
+	let path    = req.path.split('/');
+	let segment = path[2];
+
+	let id = req.params.id;
+	UsersModel.findOne({
+		where: {
+			shortid: id
+		},
+		include: [
+			{
+				model: EmergencyContactModel,
+			},
+    		{
+    			model: TaxonomyModel, 
+    			as: 'job_title',
+    			attributes: ['title']
+    		},
+    		{
+    			model: TaxonomyModel, 
+    			as: 'department',
+    			attributes: ['title']
+    		},
+    		{
+    			model: TaxonomyModel, 
+    			as: 'team',
+    			attributes: ['title']
+    		},
+    		{
+    			model: BranchesModel,
+    			attributes: ['location_id'],
+    			include: [
+    				{
+    					model: CompanyModel,
+    					attributes: ['name'],
+    				}
+    			]
+    		}
+    	]
+	}).then(function(data){
+		employee = data;
+		if(!employee) res.render('Errors/404');
+		return UserRole.get_role(user, 'employee-list');
+	}).then(function(data){
+		user_role = data;
+		if(!user_role.read) {
+			res.render('Errors/404');
+		}else{
+			CountryModel.findOne({
+				where: {
+					id: employee.nationality ? employee.nationality : 177
+				}
+			}).then(function(data){
+				nationality = data;
+				return EducationsModel.findOne({
+					where: {
+						user_id: employee.id
+					}
+				});
+			}).then(function(data){
+				education = data;
+				return EmployeeType.findOne({
+					where: {
+						id: employee.employee_type
+					}
+				});
+			}).then(function(data){
+				employee_type = data;
+				return CompanyModel.findOne({
+					where: {
+						id: employee.company_branch_id
+					}
+				});
+			}).then(function(data){
+				company = data;
+				return UserRole.allRead(user);
+				
+			}).then(function(data){
+				usrRole = data;
+				return EmploymentsModel.findAll({
+					where: {
+						user_id: employee.id
+					},
+					include: [
+			    		{
+			    			model: BranchesModel,
+			    			attributes: ['location_id'],
+			    			include: [
+			    				{
+			    					model: CompanyModel,
+			    					attributes: ['name'],
+			    				}
+			    			]
+			    		},
+			    		{
+			    			model: CompanyModel,
+			    			as: 'company'
+			    		}
+			    	],
+					order: [
+						['date_entry','desc']
+					],
+					raw: false
+				});
+				
+			}).then(function(data){
+				employment = data;
+				res.render('Employee/General/index',{
+					employee: employee,
+					nationality: nationality,
+					education: education,
+					segment: segment,
+					user_role: user_role,
+					employment: employment,
+					route: 'employee',
+					company: company,
+					employee_type: employee_type
+				});
+			})
+		}
+	});
+
+}
+
+exports.fetch = function(req, res){
+	let slug = req.body.slug;
+	UsersModel.findOne({
+		where:{
+			shortid: slug
+		},
+		include: [	
+			{
+				model: BiometricNumberModel, as: 'biometric_number'
+			},	
+			{
+				model: EmergencyContactModel,
+				include: [
+					{
+						model: AddressModel
+					}
+				]
+			},
+			{
+				model: AddressModel
+			}
+		]
+	}).then(async data => {
+		user = data;
+		biometric_number = user.biometric_number[0]?.biometric_number;
+		address = await AddressModel.findAll({
+			where: {
+				user_id: user.id
+			}
+		});
+
+		emergencyContacts = user.emergency_contacts;
+		return EmploymentsModel.findAll({
+			where:{
+				user_id: user.id
+			},
+			include:[
+				{
+					model: UsersModel,
+					as: 'employment'
+				},
+				{
+					model: CompanyModel,
+					as: 'company'
+				},{
+					model: Division,
+					as: 'division',
+					include: [
+						{
+							model: UsersModel,
+							as: 'manager',
+							attributes:['first_name','last_name'],
+						}
+					]
+				},{
+					model: Department,
+					as: 'department',
+					include: [
+						{
+							model: UsersModel,
+							as: 'manager',
+							attributes:['first_name','last_name']
+						}
+					]
+				},{
+					model: Section,
+					as: 'section',
+					include: [
+						{
+							model: UsersModel,
+							as: 'supervisor',
+							attributes:['first_name','last_name']
+						}
+					]
+				},{
+					model: Position,
+					as: 'position'
+				},{
+					model: PositionClassification,
+					as: 'position_classification'
+				},{
+					model: PositionCategory,
+					as: 'position_category'
+				},{
+					model: Location,
+					// as: 'location',
+				},{
+					model: WorkArea,
+					as: 'work_area'
+				}
+			]
+		});
+	}).then(data=>{
+		employments = data;
+		
+		res.status(200).json({
+			success: true,
+			employments,
+			emergencyContacts,
+			address,
+			biometric_number
+		});
+	})
+}
+
+async function getAddressData(type, req) {  
+	return {
+		country: req.body[`${type}_country`],
+		region: req.body[`${type}_region`],
+		state_or_province: req.body[`${type}_state_or_province`],
+		city: req.body[`${type}_city_mun`],
+		brgy: req.body[`${type}_brgy`],
+		unit_building_residence_number: req.body[`${type}_unit_building_residence_number`],
+		street: req.body[`${type}_street`],
+		zip_code: req.body[`${type}_zip_code`],
+		type,
+	};
+}
+  
+  
+ 
+
+exports.update = async(req, res)=>{
+	let user_id  = req.session.user ? req.session.user.id : null;
+	let type = req.body.type;
+	if(type == 'personal'){
+
+		let id = req.body.id;
+		
+		let validate = []; 
+
+		req.checkBody('first_name').notEmpty().withMessage('The first name field is required.');
+		req.checkBody('last_name').notEmpty().withMessage('The last name field is required.');
+		req.checkBody('gender').notEmpty().withMessage('The gender field is required.');
+		req.checkBody('birthday').notEmpty().withMessage('The birthday field is required.');
+		req.checkBody('marital_status').notEmpty().withMessage('The marital status field is required.');
+		//req.checkBody('contact_number').notEmpty().withMessage('The contact number field is required.');
+		req.checkBody('nationality').notEmpty().withMessage('The nationality field is required.');
+		req.checkBody('employee_type').notEmpty().withMessage('The employee type field is required.');
+		req.checkBody('citizenship').notEmpty().withMessage('The citizenship type field is required.');
+		
+
+		let email = req.body.email;
+		let employee_number = req.body.employee_number;
+
+		if(email != '' && await Global._validate('users:email,'+email+':id !=,'+ id)){
+			validate.push({
+				'param': 'email',
+				'msg': 'This email is already registered.'
+			});
+		}
+		if(employee_number != '' && await Global._validate('users:employee_number,'+employee_number+':id !=,'+ id)){
+			validate.push({
+				'param': 'employee_number',
+				'msg': 'This employee number is already registered.'
+			});
+		}
+
+		let errors = req.validationErrors();
+
+		if(errors || validate.length){
+
+			if(errors && validate.length){
+				errors = errors.concat(validate);
+			}else if(!errors && validate.length){
+				errors = validate;
+			}else if(errors && !validate.length){
+				errors = errors;
+			}
+
+			res.status(422).json({
+				success: false,
+	            errors
+			});
+
+		}else{
+			let bday = req.body.birthday;
+			let birthday = res.locals.moment(req.body.birthday).format('YYYY-MM-DD');
+
+			const addressTypes = ['bp', 'pa', 'ta'];
+
+			for (const type of addressTypes) {
+				const addressData = await getAddressData(type, req);
+				const existingAddress = await AddressModel.findOne({ where: { type, user_id: req.body.user_id } });
+			  
+				if (existingAddress) {
+					await AddressModel.update(addressData, { where: { type, user_id: req.body.user_id } });
+				} else {
+					await AddressModel.create({...addressData, user_id: req.body.user_id});
+				}
+			}
+			  
+			let account = {
+				employee_number: req.body.employee_number,
+				first_name: req.body.first_name,
+				middle_name: req.body.middle_name,
+				last_name: req.body.last_name,
+				suffix: req.body.suffix,
+				nick_name: req.body.nick_name,
+				gender: req.body.gender,
+				birthdate: birthday,
+				present_address: req.body.current_address,
+				permanent_address: req.body.permanent_address,
+				nationality: req.body.nationality,
+				marital_status: req.body.marital_status,
+				contact_number: req.body.contact_number,
+				email: req.body.email,
+				sss_number: req.body.sss_number,
+				pagibig_number: req.body.pagibig_number,
+				tin_number: req.body.tin_number,
+				team_id: req.body.team,
+				philhealth_number: req.body.philhealth_number,
+				updated_by: user_id,
+				employee_type: req.body.employee_type,
+				salary_type: req.body.salary_type,
+				tribe: req.body.tribe,
+				height: req.body.height,
+				weight: req.body.weight,
+				religion: req.body.religion,
+				blood_type: req.body.blood_type,
+				is_solo_parent: req.body.is_solo_parent,
+				is_with_disability: req.body.is_with_disability,
+				citizenship: req.body.citizenship,
+				break_type: req.body.break_type,
+				roster_break: req.body.roster_break,
+				birthplace: req.body.birthplace,
+				destination_entitlement: req.body.destination_entitlement,
+				type_of_disability: req.body.type_of_disability
+			}
+			UsersModel.update(account, {
+				where: {
+					id: id
+				}
+			}).then(function(data){
+				
+				res.status(200).json({
+					success: true,
+					action: 'close',
+					msg: 'Record has been successfully updated.'
+				});
+			});
+		}
+
+	}else if(type == 'login'){
+
+		let id = req.body.id;
+		let validate = []; 
+
+		req.checkBody('email').notEmpty().withMessage('The email field is required.');
+		req.checkBody('password').notEmpty().withMessage('The password field is required.');
+		req.checkBody('status').notEmpty().withMessage('The status field is required.');
+
+		let email = req.body.email;
+
+		if(email != '' && await Global._validate('users:email,'+email+':id !=,'+ id)){
+			validate.push({
+				'param': 'email',
+				'msg': 'This email is already registered.'
+			});
+		}
+
+		let errors = req.validationErrors();
+
+		if(errors || validate.length){
+
+			if(errors && validate.length){
+				errors = errors.concat(validate);
+			}else if(!errors && validate.length){
+				errors = validate;
+			}else if(errors && !validate.length){
+				errors = errors;
+			}
+
+			res.status(422).json({
+				success: false,
+	            errors
+			});
+
+		}else{
+
+			let password = req.body.password;
+			var salt = bcrypt.genSaltSync(10);
+			password = bcrypt.hashSync(password, salt);
+
+			let account = {
+				email: req.body.email,
+				password: password,
+				status: req.body.status,
+				updated_by: user_id
+			}
+			UsersModel.update(account, {
+				where: {
+					id : id
+				}
+			}).then(function(data){
+				res.status(200).json({
+					success: true,
+					action: 'close',
+					msg: 'Record has been successfully updated.'
+				});
+			});
+		}
+
+	}else if(type == 'education'){
+
+		let school_id = req.body.school_id;
+
+		let school = {
+			user_id: req.body.id,
+			school: req.body.school,
+			degree: req.body.degree,
+			year_attended: req.body.year_attended,
+			post_graduate: req.body.post_graduate,
+			others: req.body.others,
+		}
+
+		if(school_id == '' || school_id == null){
+			school.created_by = user_id;
+			EducationsModel.create(school).then(function(data){
+				res.status(200).json({
+					success: true,
+					action: 'close',
+					msg: 'Record has been successfully updated.'
+				});
+			});
+
+		}else{
+			school.updated_by = user_id;
+			EducationsModel.update(school, {
+				where: {
+					id: school_id
+				}
+			}).then(function(data){
+				res.status(200).json({
+					success: true,
+					action: 'close',
+					msg: 'Record has been successfully updated.'
+				});
+			});
+		}
+		
+	}else if(type == 'work'){
+		let id = req.body.id;
+		req.checkBody('company').notEmpty().withMessage('The company field is required.');
+		req.checkBody('department').notEmpty().withMessage('The department field is required.');
+		req.checkBody('job_title').notEmpty().withMessage('The designation field is required.');
+		req.checkBody('team').notEmpty().withMessage('The team field is required.');
+		let errors = req.validationErrors();
+
+		if(errors){
+			res.status(422).json({
+				success: false,
+	            errors
+			});
+		}else{
+			let user_id  = req.session.user ? req.session.user.id : null;
+			let start_date = req.body.start_date;
+			let end_date = req.body.end_date;
+			let date_entry = null;
+			let date_exit = null;
+			let company_branch_id = req.body.company;
+			let department_id = req.body.department;
+
+			if(start_date){
+				date_entry = res.locals.moment(start_date).format('YYYY-MM-DD');
+			}
+			
+			let data = {
+				company_branch_id: company_branch_id,
+				department_id: department_id,
+				job_title_id: req.body.job_title,
+				date_entry: date_entry,
+				team_id: req.body.team
+			}
+			UsersModel.update(data, {
+				where: {
+					id: id
+				}
+			}).then(function(data){
+				//Check Approvers and Create or Update if Any
+				ApproversModel.findOne({
+					where: {
+						company_location_id: company_branch_id,
+						department_id: department_id
+					}
+				}).then(function(data){
+					record = data;
+					if(!record){
+						let approverData = {
+							company_location_id: company_branch_id,
+							department_id: department_id
+						}
+						ApproversModel.create(approverData);
+					}
+				});
+				//Return Success Message
+				res.status(200).json({
+					success: true,
+					action: 'close',
+					msg: 'Record has been successfully updated.'
+				});
+			});
+		}
+	}
+}
+
+exports.emergency_contact_create = function(req, res){
+	req.checkBody('first_name').notEmpty().withMessage('The first name field is required.');
+	req.checkBody('last_name').notEmpty().withMessage('The last name field is required.');
+	
+	let errors = req.validationErrors();
+
+	if(errors){
+		res.status(422).json({
+			success: false,
+			errors
+		});
+	}else{
+		let emergencyContactData = {
+			user_id: req.body.user_id,
+			first_name: req.body.first_name,
+			middle_name: req.body.middle_name,
+			last_name: req.body.last_name,
+			relationship: req.body.relationship,
+			contact_number: req.body.contact_number
+		}
+		EmergencyContactModel.create(emergencyContactData).then(function(data){
+			let emergency_contact = data;
+			let emergency_contact_id = emergency_contact.id;
+
+			let permanentAddressData = {
+				unit_building_residence_number: req.body.unit_building_residence_number,
+				street: req.body.street,
+				brgy: req.body.brgy,
+				city: req.body.city,
+				state_or_province: req.body.state_or_province,
+				region: req.body.region,
+				country: req.body.country,
+				zip_code: req.body.zip_code,
+				state_or_province: req.body.state_or_province,
+			};
+			AddressModel.create(permanentAddressData).then(function(data){
+				let permanent_address_id = data.id;
+				let emergencyContactData = {
+					permanent_address_id: permanent_address_id
+				};
+				EmergencyContactModel.update(emergencyContactData, {
+					where: {
+						id: emergency_contact_id
+					}
+				})
+			});
+			res.status(200).json({
+				success: true,
+				action: 'close',
+				msg: 'Record has been successfully created.'
+			});
+		});
+	}
+}
+
+
+
+exports.emergency_contact_update = function(req, res){
+	req.checkBody('first_name').notEmpty().withMessage('The first name field is required.');
+	req.checkBody('last_name').notEmpty().withMessage('The last name field is required.');
+	
+	let errors = req.validationErrors();
+
+	if(errors){
+		res.status(422).json({
+			success: false,
+			errors
+		});
+	}else{
+		let emergencyContactData = {
+			user_id: req.body.user_id,
+			first_name: req.body.first_name,
+			middle_name: req.body.middle_name,
+			last_name: req.body.last_name,
+			relationship: req.body.relationship,
+			contact_number: req.body.contact_number
+		};
+		EmergencyContactModel.update(emergencyContactData, {
+			where: {
+				id: req.body.id
+			}
+		}).then(function(data){
+			
+			let permanentAddressData = {
+				unit_building_residence_number: req.body.unit_building_residence_number,
+				street: req.body.street,
+				brgy: req.body.brgy,
+				city: req.body.city,
+				state_or_province: req.body.state_or_province,
+				region: req.body.region,
+				country: req.body.country,
+				zip_code: req.body.zip_code,
+			};
+
+			AddressModel.update(permanentAddressData, {
+				where: {
+					id: req.body.permanent_address_id.id
+				}
+			})
+			
+			res.status(200).json({
+				success: true,
+				action: 'close',
+				msg: 'Record has been successfully updated.'
+			});
+		});
+	}
+}
+
+exports.employment_create = function(req, res){
+	let user = res.locals.user;
+	req.checkBody('company').notEmpty().withMessage('The company field is required.');
+	req.checkBody('division').notEmpty().withMessage('The division field is required.');
+	req.checkBody('department').notEmpty().withMessage('The department field is required.');
+	// req.checkBody('section').notEmpty().withMessage('The section field is required.');
+	req.checkBody('position').notEmpty().withMessage('The position field is required.');
+	req.checkBody('position_classification').notEmpty().withMessage('The position classification field is required.');
+	req.checkBody('position_category').notEmpty().withMessage('The position category field is required.');
+	
+	req.checkBody('location').notEmpty().withMessage('The location field is required.');
+	req.checkBody('work_area').notEmpty().withMessage('The work area field is required.');
+	req.checkBody('approving_organization').notEmpty().withMessage('The approving organization field is required.');
+	req.checkBody('start_date').notEmpty().withMessage('The effective date field is required.');
+	req.checkBody('status').notEmpty().withMessage('The status field is required.');
+	
+	let errors = req.validationErrors();
+
+	if(errors){
+		res.status(422).json({
+			success: false,
+            errors
+		});
+	}else{
+		let user_id  = req.body.user_id;
+		//console.log(req.body);
+		UsersModel.findOne({
+			where: { 
+				id: user_id
+			}
+		}).then(function(data){
+			employee = data;
+			CompanyModel.findOne({
+				where: {
+					id: req.body.company
+				},
+			}).then(function(data){
+				company = data;
+				let code = company.code;
+				let now = res.locals.moment(Date.now()).format('MM/DD/YYYY');
+				let year = req.body.start_date ? res.locals.moment(new Date(req.body.start_date)).format('YYYY') : res.locals.moment(new Date(now)).format('YYYY');
+				let employee_number = GlobalHelper.generate_employee_number(code, year, user_id);
+				let userData = {
+					employee_number: employee_number
+				}
+				if(employee.employee_number == null || employee.employee_number == ''){
+					UsersModel.update(userData, {
+						where: {
+							id: user_id
+						}
+					});	
+				}
+			}).then(function(data){
+				let reqData = {
+					user_id: user_id,
+					company_id: req.body.company,
+					division_id: req.body.division,
+					department_id: req.body.department,
+					section_id: req.body.section,
+					position_id: req.body.position,
+					position_classification_id: req.body.position_classification,
+					position_category_id: req.body.position_category,
+					approving_organization: req.body.approving_organization,
+					work_area_id: req.body.work_area,
+					location_id: req.body.location,
+					date_entry: res.locals.moment(req.body.start_date).format('YYYY-MM-DD'),
+					status: req.body.status,
+					cost_center: req.body.cost_center,
+					union_member: req.body.union_member,
+					employee_type: req.body.employee_type,
+					insurance_entitlement: req.body.insurance_entitlement,
+					type_of_separation: req.body.type_of_separation,
+					statutory_number: req.body.statutory_number,
+					medical_condition: req.body.medical_condition,
+					job_description: req.body.job_description
+				}
+				EmploymentsModel.create(reqData).then(data=>{
+					let userData = {
+						approver_id: req.body.approving_manager_id ? req.body.approving_manager_id : null,
+						secondary_approver_id: req.body.secondary_approver_id ? req.body.secondary_approver_id : null,
+						secretary_id: req.body.secretary_id ? req.body.secretary_id : null,
+						alternate_secretary: req.body.alternate_secretary ? req.body.alternate_secretary : null,
+						hr_generalist_id : req.body.hr_generalist_id ? req.body.hr_generalist_id : null,
+					}
+					UsersModel.update(userData,{
+						where: {
+							id: user_id,
+						}
+					});
+					res.status(200).json({
+						success: true,
+						action: 'close',
+						msg: 'Record has been successfully created.'
+					});
+				});
+			});
+		});
+	}
+}
+
+exports.employment_update = function(req, res){
+	let id = req.body.id;
+	let user_id = req.body.user_id;
+	req.checkBody('company').notEmpty().withMessage('The company field is required.');
+	req.checkBody('division').notEmpty().withMessage('The division field is required.');
+	req.checkBody('department').notEmpty().withMessage('The department field is required.');
+	//req.checkBody('section').notEmpty().withMessage('The section field is required.');
+	req.checkBody('position').notEmpty().withMessage('The position field is required.');
+	req.checkBody('position_classification').notEmpty().withMessage('The position classification field is required.');
+	req.checkBody('position_category').notEmpty().withMessage('The position category field is required.');
+	
+	req.checkBody('location').notEmpty().withMessage('The location field is required.');
+	req.checkBody('work_area').notEmpty().withMessage('The work area field is required.');
+	req.checkBody('approving_organization').notEmpty().withMessage('The approving organization field is required.');
+	req.checkBody('start_date').notEmpty().withMessage('The effective date field is required.');
+	req.checkBody('status').notEmpty().withMessage('The status field is required.');
+	let errors = req.validationErrors();
+
+	if(errors){
+		res.status(422).json({
+			success: false,
+            errors
+		});
+	}else{
+		let reqData = {
+			company_id: req.body.company,
+			division_id: req.body.division,
+			department_id: req.body.department,
+			section_id: req.body.section,
+			position_id: req.body.position,
+			position_classification_id: req.body.position_classification,
+			position_category_id: req.body.position_category,
+			approving_organization: req.body.approving_organization,
+			work_area_id: req.body.work_area,
+			location_id: req.body.location,
+			date_entry: res.locals.moment(req.body.start_date).format('YYYY-MM-DD'),
+			status: req.body.status,
+			cost_center: req.body.cost_center,
+			union_member: req.body.union_member,
+			employee_type: req.body.employee_type,
+			insurance_entitlement: req.body.insurance_entitlement,
+			type_of_separation: req.body.type_of_separation,
+			statutory_number: req.body.statutory_number,
+			medical_condition: req.body.medical_condition,
+			job_description: req.body.job_description
+		}
+		
+		EmploymentsModel.count({
+			where: {
+				id: {
+					[Op.gt]: id
+				},
+				user_id: user_id
+			}
+		}).then(data=>{
+			count = data;
+
+			if(count <= 0){
+				let userData = {
+					approver_id: req.body.approving_manager_id ? req.body.approving_manager_id : null,
+					secondary_approver_id: req.body.secondary_approver_id ? req.body.secondary_approver_id : null,
+					secretary_id: req.body.secretary_id ? req.body.secretary_id : null,
+					alternate_secretary: req.body.alternate_secretary ? req.body.alternate_secretary : null,
+					hr_generalist_id : req.body.hr_generalist_id ? req.body.hr_generalist_id : null,
+					employee_number: req.body.employee_number,
+					employee_type: req.body.employee_type,
+					status: req.body.status
+				}
+				
+				UsersModel.update(userData,{
+					where: {
+						id: user_id
+					}
+				});
+				
+			}
+			
+			EmploymentsModel.update(reqData, {
+				where: {
+					id: id
+				}
+			}).then(function(data){
+				res.status(200).json({
+					success: true,
+					action: 'close',
+					msg: 'Record has been successfully updated.'
+				});
+			});
+		});
+	}
+}

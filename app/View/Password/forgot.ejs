@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Forgot Password</title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<div id="overlay">
+		<div class="lds-ripple"><div></div><div></div></div>
+		<div class="loading">Loading, please wait...</div>
+	</div>
+	<div class="container" id="app">
+		<div class="row">
+			<div class="col col-sm-4 offset-sm-4">
+				<password-forgot inline-template>
+
+					<div class="form-default">
+						
+						<div class="header">
+							<img src="<%= baseUrl %>/img/logo.png" alt="">
+							<h1>Forgot Password</h1>
+							<div class="error" v-if="!! errors.server" v-text="errors.server"></div>
+							<div class="text-success" v-if="successMessage" v-text="successMessage"></div>
+						</div>
+						<div class="content">
+							<form action="<%= baseUrl +'/password/forgot' %>" method="post" @submit.prevent="onSubmit">
+								<div class="form-group">
+									<label for="email">Enter your email</label>
+									<input type="email" class="form-control" id="email" name="email" v-model="form.email">
+									<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block">
+										<span v-if="!loading">Submit</span>
+										<span v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Loading...</span>
+									</button>
+									<a href="<%= baseUrl +'/login' %>" class="btn btn-link btn-block">Back to login</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</password-forgot>
+			</div>
+		</div>
+
+	</div>
+	
+	<% include ../Include/javascript %>
+	
+</body>
+</html>

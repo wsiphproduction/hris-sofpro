@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-employment-history inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+                        <button class="btn btn-primary btn-sm" v-on:click="add"><i class="mdi mdi-plus"></i> Add Employment History</button>
+                        <% } %>
+				</div><!-- Breadcrumb -->
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col-sm-12">
+										<h4 class="text-center">Employment History</h4>
+										<table class="table table-bordered" v-if="employmentHistory.length">
+											<thead class="bg-light">
+												<tr>
+                                                    <th class="text-center">Company</th>
+													<th class="text-center">Position</th>
+													<th class="text-center">Full Address</th>
+                                                    <th class="text-center">Date Started</th>
+                                                    <th class="text-center">Date Ended</th>
+                                                    <th class="text-center">Reason of Leaving</th>
+                                                    <% if(user_role.modify){ %>
+                                                        <td class="text-center">Action</td>
+                                                    <% } %>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(employment, index) in employmentHistoryDisplay">
+                                                    <td class="text-center" v-text="employment.company"></td>
+                                                    <td class="text-center" v-text="employment.position"></td>
+                                                    <td v-if="employment.address" v-text="
+															`${employment.address ? employment.address.unit_building_residence_number : ''}
+															${employment.address ? employment.address.street : ''}
+															${employment.address ? employment.address.brgy : ''}
+															${employment.address ? employment.address.city : ''}
+															${employment.address ? employment.address.state_or_province : ''}
+															${employment.address ? employment.address.region : ''}
+															${employment.address ? employment.address.country : ''}
+															${employment.address ? employment.address.zip_code : ''}`"
+														>
+													</td>
+                                                    <td class="text-center" v-text="employment.date_started ? moment(employment.date_started).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="employment.date_started ? moment(employment.date_ended).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="employment.reason_of_leaving"></td>
+                                                    <% if(user_role.modify){ %>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="edit(index)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                        </button>
+                                                    </td>
+                                                    <% } %>
+                                                </tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!employmentHistory.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+				<% include ./form %>
+                <% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-employment-history>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

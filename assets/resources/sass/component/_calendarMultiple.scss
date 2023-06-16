@@ -1,0 +1,8 @@
+.datepicker--day-name{
+	color: $dark;
+}
+.dp-event{
+	& .dp-note{
+		color: $primary;
+	}
+}

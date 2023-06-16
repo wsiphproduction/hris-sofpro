@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Shift</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<form-shift inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Forms</span></li>
+						<li class="breadcrumb-item"><span class="active">Shift</span></li>
+					</ol>
+					<div class="buttons">
+						<div class="btn-group" style="margin-right: 15px;">
+							<a href="<%= baseUrl + '/forms/shift' %>" class="btn btn-outline-primary btn-sm"><i class="mdi mdi-format-list-bulleted"></i></a>
+							<a href="javascript:void(0);" class="btn btn-primary btn-sm"><i class="mdi mdi-calendar-check"></i></a>
+						</div>
+						<% if(user_role.write == 1){ %>
+						<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="open()"><i class="mdi mdi-plus"></i> New</a>
+						<% } %>
+					</div>
+				</div>
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Shift Record</h5>
+							
+							<calendar :events="events"></calendar>
+							
+						</div>
+					</div>
+					
+					<% include ./components/form %>
+					<% include ./components/preview %>
+
+				</div>
+				
+				<% include ../../Include/alert %>
+
+			</div>
+		</form-shift>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

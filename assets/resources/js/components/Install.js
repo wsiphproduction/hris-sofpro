@@ -1,0 +1,1 @@
+Vue.component('install-register', require('./install/Register.vue')); 

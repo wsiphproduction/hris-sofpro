@@ -1,0 +1,5 @@
+ALTER TABLE `users` ADD `resignation_date` DATE NULL DEFAULT NULL;
+ALTER TABLE `leave_policy` ADD `carry_over` INT(11) NULL DEFAULT NULL;
+
+
+ALTER TABLE `leaves` ADD `is_hr` INT(11) NULL DEFAULT NULL;

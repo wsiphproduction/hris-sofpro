@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Role Management</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-role-manage inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>/settings/user-role">Role</a></li>
+						<li class="breadcrumb-item"><span class="active" v-text="role ? role.label : ''"></span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<div class="row">
+								<div class="col"><h5 v-text="role ? role.label : ''"></h5></div>
+								<div class="col text-right">
+									<button class="btn btn-primary" v-on:click="updateRole">Save Changes</button>
+								</div>
+							</div>
+							<p></p>
+							<div role="alert" v-if="success.message" class="alert alert-success" v-html="success.message"></div>
+							<!-- <div role="alert" class="alert alert-warning"><strong>Important:</strong> User role permission warning.</div> -->
+							<div v-if="!fetching && form.modules.length">
+								<table class="table table-bordered">
+									<thead class="bg-light">
+										<tr>
+											<th class="text-center" width="25">Count</th>
+											<th>Module Name</th>
+											<th width="250">Module Tag</th>
+											<th class="text-center" width="120">Read</th>
+											<th class="text-center" width="120">Create</th>
+											<th class="text-center" width="120">Modify</th>
+											<th class="text-center" width="120">Delete</th>
+											<th class="text-center" width="120">Full Control</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(record, index) in form.modules">
+											<th class="text-center" v-text="index + 1"></th> 
+											<td v-text="record.title"></td>
+											<td v-text="record.tag"></td>
+											<td class="text-center">
+												<div class="custom-control custom-switch">
+													<input type="checkbox" class="custom-control-input" v-bind:id="'read'+index" v-model="record.read">
+													<label class="custom-control-label" v-bind:for="'read'+index"></label>
+												</div>
+											</td>
+											<td class="text-center">
+												<div class="custom-control custom-switch">
+													<input type="checkbox" class="custom-control-input" v-bind:id="'create'+index" v-model="record.create">
+													<label class="custom-control-label" v-bind:for="'create'+index"></label>
+												</div>
+											</td>
+											<td class="text-center">
+												<div class="custom-control custom-switch">
+													<input type="checkbox" class="custom-control-input" v-bind:id="'modify'+index" v-model="record.modify">
+													<label class="custom-control-label" v-bind:for="'modify'+index"></label>
+												</div>
+											</td>
+											<td class="text-center">
+												<div class="custom-control custom-switch">
+													<input type="checkbox" class="custom-control-input" v-bind:id="'delete'+index" v-model="record.delete">
+													<label class="custom-control-label" v-bind:for="'delete'+index"></label>
+												</div>
+											</td>
+											<td class="text-center">
+												<div class="custom-control custom-switch">
+													<input type="checkbox" class="custom-control-input" v-bind:id="'full'+index" v-on:change="fullControl(index, $event)" v-bind:checked="record.read && record.create && record.modify && record.delete">
+													<label class="custom-control-label" v-bind:for="'full'+index"></label>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !form.modules.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-role-manage> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

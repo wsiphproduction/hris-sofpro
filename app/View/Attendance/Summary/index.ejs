@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Summary</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-summary inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item">Attendance</li>
+						<li class="breadcrumb-item"><span class="active">Daily Time Record</span></li>
+						<li class="search">
+							<div class="search-container">
+								<div class="input-group">
+									<input type="search" class="form-control form-control-sm" v-on:keyup="find()"  v-on:click="clear()" v-on:click="clear()"  v-model="keyword" placeholder="Search employees">
+								</div>
+							</div>
+							<div class="search-result" v-if="showResult">
+								<ul>
+									<li class="blank" v-if="!searchResult.length">
+										<i class="mdi mdi-information-outline"></i>
+										<div>No record found!</div>
+									</li>
+									<li class="tbl" v-for="result in searchResult">
+										<a v-on:click="selectEmployee(result.first_name +' '+ result.last_name)">
+											<div class="image">
+												<span>
+													<img v-if="result.avatar" v-bind:src="'./uploads/avatar/'+ result.avatar">
+													<img v-else="result.avatar" v-bind:src="'./uploads/avatar/'+result.gender+'.png'">
+												</span>
+											</div>
+											<div class="content">
+												<div v-text="result.first_name +' '+ result.last_name"></div>
+												<small v-text="result.email"></small>
+											</div>
+										</a>
+									</li>
+									<!-- <li class="default"><a href="">The best part is you can do this with any button variant, too:</a></li> -->
+								</ul>
+							</div>
+						</li>
+					</ol>
+					<button class="btn btn-primary btn-sm" v-on:click="exportRecords()" v-bind:disabled="!records.length"><i class="mdi mdi-download"></i> Export</button>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="row">
+								<div class="col-sm-11">
+									<form class="form-inline">
+										<% if(user_role.write){ %>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.company" style="max-width: 150px">
+											<option value="">Company</option>
+											<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.division" style="max-width: 150px">
+											<option value="">Division</option>
+											<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.department" style="max-width: 150px">
+											<option value="">Department</option>
+											<option v-for="department in departments" v-bind:style="param.division == department.division_id ? '': 'display: none;'" v-bind:value="department.id" v-text="department.department_name"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2  form-control-sm" v-model="param.section" style="max-width: 150px">
+											<option value="">Section</option>
+											<option v-for="section in sections" v-bind:style="param.department == section.department_id ? '': 'display: none;'" v-bind:value="section.id" v-text="section.section_name"></option>
+										</select>
+										<% } %>
+										<select class="form-control mb-2 mr-sm-2" v-model="param.filter">
+											<option value="">Filter By</option>
+											<option value="1">Date Range</option>
+											<option value="2">Cutoff Period</option>
+										</select>
+										
+										<date-picker-2 v-if="param.filter == 2" type="month" v-model="param.month_date" format="YYYY-MM" style="width: 150px; margin-top: -10px; margin-right: 8px;"></date-picker-2>
+										<select v-if="param.filter == 2" class="form-control mb-2 mr-sm-2" v-model="param.period">
+											<option value="">Select Period</option>
+											<option value="A">Period A</option>
+											<option value="B">Period B</option>
+										</select>
+
+										<datetime v-if="param.filter==1" type="date" input-class="form-control mb-2 mr-sm-2" placeholder="Start Date" v-model="param.start"></datetime>
+										<datetime v-if="param.filter==1" type="date" input-class="form-control mb-2 mr-sm-2" placeholder="End Date" v-model="param.end" :min-datetime="minDate"></datetime>
+										
+										<label class="mb-2 mr-sm-2">Limit</label>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="75">75</option>
+											<option value="100">100</option>
+										</select>
+										<button type="reset" class="btn btn-light mb-2" v-on:click="reset">Reset</button>
+									</form>
+								</div>
+							</div>
+							<div class="row">
+								<div v-if="!fetching && records.length" class="col-sm-12 time_keeping">
+									<div class="" >
+										<div class="table-scrollable" v-for="record in records">
+											<table class="table table-bordered">
+												<thead class="bg-light">
+													<tr>
+														<% if(user_role.write){ %>
+															<td v-if="record.tss.length" width="300" class="text-center nowrap">Actions</td>
+														<% } %>
+														<td width="200" class="nowrap">Employee Number</td>
+														<td width="300" class="nowrap">Employee</td>
+														<td class="text-center nowrap" width="150">DTR Date</td>
+														<td class="text-center nowrap" width="100">Day</td>
+														<td class="text-center nowrap" width="150">ShiftID</td>
+														<td class="text-center nowrap" width="150">Shift TI</td>
+														<td class="text-center nowrap" width="150">Shift TO</td>
+														<td class="text-center nowrap" width="150">Actual TI</td>
+														<td class="text-center nowrap" width="150">Actual TO</td>
+														<th width="100" class="text-center nowrap">Reg (hrs)</th>
+														<th width="100" class="text-center nowrap">Late (mins)</th>
+														<th width="100" class="text-center nowrap" title="undertime">UT (mins)</th>
+														<th width="100" class="text-center nowrap" title="">ND (hrs)</th>
+														<th width="100" class="text-center nowrap">Absent</th>
+														<th width="100" class="text-center nowrap" title="Sick Leave">SL</th>
+														<th width="100" class="text-center nowrap" title="Emergency Leave">EL</th>
+														<th width="100" class="text-center nowrap" title="Vacation Leave">VL</th>
+														<th width="100" class="text-center nowrap" title="Maternity Leave">ML</th>
+														<th width="100" class="text-center nowrap" title="Paternity Leave">PL</th>
+														<th width="100" class="text-center nowrap" title="Service Incentive Leave">SIL</th>
+														<th width="100" class="text-center nowrap" title="Additional Day Off">ADO</th>
+														<th width="100" class="text-center nowrap" title="Single Parent Leave">SPL</th>
+														<th width="100" class="text-center nowrap">L09</th>
+														<th width="100" class="text-center nowrap" title="Bereavement Leave">BL</th>
+														<th width="100" class="text-center nowrap" title="Miscarriage Leave">MML</th>
+														<th width="100" class="text-center nowrap" title="Special Leave for Women">SLWL</th>
+														<th width="100" class="text-center nowrap" title="VAWCI Leave">VAWCL</th>
+														<th width="100" class="text-center nowrap" title="Union Leave">UL</th>
+														<th width="100" class="text-center nowrap">L15</th>
+														<th width="100" class="text-center nowrap">L16</th>
+														<th width="100" class="text-center nowrap">L17</th>
+														<th width="100" class="text-center nowrap">L18</th>
+														<th width="100" class="text-center nowrap">L19</th>
+														<th width="100" class="text-center nowrap">L20</th>
+														<th width="100" class="text-center nowrap" title="Regular Overtime">ROT</th>
+														<th width="100" class="text-center nowrap" title="Regular Overtime with Night Premium">NPROT</th>
+														<th width="100" class="text-center nowrap" title="Duty Restday">DO</th>
+														<th width="100" class="text-center nowrap" title="Special Holiday">SH</th>
+														<th width="100" class="text-center nowrap" title="Legal Holiday">LH</th>
+														<th width="100" class="text-center nowrap" title="Special Holiday on Duty Restday">SHDO</th>
+														<th width="100" class="text-center nowrap" title="Legal Holiday on Duty Restday">LHDO</th>
+														<th width="100" class="text-center nowrap" title="Ovetime on Duty Restday">OTDO</th>
+														<th width="100" class="text-center nowrap" title="Overtime on Special Holiday">OTSH</th>
+														<th width="100" class="text-center nowrap" title="Overtime on Legal Holiday">OTLH</th>
+														<th width="100" class="text-center nowrap" title="Overtime on Special Holiday and Duty Restday">OTSHDO</th>
+														<th width="100" class="text-center nowrap" title="Overtime on Legal Holiday and Duty Restday">OTLHDO</th>
+														<th width="100" class="text-center nowrap" title="Night Premium on Duty Restday">NDDO</th>
+														<th width="100" class="text-center nowrap" title="Night Premium on Special Holiday">NDSH</th>
+														<th width="100" class="text-center nowrap" title="Night Premium on Legal Holiday">NDLH</th>
+														<th width="100" class="text-center nowrap" title="Night Premium on Special Holiday and Duty Restday">NDSHDO</th>
+														<th width="100" class="text-center nowrap" title="Night Premium on Legal Holiday and Duty Restday">NDLHDO</th>
+														<th width="100" class="text-center nowrap" title="Night Premium on Duty Restday">NPDO</th>
+														<th width="100" class="text-center nowrap" title="">NPSH</th>
+														<th width="100" class="text-center nowrap" title="">NPLH</th>
+														<th width="100" class="text-center nowrap" title="">NPSHDO</th>
+														<th width="100" class="text-center nowrap">NPLHDO</th>
+														<th width="100" class="text-center nowrap" title="">OT23</th>
+														<th width="100" class="text-center nowrap">OT24</th>
+														<th width="100" class="text-center nowrap">OT25</th>
+														<th width="100" class="text-center nowrap">Rate</th>
+														<th width="100" class="text-center nowrap">UnpaidRegHrs</th>
+														<th width="100" class="text-center nowrap">UnpaidSL</th>
+														<th width="100" class="text-center nowrap">UnpaidTaxSL</th>
+														<th width="100" class="text-center nowrap">UnpaidVL</th>
+														<th width="100" class="text-center nowrap">UnpaidTaxVL</th>
+														<th width="100" class="text-center nowrap">UnpaidEL</th>
+														<th width="100" class="text-center nowrap">EffectivityDate</th>
+														<th width="100" class="text-center nowrap">EmpStatus</th>
+														<th width="100" class="text-center nowrap">EffectivityDateResign</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr v-if="record.tss.length" v-for="tss in record.tss"  :class="searchLogs?searchLogs.dtr_date? searchLogs.dtr_date==tss.date?'border-primary border-3':'':'':''" :id="searchLogs?searchLogs.dtr_date? searchLogs.dtr_date==tss.date?'searched':'':'':''" :style="searchLogs?searchLogs.dtr_date? searchLogs.dtr_date==tss.date?'border-style: solid':'':'':''">
+														<% if(user_role.write){ %>
+															<td class="text-center">
+																<button title="Reprocess Record" class="btn btn-sm btn-outline-primary" v-on:click="reprocessRecord(record.id, tss.date,tss.shift.id)">
+																	<i class="mdi mdi-refresh"></i>
+																</button>
+																<button title="Add Attendance" class="btn btn-outline-success btn-sm m-1" @click="addAttendance(tss.shift.id)">
+																	<i class="mdi mdi-calendar-plus"></i>
+																</button>
+															</td>
+														<% } %>
+														<td class="nowrap" v-text="record.employee_number ? record.employee_number : '--'"></td>
+														<td class="nowrap">
+															<a href="javascript:void(0);" @click="fetchBiometricLogs(record.id)" data-toggle="modal" data-target="#exampleModalLong" v-text="record.last_name+', '+record.first_name"></a>
+														</td>
+														<td v-text="moment(tss.date).format('MM/DD/YYYY')"></td>
+														<td v-text="moment(tss.date).format('dddd')"></td>
+														<td class="nowrap" v-text="tss.shift && tss.shift.shift_type ? tss.shift.shift_type:'--'"></td>
+														<td class="nowrap" v-text="shiftInOut(tss,'in')"></td>
+														<td class="nowrap" v-text="shiftInOut(tss,'out')"></td>
+														<td class="nowrap" v-text="actualCheckIn(tss)"></td>
+														<td class="nowrap" v-text="actualCheckOut(tss)"></td>
+														<td v-text="tss.RegHrs ? tss.RegHrs.toFixed(2) : ''"></td>
+														<td v-text="tss.LateHrs ? tss.LateHrs.toFixed(2) : ''"></td>
+														<td v-text="tss.UndertimeHrs ? tss.UndertimeHrs.toFixed(2) : ''"></td>
+														<td v-text="tss.NDHrs ? tss.NDHrs.toFixed(2) : ''"></td>
+														<td v-text="tss.Absent ? tss.Absent.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave01 ? tss.Leave01.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave02 ? tss.Leave02.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave03 ? tss.Leave03.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave04 ? tss.Leave04.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave05 ? tss.Leave05.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave06 ? tss.Leave06.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave07 ? tss.Leave07.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave08 ? tss.Leave08.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave09 ? tss.Leave09.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave10 ? tss.Leave10.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave11 ? tss.Leave11.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave12 ? tss.Leave12.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave13 ? tss.Leave13.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave14 ? tss.Leave14.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave15 ? tss.Leave15.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave16 ? tss.Leave16.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave17 ? tss.Leave17.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave18 ? tss.Leave18.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave19 ? tss.Leave19.toFixed(2) : ''"></td>
+														<td v-text="tss.Leave20 ? tss.Leave20.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs01 ? tss.OTHrs01.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs02 ? tss.OTHrs02.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs03 ? tss.OTHrs03.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs04 ? tss.OTHrs04.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs05 ? tss.OTHrs05.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs06 ? tss.OTHrs06.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs07 ? tss.OTHrs07.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs08 ? tss.OTHrs08.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs09 ? tss.OTHrs09.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs10 ? tss.OTHrs10.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs11 ? tss.OTHrs11.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs12 ? tss.OTHrs12.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs13 ? tss.OTHrs13.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs14 ? tss.OTHrs14.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs15 ? tss.OTHrs15.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs16 ? tss.OTHrs16.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs17 ? tss.OTHrs17.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs18 ? tss.OTHrs18.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs19 ? tss.OTHrs19.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs20 ? tss.OTHrs20.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs21 ? tss.OTHrs21.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs22 ? tss.OTHrs22.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs23 ? tss.OTHrs23.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs24 ? tss.OTHrs24.toFixed(2) : ''"></td>
+														<td v-text="tss.OTHrs25 ? tss.OTHrs25.toFixed(2) : ''"></td>
+														<td v-text="tss.Rate ? tss.Rate.toFixed(2) : ''"></td>
+														<td v-text="tss.UnpaidRegHrs ? tss.UnpaidRegHrs.toFixed(2) : ''"></td>
+														<td v-text="tss.UnpaidSL ? tss.UnpaidSL.toFixed(2) : ''"></td>
+														<td v-text="tss.UnpaidTaxSL ? tss.UnpaidTaxSL.toFixed(2) : ''"></td>
+														<td v-text="tss.UnpaidVL ? tss.UnpaidVL.toFixed(2) : ''"></td>
+														<td v-text="tss.UnpaidTaxVL ? tss.UnpaidTaxVL.toFixed(2) : ''"></td>
+														<td v-text="tss.UnpaidEL ? tss.UnpaidEL.toFixed(2) : ''"></td>
+														<td v-text="tss.EffectivityDate ? tss.EffectivityDate : ''"></td>
+														<td v-text="tss.EmpStatus ? tss.EmpStatus : ''"></td>
+														<td v-text="tss.EffectivityDateResign ? tss.EffectivityDateResign : ''"></td>
+													</tr>
+													
+													<tr v-if="record.tss.length">
+														<td class="nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+														<td class="nowrap" v-text="record.employee_number ? record.employee_number : '--'"></td>
+														<td class="nowrap" v-text="record.last_name+', '+record.first_name"></td>
+														<td colspan="7" >TOTAL</td>
+														<td colspan="1" v-text="getTotal(record, 'RegHrs').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'LateHrs').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UndertimeHrs').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'NDHrs').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Absent').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave01').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave02').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave03').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave04').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave05').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave06').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave07').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave08').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave09').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave10').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave11').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave12').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave13').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave14').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave15').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave16').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave17').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave18').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave19').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Leave20').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs01').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs02').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs03').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs04').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs05').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs06').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs07').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs08').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs09').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs10').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs11').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs12').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs13').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs14').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs15').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs16').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs17').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs18').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs19').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs20').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs21').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs22').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs23').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs24').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'OTHrs25').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'Rate').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UnpaidRegHrs').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UnpaidSL').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UnpaidTaxSL').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UnpaidVL').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UnpaidTaxVL').toFixed(2)"></td>
+														<td colspan="1" v-text="getTotal(record, 'UnpaidEL').toFixed(2)"></td>
+														<td colspan="1" v-text=""></td>
+														<td colspan="1" v-text=""></td>
+														<td colspan="1" v-text=""></td>
+													</tr>
+													<tr v-if="!record.tss.length">
+														<td class="nowrap" v-text="record.employee_number ? record.employee_number : '--'"></td>
+														<td class="nowrap" v-text="record.last_name+', '+record.first_name"></td>
+														<td colspan="67">No record found!</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<ul class="pagination" v-if="counts">
+										<li class="page-item">
+											<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+										</li>
+										<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+											<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+										</li>
+										<li class="page-item">
+											<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+										</li>
+									</ul>
+									<div class="loading" v-if="fetching">
+										<img src="<%= baseUrl + '/img/loading.gif' %>">
+										<p>Loading.....</p>
+									</div>
+									<div class="norecord" v-if="!fetching && !records.length">
+										<img src="<%= baseUrl + '/img/info.png' %>">
+										<p>Sorry, we couldn't find any matches.</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Modal -->
+					
+							<% include ./form %>
+							<!-- Modal -->
+
+						</div>
+					</div>
+					<% include ./biometric_log %>
+					<% include ../../Include/alert %>
+					
+				</div>
+				
+			</div>
+		</attendance-summary>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

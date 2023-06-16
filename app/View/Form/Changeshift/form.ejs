@@ -1,0 +1,89 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Change Shift</h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%= baseUrl %>/forms/change-shift" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-12" v-if="!form.approver_name">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span>Change shift required approver. Please contact administrator.</span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="head">Approver</label>
+						<input type="text" class="form-control" v-model="form.approver_name" disabled>
+						<div class="form-text form-error" v-if="!! errors.approver_id" v-text="errors.approver_id"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th colspan="4" class="text-center bg-light">Current Shift</th>
+									<th colspan="3" class="text-center bg-light">New Shift</th>
+								</tr>
+								<tr>
+									<th width="16.6%">Date</th>
+									<th width="16.6%">Shift</th>
+									<th width="10%">Login</th>
+									<th width="10%">Logout</th>
+									<th width="32%">Shift ID</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select class="form-control form-control-sm" v-if="form.type != 'update'" v-model="form.old_date" @change="setOldDate($event)">
+											<option value="">-Selecte Shift-</option>
+											<option v-for="(shift, index) in shifts" v-if="!shift.actual_check_in && !shift.actual_check_out" v-bind:value="shift.id" v-text="moment(shift.date).format('ll')"></option>
+										</select>
+										<input type="text" class="form-control form-control-sm" v-if="form.type == 'update'" v-model="form.old_date" disabled>
+										<div class="form-text form-error" v-if="!! errors.old_date" v-text="errors.old_date"></div>
+									</td>
+									<td>
+										<input type="text" class="form-control form-control-sm" v-model="form.cur_shift_type" readonly>
+									</td>
+									<td>
+										<input type="text" class="form-control form-control-sm" v-model="form.old_login" readonly>
+									</td>
+									<td>
+										<input type="text" class="form-control form-control-sm" v-model="form.old_logout" readonly>
+									</td>
+									<td>
+										<select class="form-control form-control-sm" v-model="form.shift_type">
+											<option value="">Select Shift ID</option>
+											<option v-for="shift_id in shift_types" :selected="form.shift_type == shift_id.shift_id" v-bind:value="shift_id.id" v-text="shift_id.shift_id"></option>
+										</select>
+										<div class="form-text form-error" v-if="!! errors.shift_type" v-text="errors.shift_type"></div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="attachment">Attachment</label>
+						<input type="file" id="attachment" class="form-control-file" accept="image/*, application/pdf" v-on:change="onAttachmentChange($event)" name="attachment">
+						<div class="form-text form-error" v-if="!! errors.attachment" v-text="errors.attachment"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<input type="hidden" name="id" v-model="form.id">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

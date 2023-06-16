@@ -1,0 +1,168 @@
+aside{
+	& .asideAccount{
+		display: none;
+		background-image: url("../img/material.jpg");
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: cover;
+		padding: 25px 15px 30px 15px;
+		& .tbl{
+			display: table;
+			width: 100%;
+			margin-bottom: 15px;
+			& .avatar,
+			& .name{
+				display: table-cell;
+				vertical-align: middle;
+			}
+			& .avatar{
+				width: 50px;
+				& span{
+					border: $white solid 2px;
+					display: inline-block;
+					height: 40px;
+					width: 40px;
+					border-radius: 50%;
+					overflow: hidden;
+					& img{
+						width: 100%;
+						height: 100%;
+						object-fit: cover;
+					}
+				}
+			}
+			& .name{
+				font-size: 18px;
+				font-weight: 500;
+				color: $white;
+			}
+		}
+		& a{
+			&.buttons{
+				color: $primary;
+				border: $primary solid 1px;
+				background: rgba(0, 123, 255, 0.3);
+				display: inline-block;
+				width: 80px;
+				text-decoration: none;
+				border-radius: 2px;
+				text-align: center;
+				padding: 5px 0;
+				&:hover{
+					color: $white;
+					background: rgba(0, 123, 255, 0.8);
+				}
+			}
+		}
+	}
+	&.full-width{
+		margin-left: -200px;
+	}
+	position: fixed;
+	top: 55px;
+	z-index: 999;
+	background: $light;
+	border-right: $grey-lighten-1 solid 1px;
+	width: 200px;
+	height: calc(100vh - 55px);
+	//overflow: auto;
+	//overflow-x: hidden;
+	& ul{
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		& li{
+			height: 46px;
+			line-height: 46px;
+			white-space: nowrap;
+			&.title{
+				@extend .uppercase;
+				font-size: 13px;
+				padding-left: 15px;
+				color: $secondary;
+			}
+			& a,
+			& span{
+				font-weight: 300;
+				display: block;
+				color: $grey-darken-3;
+				padding-left: 15px;
+				cursor: pointer;
+				& i.mdi{
+					color: $primary;
+					width: 30px;
+					margin-right: 5px;
+				}
+				&.active,
+				&:hover{
+					background: $primary;
+					color: $white;
+					text-decoration: none;
+					& i.mdi{
+						color: $white;
+					}
+				}
+			}
+			&.nav-dropdown{
+				& ul{
+					display: none;
+				}
+				& li{
+					& a{
+						padding-left: 15px;
+						& i{
+							display: inline-block;
+							width: 10px;
+							height: 10px;
+							border-radius: 50%;
+							background: $primary;
+							float: right;
+							margin: 20px 15px 0 0;
+						}
+						&.active,
+						&:hover{
+							& i{
+								background: $white;
+							}
+						}
+						&:before{
+							content: '→';
+							margin-right: 10px;
+						}
+					}
+				}
+				& span{
+					&:after{
+						font-family: "Material Design Icons";
+		    			content: "\f141";
+		    			font-size: 14px;
+		    			float: right;
+		    			margin-right: 15px;
+					}
+				}
+				&.open{
+					background: $grey-lighten-2;
+					height: auto;
+					& span{
+						&:after{
+			    			content: "\f140";
+						}
+					}
+					& ul{
+						background: $grey-lighten-2;
+						display: block;
+					}
+				}
+				
+			}
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	aside{
+		& .asideAccount{
+			display: block;
+		}
+	}
+}

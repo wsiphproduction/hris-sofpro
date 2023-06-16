@@ -1,0 +1,58 @@
+DECLARE @START_DATE AS VARCHAR(60), @END_DATE AS VARCHAR(60)
+
+-- CHANGE THIS TO DETERMMINE YOUR DATE RANGE
+SET @START_DATE = '2022-10-26'
+SET @END_DATE   = '2022-11-10'
+
+SELECT u.id AS USER_ID,u.employee_number, CONCAT(u.last_name,', ',u.first_name), o.start_date,
+	(ISNULL(t.OTHrs01,0)+ISNULL(t.OTHrs02,0)+ISNULL(t.OTHrs03,0)+ISNULL(t.OTHrs04,0)+ISNULL(t.OTHrs05,0)
+	+ISNULL(t.OTHrs06,0)+ISNULL(t.OTHrs07,0)+ISNULL(t.OTHrs08,0)+ISNULL(t.OTHrs09,0)+ISNULL(t.OTHrs10,0)
+	+ISNULL(t.OTHrs11,0)+ISNULL(t.OTHrs12,0)+ISNULL(t.OTHrs13,0)+ISNULL(t.OTHrs14,0)+ISNULL(t.OTHrs15,0)) AS TOTAL_OT
+FROM overtimes o
+	LEFT JOIN users u ON o.user_id = u.id
+	LEFT JOIN tss_data t ON t.user_id = u.id
+WHERE o.primary_status = 2
+	AND (ISNULL(t.OTHrs01,0)+ISNULL(t.OTHrs02,0)+ISNULL(t.OTHrs03,0)+ISNULL(t.OTHrs04,0)+ISNULL(t.OTHrs05,0)
+	+ISNULL(t.OTHrs06,0)+ISNULL(t.OTHrs07,0)+ISNULL(t.OTHrs08,0)+ISNULL(t.OTHrs09,0)+ISNULL(t.OTHrs10,0)
+	+ISNULL(t.OTHrs11,0)+ISNULL(t.OTHrs12,0)+ISNULL(t.OTHrs13,0)+ISNULL(t.OTHrs14,0)+ISNULL(t.OTHrs15,0)) <= 0
+	AND o.start_date >= @START_DATE AND o.start_date <= @END_DATE
+ORDER BY o.start_date
+
+
+================
+
+
+DECLARE @START_DATE AS VARCHAR(60), @END_DATE AS VARCHAR(60)
+
+-- CHANGE THIS TO DETERMMINE YOUR DATE RANGE
+SET @START_DATE = '2022-10-26'
+SET @END_DATE   = '2022-11-10'
+
+SELECT u.id AS USER_ID,u.employee_number, CONCAT(u.last_name,', ',u.first_name),s.date,s.check_in,s.check_out,
+	s.actual_check_in,s.actual_check_out,s.shift_type,
+	(ISNULL(t.Leave01,0) + ISNULL(t.Leave02,0)+ ISNULL(t.Leave03,0)+ ISNULL(t.Leave04,0)+ ISNULL(t.Leave05,0)
+	+ ISNULL(t.Leave06,0)+ ISNULL(t.Leave07,0)+ ISNULL(t.Leave08,0)+ ISNULL(t.Leave09,0)+ ISNULL(t.Leave10,0)
+	+ ISNULL(t.Leave11,0)+ ISNULL(t.Leave12,0)+ ISNULL(t.Leave13,0)+ ISNULL(t.Leave14,0)+ ISNULL(t.Leave15,0)+ ISNULL(t.Leave16,0)) AS TOTAL_LEAVE
+FROM leaves_date ld
+	LEFT JOIN leaves l ON ld.leave_id = l.id
+	LEFT JOIN users u ON ld.user_id = u.id
+	LEFT JOIN tss_data t ON ld.date = t.date
+	LEFT JOIN shifts s ON t.shift_id = s.id
+WHERE l.primary_status = 2
+	AND (ISNULL(t.Leave01,0) + ISNULL(t.Leave02,0)+ ISNULL(t.Leave03,0)+ ISNULL(t.Leave04,0)+ ISNULL(t.Leave05,0)
+	+ ISNULL(t.Leave06,0)+ ISNULL(t.Leave07,0)+ ISNULL(t.Leave08,0)+ ISNULL(t.Leave09,0)+ ISNULL(t.Leave10,0)
+	+ ISNULL(t.Leave11,0)+ ISNULL(t.Leave12,0)+ ISNULL(t.Leave13,0)+ ISNULL(t.Leave14,0)+ ISNULL(t.Leave15,0)+ ISNULL(t.Leave16,0))<=0
+	AND ld.date >= @START_DATE AND ld.date <= @END_DATE
+
+==================
+
+select di.name,de.department_name,u.last_name,u.first_name,u.old_employee_number,u.employee_number,d.date,s.shift_type,d.RegHrs,s.check_in,s.check_out,s.actual_check_in,s.actual_check_out from tss_data d 
+left join shifts s on s.id=d.shift_id 
+left join users u on u.id=d.user_id
+outer apply (select top 1 * from employments where employments.user_id=u.id) as e
+left join departments de on de.id=e.department_id
+left join divisions di on di.id=de.division_id
+where d.shift_id>0 
+and d.date>='2022-11-11' and s.actual_check_in is not null and actual_check_out is not null 
+and (RegHrs is null or RegHrs=0)
+order by di.name,de.department_name,u.last_name,u.first_name,u.old_employee_number,u.employee_number

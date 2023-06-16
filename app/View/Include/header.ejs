@@ -1,0 +1,88 @@
+	<div id="overlay">
+		<div class="lds-ripple"><div></div><div></div></div>
+		<div class="loading">Loading, please wait...</div>
+	</div>
+	<div class="app-header">
+		<div class="links">
+			<a href="<%= baseUrl %>">
+			<div class="logo">
+				<% if(BRANDING != 1){ %>
+				<img src="<%= baseUrl +'/uploads/'+ APP_LOGO %>" alt="">
+				<% } %>
+				<% if(BRANDING != 2){ %>
+				<span><%= APP_NAME %></span>
+				<% } %>
+			</div>
+			</a>
+			<span class="burger" v-on:click="fullWidth">
+				<i class="mdi mdi-menu"></i>
+			</span>
+			<nav-menu inline-template>
+				<ul>
+					<!-- <li>
+						<a href="<%= baseUrl +'/manual' %>" class="item-link" title="Users Manual">
+							<i class="mdi mdi-help-circle-outline"></i>
+						</a>
+					</li> -->
+					<li>
+						<div class="dropdown">
+							<a href="#" class="item-link dropdown-toggle" id="notification-dropdown" data-toggle="dropdown"><i class="mdi mdi-bell-ring-outline"></i> <small v-if="notificationsCnt" v-text="notificationsCnt"></small></a>
+							<div class="dropdown-menu dropdown-menu-right notification" aria-labelledby="notification-dropdown">
+								<ul>
+									<li v-if="!notifications.length">
+										<div class="info">
+											<i class="mdi mdi-information-outline"></i>
+											<p>No record found!</p>
+										</div>
+									</li>
+									<li class="heading" v-if="notifications.length"><i class="mdi mdi-bell-ring-outline"></i> Notifications</li>
+									<li v-for="notification in notifications">
+										<a class="list" v-on:click="setAsRead(notification.notification.id, notification.notification.url)">
+											<div class="image">
+												<span>
+													<img v-if="notification.notification.user.avatar" v-bind:src="'./uploads/avatar/'+ notification.notification.user.avatar">
+													<img v-else="notification.notification.user.avatar" v-bind:src="'./uploads/avatar/'+notification.notification.user.gender+'.png'">
+												</span>
+											</div>
+											<div class="text">
+												<div v-html="notification.notification.content"></div>
+												<small v-text="$Carbon(notification.notification.date)"></small>
+											</div>
+										</a>
+									</li>
+									<!-- <li>
+										<a href="<%= baseUrl +'/notifications' %>" class="more">
+											More 
+										</a>
+									</li> -->
+								</ul>
+							</div>
+						</div>
+					</li>
+					
+					<li>
+						<div class="dropdown">
+							<div class="dropdown-toggle" data-toggle="dropdown" data-target="user-dropdown">
+								<div class="avatar">
+									<span>
+									<% if(user.avatar){ %>
+									<img src="<%= baseUrl + '/uploads/avatar/'+ user.avatar %>">
+									<% }else{ %>
+									<img src="<%= baseUrl + '/uploads/avatar/'+ user.gender +'.png' %>">
+									<% } %>
+									</span>
+								</div>
+								<div class="name"><%= user.first_name +' '+ user.last_name %></div>
+							</div>
+							<div class="dropdown-menu" id="user-dropdown">
+								<a class="dropdown-item" href="http://172.16.20.28/hris-faq/index.html"><i class="mdi mdi-help"></i>FAQ</a>
+								<a class="dropdown-item" href="<%= baseUrl +'/myaccount' %>"><i class="mdi mdi-account-circle"></i> My Account</a>
+								<!-- <a class="dropdown-item" href="<%= baseUrl +'/myaccount/settings' %>"><i class="mdi mdi-settings"></i> Settings</a> -->
+								<a class="dropdown-item" href="<%= baseUrl +'/logout' %>"><i class="mdi mdi-logout-variant"></i> Logout</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</nav-menu inline-template>
+		</div>
+	</div>

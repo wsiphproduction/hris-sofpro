@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Employee</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-hierarchy inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Hierarchy</span></li>
+						<li class="search">
+							<div class="search-container">
+								<div class="input-group">
+									<select class="form-control form-control-sm" v-on:change="filterCompany()" v-model="filter.company">
+										<option value="">All Company</option>
+										<option v-for="company in companies" v-bind:value="company.id" v-text="company.company +' — '+ company.location" ></option>
+									</select>
+								</div>
+							</div>
+							
+						</li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Hierarchy</h5>
+							
+							<% if(count){ %>
+							<div class="tree">
+							<%- tree %>
+							</div>
+							<% }else{ %>
+							<div class="norecord">
+								<i class="mdi mdi-information-outline"></i>
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							<% } %>
+						</div>
+					</div>
+
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</employee-hierarchy> <!-- Inline Template -->
+		
+	</main>
+	</div>
+	
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl %>/settings/biometric" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="label" class="isRequired">Label</label>
+						<input type="text" class="form-control" id="label" v-model="form.label">
+						<div class="form-text form-error" v-if="!! errors.label" v-text="errors.label"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="site" class="isRequired">IP Address</label>
+						<input type="text" class="form-control" id="site" v-model="form.site">
+						<div class="form-text form-error" v-if="!! errors.site" v-text="errors.site"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="status" class="isRequired">Status</label>
+						<select name="status" id="status" class="form-control" v-model="form.status">
+							<option value="1">Active</option>
+							<option value="2">Inactive</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

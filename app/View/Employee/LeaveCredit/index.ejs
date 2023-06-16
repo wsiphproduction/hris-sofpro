@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Leave Credit</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-leave-credit inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Leave Credit</span></li>
+					</ol>
+					<% if(user_role.write){ %>
+						<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-upload"></i> Import</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Leave Credit</h5>
+
+							<form class="form-inline">
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.company" style="max-width: 200px">
+									<option value="">Company</option>
+									<option v-for="company in companies" v-if="company.status == 1" v-bind:value="company.id" v-text="company.name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.division" style="max-width: 200px">
+									<option value="">Division</option>
+									<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.department" style="max-width: 200px">
+									<option value="">Department</option>
+									<option v-for="department in departments" v-bind:style="param.division == department.division_id ? '': 'display: none;'" v-bind:value="department.id" v-text="department.department_name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2  form-control-sm" v-model="param.section" style="max-width: 200px">
+									<option value="">Section</option>
+									<option v-for="section in sections" v-bind:style="param.department == section.department_id ? '': 'display: none;'" v-bind:value="section.id" v-text="section.section_name"></option>
+								</select>
+								<label class="mb-2 mr-sm-2">Limit</label>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="75">75</option>
+									<option value="100">100</option>
+								</select>
+								<button type="reset" class="btn btn-light mb-2" v-on:click="reset">Reset</button>
+							</form>
+
+							<div class="table-responsive" v-if="!fetching && records.length">
+								<table class="table table-bordered table-hover table-nowrap">
+									<thead class="bg-light">
+										<tr>
+											<td class="text-center">Emp No</td>
+											<td class="text-center">Employee</td>
+											<td class="text-center noPaddLeftRight" v-for="policy in policies">
+												<span v-text="policy.name"></span>
+												<div class="tbl-credit-head">
+													<div class="td">Balance</div>
+													<div class="td">Utilized</div>
+												</div>
+											</td>
+											<td class="text-center" width="150" class="text-center">Total Balance</td>
+											<td class="text-center" width="150" class="text-center">Cycle Date</td>
+											<% if(user_role.modify){ %>
+											<td class="text-center" width="100" class="text-center">Action</td>
+											<% } %>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(record, index) in records">
+											<td class="text-center" v-text="record.employee_number"></td>
+											<td class="withTable">
+												<a v-bind:href="'<%= baseUrl + '/employee/general/' %>'+ record.shortid">
+													<div class="img">
+														<span class="image">
+															<img v-bind:src="'<%= baseUrl + '/uploads/avatar/' %>'+ record.avatar" v-if="record.avatar">
+															<img v-bind:src="'<%= baseUrl + '/uploads/avatar/' %>' + record.gender + '.png'" v-if="!record.avatar">
+														</span>
+													</div>
+													<div class="info">
+														{{ record.last_name +', '+ record.first_name }}
+														<small v-text="record.email"></small>
+													</div>
+												</a>
+											</td>
+											<td v-for="policy in policies" class="nopadding" v-html="setCredit(record.leave_credit_policies, policy.id)">
+												
+											</td>
+											<td class="text-center" v-text="totalBalance(record.leave_credit_policies)"></td>
+											<!-- <td class="text-center" v-text="moment(record.date_entry).format('MMMM DD')"></td> -->
+											<td class="text-center">January 1</td>
+											<td class="text-center">
+												<button :disabled='checkHRGeneralist(record, "modify")' class="btn btn-outline-primary btn-sm" v-on:click="editLeaveCredit(record.id)"><i class="mdi mdi-pen"></i></button>
+											</td>
+											<!-- <% if(user_role.modify){ %>
+											<td class="text-center">
+												<button class="btn btn-outline-primary btn-sm" v-on:click="editLeaveCredit(record.id)"><i class="mdi mdi-pen"></i></button>
+											</td>
+											<% } %> -->
+										</tr>
+									</tbody>
+								</table>
+
+								<ul class="pagination" v-if="counts">
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+									</li>
+									<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+										<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+									</li>
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+									</li>
+								</ul>
+							</div>
+
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal -->
+					
+					<% include ./form %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</employee-leave-credit> <!-- Inline Template -->
+		
+	</main>
+	</div>
+	
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

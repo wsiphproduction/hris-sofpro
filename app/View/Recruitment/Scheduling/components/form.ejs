@@ -1,0 +1,52 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%- baseUrl %>/recruitment/schedule" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="candidate" class="isRequired">Candidate</label>
+						<select id="candidate" class="form-control" v-model="form.candidate">
+							<option value="" v-if="method=='post'">--Select Candidate--</option>
+							<option v-for="res in candidate" v-bind:value="res.id" v-text="res.first_name +' '+ res.last_name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.candidate" v-text="errors.candidate"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="date_time" class="isRequired">Date and Time</label>
+						<datetime type="datetime" input-class="form-control" input-id="date_time" v-model="form.date_time" :minute-step="15" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.date_time" v-text="errors.date_time"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="method == 'put'">
+					<div class="form-group col-md-12">
+						<label for="note">Note</label>
+						<textarea class="form-control" id="note" v-model="form.note" rows="5"></textarea>
+					</div>
+				</div>
+				<div class="form-row" v-if="method == 'put'">
+					<div class="form-group col-md-6">
+						<label for="status" class="isRequired">Status</label>
+						<select id="status" class="form-control" v-model="form.status">
+							<option value="1">Pending</option>
+							<option value="2">Cancelled</option>
+							<option value="3">Pass</option>
+							<option value="4">Failed</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" <%- !user_role.modify ? 'disabled':'' %> class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

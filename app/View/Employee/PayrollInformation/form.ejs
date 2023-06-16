@@ -1,0 +1,120 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="modal = false"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl +'/employee/payroll-information/'+ employee.shortid %>" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-lg-4">
+                        <label for="rate_type">Rate Type</label>
+                        <select class="form-control" id="rate_type" v-model="form.rate_type">
+                            <option value="" disabled>--Select--</option>
+                            <option value="0">Daily</option>
+                            <option value="1">Monthly</option>
+                        </select>
+                        <div class="form-text form-error" v-if="!! errors.rate_type" v-text="errors.rate_type"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="payee_location">Payee Location</label>
+                        <input type="text" class="form-control" id="payee_location" v-model="form.payee_location">
+                        <div class="form-text form-error" v-if="!! errors.payee_location" v-text="errors.payee_location"></div>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label for="payment_type">Payment Type</label>
+                        <select class="form-control" id="payment_type" v-model="form.payment_type">
+                            <option value="" disabled>--Select--</option>
+                            <option value="0">Cash</option>
+                            <option value="1">ATM</option>
+                        </select>
+                        <div class="form-text form-error" v-if="!! errors.payment_type" v-text="errors.payment_type"></div>
+                    </div>
+				</div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="currency_id">Currency ID</label>
+                        <input type="text" class="form-control" id="currency_id" v-model="form.currency_id" maxlength="10">
+                        <div class="form-text form-error" v-if="!! errors.currency_id" v-text="errors.currency_id"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="bank_id">Bank ID</label>
+                        <input type="text" class="form-control" id="bank_id" v-model="form.bank_id">
+                        <div class="form-text form-error" v-if="!! errors.bank_id" v-text="errors.bank_id"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="bank_name">Bank Name</label>
+                        <input type="text" class="form-control" id="bank_name" v-model="form.bank_name">
+                        <div class="form-text form-error" v-if="!! errors.bank_name" v-text="errors.bank_name"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="bank_id">Bank Account Number</label>
+                        <input type="text" class="form-control" id="bank_acct_number" v-model="form.bank_acct_number">
+                        <div class="form-text form-error" v-if="!! errors.bank_acct_number" v-text="errors.bank_acct_number"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="basic_monthly_rate">Basic Monthly Rate</label>
+                        <input type="text" class="form-control" id="basic_monthly_rate" v-model="form.basic_monthly_rate">
+                        <div class="form-text form-error" v-if="!! errors.basic_monthly_rate" v-text="errors.basic_monthly_rate"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="basic_daily_rate">Basic Daily Rate</label>
+                        <input type="text" class="form-control" id="basic_daily_rate" v-model="form.basic_daily_rate">
+                        <div class="form-text form-error" v-if="!! errors.basic_daily_rate" v-text="errors.basic_daily_rate"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="e_cola">E-Cola (Daily)</label>
+                        <input type="text" class="form-control" id="e_cola" v-model="form.e_cola_daily">
+                        <div class="form-text form-error" v-if="!! errors.e_cola_daily" v-text="errors.e_cola_daily"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="allowance">Allowance</label>
+                        <input type="text" class="form-control" id="allowance" v-model="form.allowance">
+                        <div class="form-text form-error" v-if="!! errors.allowance" v-text="errors.allowance"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="allowance_effective_date">Allowance Effectivity Date</label>
+                        <datetime type="date" input-class="form-control " input-id="allowance_effective_date" v-model="form.allowance_effective_date"></datetime>
+                        <div class="form-text form-error" v-if="!! errors.allowance_effective_date" v-text="errors.allowance_effective_date"></div>
+                    </div>  
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="incentive">Incentive</label>
+                        <input type="text" class="form-control" id="incentive" v-model="form.incentive">
+                        <div class="form-text form-error" v-if="!! errors.incentive" v-text="errors.incentive"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="incentive_effective_date">Incentive Effectivity Date</label>
+                        <datetime type="date" input-class="form-control " input-id="incentive_effective_date" v-model="form.incentive_effective_date"></datetime>
+                        <div class="form-text form-error" v-if="!! errors.incentive_effective_date" v-text="errors.incentive_effective_date"></div>
+                    </div>  
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-sm-4">
+                        <label for="benefit">Benefit</label>
+                        <input type="text" class="form-control" id="benefit" v-model="form.benefit">
+                        <div class="form-text form-error" v-if="!! errors.benefit" v-text="errors.benefit"></div>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <label for="benefit_effective_date">Benefit Effectivity Date</label>
+                        <datetime type="date" input-class="form-control " input-id="benefit_effective_date" v-model="form.benefit_effective_date"></datetime>
+                        <div class="form-text form-error" v-if="!! errors.benefit_effective_date" v-text="errors.benefit_effective_date"></div>
+                    </div>
+                </div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="modal = false">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

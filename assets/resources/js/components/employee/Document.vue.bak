@@ -1,0 +1,95 @@
+<script>
+    let Cover = require('./Cover.vue');
+	module.exports = {
+		  
+		data: function(){
+
+			return{
+                modal: false,
+                modalText: 'Document Detail',
+                form:{
+                    mode: '',
+                    status: '0'
+                },
+                records: [],
+                fetching: true,
+                method: 'post',
+			}
+		},
+
+        computed: {
+            
+        },
+
+        watch: {
+
+        },
+
+		mounted(){
+            this.fetchRecord();
+		},
+
+		mixins: [
+			Form,
+			Alert,
+            Cover
+		],
+
+        methods: {
+
+            onAttachmentChange(element){
+                let file = element.target.files[0];
+                this.form.document = file;
+            },
+
+            openModal(){
+                this.loading = false;
+                this.errors = {}
+                this.method = 'post';
+                this.modal = true;
+            },
+            
+            closeModal(){
+                this.loading = false;
+                this.errors = {}
+                this.modal = false;
+            },
+            
+            info(index){
+
+            },
+
+            edit(index){
+
+                this.method = 'put';
+                this.modal = true;
+                let record = this.records;
+                    record = record[index];
+                
+                this.form = {
+                    id: record.id,
+                    label: record.label,
+                    description: record.description,
+                    filename: record.hash,
+                }
+
+            },
+
+            fetchRecord(){
+                this.fetching = true;
+                let url = new URL(window.location.href);
+                let pathname = url.pathname;
+                let segment = pathname.split('/');
+                let shortid = segment[3];
+                let REST = base_url + 'employee/document/record/fetch';
+                axios.post(REST, { shortid:shortid }).then(response => {
+                    this.records = response.data.records;
+                    this.fetching = false;
+                });
+            }
+
+		}
+
+	}
+
+</script>

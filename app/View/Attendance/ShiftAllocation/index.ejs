@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Shift Management</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<shift-allocation inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Shift Management</span></li>
+						<li class="search">
+							<div class="search-container">
+								<div class="input-group">
+									<input type="search" id="txtfilter" class="form-control form-control-sm" v-on:keyup="find()" v-on:click="clear()" v-model="keyword" placeholder="Search employees">
+								</div>
+							</div>
+						</li>
+					</ol>
+					<a v-bind:href="exportLink" class="btn btn-primary btn-sm" target="_blank"><i class="mdi mdi-download"></i> Export</a>
+					<% if(user_role.modify){ %>
+					<button class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> Upload Shift</button>
+					<% } %>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="row">
+								
+								<div class="col-sm-9">
+									<div class="card">
+										<div class="card-header">Filters</div>
+										<div class="card-body">
+											<form>
+												<div class="form-row">
+													<% if(user_role.write){ %>
+													<div class="form-group col-sm-6 col-md-2">
+														<select :disabled='isUserHRGeneralist()' class="form-control" v-model="param.company">
+															<option value="">Company</option>
+															<option v-for="company in companies" v-if="company.status==1" v-bind:value="company.id" v-text="company.name"></option>
+														</select>
+													</div>
+													<div class="form-group col-sm-6 col-md-2">
+														<select :disabled='isUserHRGeneralist()' class="form-control" v-model="param.division">
+															<option value="">Division</option>
+															<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+														</select>
+													</div>
+													<div class="form-group col-sm-6 col-md-2">
+														<select :disabled='isUserHRGeneralist()' class="form-control" v-model="param.department">
+															<option value="">Department</option>
+															<option v-for="department in departments" v-bind:style="param.division == department.division_id ? '': 'display: none;'" v-bind:value="department.id" v-text="department.department_name"></option>
+														</select>
+													</div>
+													<div class="form-group col-sm-6 col-md-2">
+														<select :disabled='isUserHRGeneralist()' class="form-control" v-model="param.section">
+															<option value="">Section</option>
+															<option v-for="section in sections" v-bind:style="param.department == section.department_id ? '': 'display: none;'" v-bind:value="section.id" v-text="section.section_name"></option>
+														</select>
+													</div>
+													<% } %>
+													<date-picker-2 type="month" v-model="param.month_date" format="YYYY-MM" style="width: 150px;"></date-picker-2>
+													<div class="form-group col-sm-6 col-md-2">
+														<select class="form-control" v-model="param.period">
+															<option value="">Select Period</option>
+															<option value="A">Period A</option>
+															<option value="B">Period B</option>
+														</select>
+													</div>
+
+													<div class="form-group col-sm-6 col-md-1">
+														<select class="form-control" id="limit" v-model="param.limit">
+															<option value="25">25</option>
+															<option value="50">50</option>
+															<option value="75">75</option>
+															<option value="100">100</option>
+														</select>
+													</div>
+												</div>
+											</form>
+											
+										</div>
+									</div>
+								</div>
+
+								<div class="col-sm-3">
+									<div class="card legend">
+										<div class="card-header">Legend</div>
+										<div class="card-body">
+											<div class="row">
+												<div class="col-sm-6">
+													<div class="items">
+														<div class="color">
+															<span class="perfect"></span>
+														</div>
+														<div class="label">Perfect</div>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<div class="items">
+														<div class="color">
+															<span class="tardy"></span>
+														</div>
+														<div class="label">Tardiness</div>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+													<div class="items">
+														<div class="color">
+															<span class="absent"></span>
+														</div>
+														<div class="label">Absent</div>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<div class="items">
+														<div class="color">
+															<span class="leave"></span>
+														</div>
+														<div class="label">Leave</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div v-if="!fetching && records.length">
+								<div class="table-responsive">
+
+									<table class="table-custom" style="width: 2730px">
+										<thead class="bg-light">
+											<tr class="rt">
+												<td></td>
+												<td class="align-middle month" v-text="periodDate"></td>
+												<td v-for="date in dateArray">
+													<div class="rotated" v-text="moment(date).format('dddd')"></div>
+												</td>
+											</tr>
+											<tr>
+												<td class="align-middle employee">Emp No</td>
+												<td class="align-middle employee">Employee</td>
+												<td class="text-center" v-for="date in dateArray" v-text="moment(date).format('D')"></td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="record in records">
+												<td class="name">
+													<a v-bind:href="'<%= baseUrl %>/attendance/shift-management/' + record.shortid" v-text="record.employee_number" target="_blank"></a>
+												</td>
+												<td class="name">
+													<a v-bind:href="'<%= baseUrl %>/attendance/shift-management/' + record.shortid" v-text="record.last_name +', '+ record.first_name" target="_blank"></a>
+												</td>
+												<td v-for="schedule in record.schedule" class="text-center" v-bind:class="schedule.bg" >
+													<div style="white-space: nowrap;"> 
+														<small :title="schedule.actualTime" v-text="schedule.time"></small>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p></p>
+								<ul class="pagination" v-if="counts">
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+									</li>
+									<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+										<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+									</li>
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+									</li>
+								</ul>
+							</div>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+					<div class="widget custom-modal" v-if="modal">
+						<div class="modal-container">
+							<div class="heading">
+								<h4 v-text="modalText"></h4>
+								<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+							</div>
+
+							<form action="<%- baseUrl %>/attendance/shift-management" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+								<div class="body">
+									<div class="alert alert-danger" role="alert" v-if="!! errors.csv_format" v-text="errors.csv_format"></div>
+									<div class="alert alert-info" role="alert">
+										To import biometric data, the file must be in CSV format and <strong>comma separated values</strong>. Supported format: <strong><a href="<%= baseUrl +'/uploads/shifts/shift_format.csv' %>">Click Here</a></strong>.
+									</div>
+									<div class="form-row">
+										<div class="form-group col-md-12">
+											<label for="csv">Select CSV</label>
+											<input type="file" class="form-control-file" id="csv" v-on:change="fileUpload($event,'csv')" name="csv" accept=".csv">
+											<div class="form-text form-error" v-if="!! errors.csv" v-text="errors.csv"></div>
+										</div>
+									</div>
+								</div>
+								<div class="footer">
+									<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+									<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+									<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+								</div>
+							</form>
+						</div>
+					</div>
+
+				</div>
+				<% include ../../Include/alert %>
+			</div>
+		</shift-allocation>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

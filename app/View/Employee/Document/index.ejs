@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-document inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									<div class="col col-sm-12">
+										<h5>Documents</h5>
+										<div class="norecord" v-if="!fetching && !records.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+										<table class="table table-bordered" v-if="!fetching && records.length">
+											<thead class="bg-light">
+												<tr>
+													<th>Document</th>
+													<th>Description</th>
+													<th width="100" class="text-center">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(record, index) in records">
+													<td>
+														<a v-bind:href="'<%= baseUrl %>/uploads/documents/' + record.hash" target="_blank">
+														<span v-html="record.hash ? $Global.fileIcon(record.hash) : ''"></span>
+														<span v-text="record.original_name"></span>
+														</a>
+													</td>
+													<td v-text="record.description"></td>
+													<td class="text-center">
+														<button class="btn btn-sm btn-outline-primary" <%- !user_role.modify ? 'disabled':'v-on:click="edit(index)"' %>><i class="mdi mdi-lead-pencil"></i></button>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<% include ./form %>
+				</div><!-- App Container -->
+				<% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-document>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

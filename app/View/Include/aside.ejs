@@ -1,0 +1,554 @@
+	<aside v-bind:class="fluid ? 'full-width':''">
+		<vuescroll>
+		<div class="asideAccount">
+			<div class="tbl">
+				<div class="avatar">
+					<span>
+					<% if(user.avatar){ %>
+					<img src="<%= baseUrl + '/uploads/avatar/'+ user.avatar %>">
+					<% }else{ %>
+					<img src="<%= baseUrl + '/uploads/avatar/'+ user.gender +'.png' %>">
+					<% } %>
+					</span>
+				</div>
+				<div class="name"><%= user.first_name.substring(0, 1) +'. '+ user.last_name %></div>
+			</div>
+			<a class="buttons profile" href="<%= baseUrl +'/myaccount' %>">My Account</a>
+			<a class="buttons logout" href="<%= baseUrl +'/logout' %>">Logout</a>
+		</div>
+		<ul>
+			<li>
+				<a href="<%= baseUrl %>"><i class="mdi mdi-speedometer"></i> Dashboard</a>
+			</li>
+			<% if(usrRole['recruitment-candidate-profile'] || 
+					usrRole['recruitment-schedule'] || 
+					usrRole['recruitment-rating'] || 
+					usrRole['recruitment-joining']){ %>
+			<li class="nav-dropdown 
+				<%- typeof route !== 'undefined' && (['recruitment-candidate','recruitment-schedule', 'recruitment-rating', 'recruitment-joining'].includes(route)) ? 'open':'' %>">
+				<span><i class="mdi mdi-account-search"></i> Recruitment</span>
+				<ul>
+					<% if(usrRole['recruitment-candidate-profile']){ %>
+					<li>
+						<a href="<%= baseUrl %>/recruitment/candidate-profile" class="<%- typeof route !== 'undefined' && route == 'recruitment-candidate' ? 'active':'' %>">
+							Candidate Profile
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['recruitment-schedule']){ %>
+					<li>
+						<a href="<%= baseUrl %>/recruitment/schedule" class="<%- typeof route !== 'undefined' && route == 'recruitment-schedule' ? 'active':'' %>">
+							Interview Schedule
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['recruitment-rating']){ %>
+					<li>
+						<a href="<%= baseUrl %>/recruitment/rating" class="<%- typeof route !== 'undefined' && route == 'recruitment-rating' ? 'active':'' %>">
+							Interview Rating
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['recruitment-joining']){ %>
+					<li>
+						<a href="<%= baseUrl %>/recruitment/joining" class="<%- typeof route !== 'undefined' && route == 'recruitment-joining' ? 'active':'' %>">
+							Joining
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+			<% if(usrRole['employee-list'] || usrRole['employee-leave-credit']){ %>
+			<li class="nav-dropdown <%- typeof route !== 'undefined' && (['employee','employee-leave-credit'].includes(route)) ? 'open':'' %>">
+				<span><i class="mdi mdi-account-supervisor-circle"></i> Employee</span>
+				<ul>
+					<% if(usrRole['employee-list']){ %>
+					<li>
+						<a href="<%= baseUrl %>/employee" class="<%- typeof route !== 'undefined' && route == 'employee' ? 'active':'' %>">
+							Employee List
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['employee-leave-credit']){ %>
+					<li>
+						<a href="<%= baseUrl %>/employee/leave-credit" class="<%- typeof route !== 'undefined' && route == 'employee-leave-credit' ? 'active':'' %>">
+							Leave Credit
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+			<% if(usrRole['attendance-shift'] || 
+					usrRole['attendance-biometric'] || 
+					usrRole['attendance-leave'] || 
+					usrRole['attendance-overtime'] || 
+					usrRole['attendance-undertime'] || 
+					usrRole['attendance-absence'] ||
+					usrRole['attendance-tss'] ||
+					usrRole['attendance-summary'] 
+					){ %>
+			<li class="nav-dropdown <%= typeof route !== 'undefined' && (['attendance-leave','shift-management','attendance-biometric','attendance-summary','attendance-overtime','attendance-undertime','attendance-absence','attendance-tss'].includes(route)) ? 'open':'' %>">
+				<span><i class="mdi mdi-account-multiple-check"></i> Attendance</span>
+				<ul>
+					<% if(usrRole['attendance-shift']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/shift-management" class="<%- typeof route !== 'undefined' && route == 'shift-management' ? 'active':'' %>">
+							Shift Management
+						</a>
+					</li>
+					<% } %>
+
+					<% if(usrRole['attendance-biometric']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/biometric-integration" class="<%- typeof route !== 'undefined' && route == 'attendance-biometric' ? 'active':'' %>">
+							Biometric Integration
+						</a>
+					</li>
+					<% } %>
+
+					<% if(usrRole['attendance-leave']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/leave-management" class="<%- typeof route !== 'undefined' && route == 'attendance-leave' ? 'active':'' %>">
+							Leave Management
+						</a>
+					</li>
+					<% } %>
+
+					<% if(usrRole['attendance-overtime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/overtime" class="<%- typeof route !== 'undefined' && route == 'attendance-overtime' ? 'active':'' %>">
+							Overtime Management
+						</a>
+					</li>
+				
+					<% } %>
+
+					<% if(usrRole['attendance-undertime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/undertime" class="<%- typeof route !== 'undefined' && route == 'attendance-undertime' ? 'active':'' %>">
+							Undertime Management
+						</a>
+					</li>
+					<% } %>
+
+					
+
+					<% if(usrRole['attendance-absence']){ %>
+					<!-- <li>
+						<a href="<%= baseUrl %>/attendance/absence" class="<%- typeof route !== 'undefined' && route == 'attendance-absence' ? 'active':'' %>">
+							Holiday Management
+						</a>
+					</li> -->
+					<% } %>
+					
+					<% if(usrRole['attendance-summary']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/dtr-management" class="<%- typeof route !== 'undefined' && route == 'attendance-summary' ? 'active':'' %>">
+							DTR Management
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['attendance-tss']){ %>
+					<li>
+						<a href="<%= baseUrl %>/attendance/tss" class="<%- typeof route !== 'undefined' && route == 'attendance-tss' ? 'active':'' %>">
+							TSS
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+
+			<% if(usrRole['payment-dispute'] || 
+					usrRole['payment-loan'] || 
+					usrRole['payment-salary'] || 
+					usrRole['payment-adjustment'] || 
+					usrRole['payment-settlement']){ %>
+			<li class="nav-dropdown <%- typeof route !== 'undefined' && (['payment-dispute','payment-loan','payment-payroll','payment-adjustment'].includes(route)) ? 'open':'' %>" >
+				<span><i class="mdi mdi-cash-100"></i> Payroll</span>
+				<ul>
+					<% if(usrRole['payment-dispute']){ %>
+					<li>
+						<a href="<%= baseUrl %>/payment/dispute" class="<%- typeof route !== 'undefined' && route == 'payment-dispute' ? 'active':'' %>">
+							Dispute
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['payment-loan']){ %>
+					<li>
+						<a href="<%= baseUrl %>/payment/loan-advance-payment" class="<%- typeof route !== 'undefined' && route == 'payment-loan' ? 'active':'' %>">
+							Loan/Advance Payment
+						</a>
+					</li>
+					<% } %>
+					
+					<% if(usrRole['payment-payroll']){ %>
+					<li>
+						<a href="<%= baseUrl %>/payment/payroll" class="<%- typeof route !== 'undefined' && route == 'payment-payroll' ? 'active':'' %>">
+							Payroll
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['payment-adjustment']){ %>
+					<li>
+						<a href="<%= baseUrl %>/payment/adjustment" class="<%- typeof route !== 'undefined' && route == 'payment-adjustment' ? 'active':'' %>">
+							Salary Adjustment
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+
+			<% if(usrRole['approvals-shift'] || 
+					usrRole['approvals-leave'] || 
+					usrRole['approvals-change-shift'] || 
+					usrRole['approvals-overtime'] || 
+					usrRole['approvals-undertime'] || 
+					usrRole['approvals-dispute'] || 
+					usrRole['approvals-business-trip']){ %>
+			<li class="nav-dropdown <%- typeof route !== 'undefined' && (['app-business','app-overtime','app-undertime','app-leave','app-shift','app-dispute','app-change-shift','app-change-log'].includes(route)) ? 'open':'' %>">
+				<span><i class="mdi mdi-checkbox-marked-outline"></i> Approvals</span>
+				<ul>
+					<% if(usrRole['approvals-shift']){ %>
+					<!-- <li>
+						<a href="<%= baseUrl %>/approvals/shift" class="<%- typeof route !== 'undefined' && route == 'app-shift' ? 'active':'' %>">
+							Shift
+						</a>
+					</li> -->
+					<% } %>
+					<% if(usrRole['approvals-leave']){ %>
+					<li>
+						<a href="<%= baseUrl %>/approvals/leave" class="<%- typeof route !== 'undefined' && route == 'app-leave' ? 'active':'' %>">
+							Leave
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['approvals-overtime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/approvals/overtime" class="<%- typeof route !== 'undefined' && route == 'app-overtime' ? 'active':'' %>">
+							Overtime
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['approvals-undertime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/approvals/undertime" class="<%- typeof route !== 'undefined' && route == 'app-undertime' ? 'active':'' %>">
+							Undertime
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['approvals-business-trip']){ %>
+					<li>
+						<a href="<%= baseUrl %>/approvals/business-trip" class="<%- typeof route !== 'undefined' && route == 'app-business' ? 'active':'' %>">
+							Business Trip
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['approvals-dispute']){ %>
+					<li>
+						<a href="<%= baseUrl %>/approvals/dispute" class="<%- typeof route !== 'undefined' && route == 'app-dispute' ? 'active':'' %>">
+							Dispute
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['approvals-change-shift']){ %>
+					<li>
+						<a href="<%= baseUrl %>/approvals/change-shift" class="<%- typeof route !== 'undefined' && route == 'app-change-shift' ? 'active':'' %>">
+							Change Shift
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['approvals-change-log']){ %>
+						<li>
+							<a href="<%= baseUrl %>/approvals/change-log" class="<%- typeof route !== 'undefined' && route == 'app-change-log' ? 'active':'' %>">
+								Change Log
+							</a>
+						</li>
+						<% } %>
+					</ul>
+			</li>
+			<% } %>
+			<% if(usrRole['custom-form-leave'] || 
+					usrRole['custom-form-overtime'] || 
+					usrRole['custom-form-businesstrip'] || 
+					usrRole['custom-form-undertime'] || 
+					usrRole['custom-form-dispute'] || 
+					usrRole['custom-form-change-log'] || 
+					usrRole['custom-form-change-shift']){ %>
+			<li class="nav-dropdown <%- typeof route !== 'undefined' && (['custom-form-businesstrip','custom-form-leave','custom-form-overtime','custom-form-undertime','custom-form-change-shift','custom-form-dispute','custom-form-change-log'].includes(route)) ? 'open':'' %>" >
+				<span><i class="mdi mdi-cash-100"></i> Custom Forms</span>
+				<ul>
+					<% if(usrRole['custom-form-leave']){ %>
+					<li>
+						<a href="<%= baseUrl %>/custom/leave" class="<%- typeof route !== 'undefined' && route == 'custom-form-leave' ? 'active':'' %>">
+							Custom Leave
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['custom-form-undertime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/custom/undertime" class="<%- typeof route !== 'undefined' && route == 'custom-form-undertime' ? 'active':'' %>">
+							Custom Undertime
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['custom-form-overtime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/custom/overtime" class="<%- typeof route !== 'undefined' && route == 'custom-form-overtime' ? 'active':'' %>">
+							Custom Overtime
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['custom-form-change-shift']){ %>
+					<li>
+						<a href="<%= baseUrl %>/custom/change-shift" class="<%- typeof route !== 'undefined' && route == 'custom-form-change-shift' ? 'active':'' %>">
+							Custom Change Shift
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['custom-form-change-log']){ %>
+						<li>
+							<a href="<%= baseUrl %>/custom/change-log" class="<%- typeof route !== 'undefined' && route == 'custom-form-change-log' ? 'active':'' %>">
+								Custom Change Log
+							</a>
+						</li>
+						<% } %>
+						<% if(usrRole['custom-form-dispute']){ %>
+					<li>
+						<a href="<%= baseUrl %>/custom/dispute" class="<%- typeof route !== 'undefined' && route == 'custom-form-dispute' ? 'active':'' %>">
+							Dispute
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['custom-form-businesstrip']){ %>
+					<li>
+						<a href="<%= baseUrl %>/custom/businesstrip" class="<%- typeof route !== 'undefined' && route == 'custom-form-businesstrip' ? 'active':'' %>">
+							Business Trip
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+
+			<% if(usrRole['forms-shift'] || 
+					usrRole['forms-leave'] ||
+					usrRole['forms-change-shift'] || 
+					usrRole['forms-overtime'] || 
+					usrRole['forms-undertime'] || 
+					usrRole['forms-business-trip'] || 
+					usrRole['forms-dispute']){ %>
+			<li class="nav-dropdown <%- typeof route !== 'undefined' && (['form-overtime','form-leave','form-undertime', 'form-shift', 'form-business','form-dispute','forms-change-shift'].includes(route)) ? 'open':'' %>">
+				<span><i class="mdi mdi-file-document-outline"></i> Forms</span>
+				<ul>
+					<% if(usrRole['forms-shift']){ %>
+					<!-- <li>
+						<a href="<%= baseUrl %>/forms/shift" class="<%- typeof route !== 'undefined' && route == 'form-shift' ? 'active':'' %>">
+							Shift
+						</a>
+					</li> -->
+					<% } %>
+					<% if(usrRole['forms-leave']){ %>
+					<li>
+						<a href="<%= baseUrl %>/forms/leave" class="<%- typeof route !== 'undefined' && route == 'form-leave' ? 'active':'' %>">
+							Leave
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['forms-overtime'] && usrRole['has_overtime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/forms/overtime" class="<%- typeof route !== 'undefined' && route == 'form-overtime' ? 'active':'' %>">
+							Overtime
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['forms-undertime']){ %>
+					<li>
+						<a href="<%= baseUrl %>/forms/undertime" class="<%- typeof route !== 'undefined' && route == 'form-undertime' ? 'active':'' %>">
+							Undertime
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['forms-business-trip']){ %>
+					<li>
+						<a href="<%= baseUrl %>/forms/business-trip" class="<%- typeof route !== 'undefined' && route == 'form-business' ? 'active':'' %>">
+							Business Trip
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['forms-dispute']){ %>
+					<li>
+						<a href="<%= baseUrl %>/forms/dispute" class="<%- typeof route !== 'undefined' && route == 'form-dispute' ? 'active':'' %>">
+							Dispute
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['forms-change-shift']){ %>
+					<li>
+						<a href="<%= baseUrl %>/forms/change-shift" class="<%- typeof route !== 'undefined' && route == 'forms-change-shift' ? 'active':'' %>">
+							Change Shift
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+
+			<% if(usrRole['announcement']){ %>
+			<li>
+				<a href="<%= baseUrl %>/announcement"><i class="mdi mdi-calendar-star"></i> Announcement</a>
+			</li>
+			<% } %>
+			<% if(usrRole['accounts']){ %>
+			<li>
+				<a href="<%= baseUrl %>/accounts"><i class="mdi mdi-chart-bar"></i> Accounts</a>
+			</li>
+			<% } %>
+			<% if(usrRole['settings-configuration'] || 
+					usrRole['settings-company'] || 
+					usrRole['settings-branch'] || 
+					usrRole['settings-section'] || 
+					usrRole['settings-department'] || 
+					usrRole['settings-division'] || 
+					usrRole['settings-approvers'] || 
+					usrRole['settings-taxonomy'] || 
+					usrRole['settings-holidays'] ||
+					usrRole['settings-biometric'] ||
+					usrRole['settings-branding'] ||
+					usrRole['settings-cron-management'] ||
+					usrRole['settings-role']){ %>
+			<li class="nav-dropdown <%- typeof route !== 'undefined' && ([
+				'company',
+				'branch',
+				'approvers',
+				'taxonomy',
+				'holidays',
+				'role',
+				'biometric',
+				'configuration',
+				'setting-cutoff',
+				'leave-policy',
+				'branding',
+				'department',
+				'division',
+				'section',
+				'settings-shift-management',
+				'settings-cron-management'
+				].includes(route)) ? 'open':'' %>">
+				<span><i class="mdi mdi-cogs"></i> Settings</span>
+				<ul>
+					<% if(usrRole['settings-cron-management']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/cron-management" class="<%- typeof route !== 'undefined' && route == 'settings-cron-management' ? 'active':'' %>">
+							CRON Management
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-configuration']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/configuration" class="<%- typeof route !== 'undefined' && route == 'configuration' ? 'active':'' %>">
+							Configuration
+						</a>
+					</li>
+					<% } %>
+					
+					<% if(usrRole['settings-shift-management']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/shift-management" class="<%- typeof route !== 'undefined' && route == 'settings-shift-management' ? 'active':'' %>">
+							Shift Management
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-branding']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/branding" class="<%- typeof route !== 'undefined' && route == 'branding' ? 'active':'' %>">
+							Branding
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-company']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/company" class="<%- typeof route !== 'undefined' && route == 'company' ? 'active':'' %>">
+							Company
+						</a>
+					</li>
+					<% } %>
+					<!-- <% if(usrRole['settings-branch']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/branch" class="<%- typeof route !== 'undefined' && route == 'branch' ? 'active':'' %>">
+							Branch
+						</a>
+					</li>
+					<% } %> -->
+					<% if(usrRole['settings-division']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/division" class="<%- typeof route !== 'undefined' && route == 'division' ? 'active':'' %>">
+							Divisions
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-department']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/department" class="<%- typeof route !== 'undefined' && route == 'department' ? 'active':'' %>">
+							Departments
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-section']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/section" class="<%- typeof route !== 'undefined' && route == 'section' ? 'active':'' %>">
+							Sections
+						</a>
+					</li>
+					<% } %>
+					<!-- <% if(usrRole['settings-approvers']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/approvers" class="<%- typeof route !== 'undefined' && route == 'approvers' ? 'active':'' %>">
+							Approvers
+						</a>
+					</li>
+					<% } %> -->
+					<% if(usrRole['settings-taxonomy']){ %>
+					<!-- <li>
+						<a href="<%= baseUrl %>/settings/taxonomy" class="<%- typeof route !== 'undefined' && route == 'taxonomy' ? 'active':'' %>">
+							Taxonomy
+						</a>
+					</li> -->
+					<% } %>
+					<% if(usrRole['settings-holidays']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/holidays" class="<%- typeof route !== 'undefined' && route == 'holidays' ? 'active':'' %>">
+							Holidays
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-biometric']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/biometric" class="<%- typeof route !== 'undefined' && route == 'biometric' ? 'active':'' %>">
+							Biometric
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-leave-policy']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/leave-policy" class="<%- typeof route !== 'undefined' && route == 'leave-policy' ? 'active':'' %>">
+							Leave Policy
+						</a>
+					</li>
+					<% } %>
+					<% if(usrRole['settings-role']){ %>
+					<li>
+						<a href="<%= baseUrl %>/settings/user-role" class="<%- typeof route !== 'undefined' && route == 'role' ? 'active':'' %>">
+							User Role
+						</a>
+					</li>
+					<% } %>
+				</ul>
+			</li>
+			<% } %>
+		</ul>
+		</vuescroll>
+	</aside>

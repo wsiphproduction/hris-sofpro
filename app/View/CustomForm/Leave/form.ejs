@@ -1,0 +1,154 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+
+		<form action="<%= baseUrl %>/custom/leave" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+			<div class="body">
+				<div class="alert alert-primary" role="alert">
+					<strong>NOTE:</strong> If leave application is more than 1 (one) day. <strong>Number of Days</strong> should be a whole number
+				</div>
+				<div class="row p-3">
+					<div v-for="res in policy" if="policy.length" class="col-lg-2 col-sm-3 col-md-4 p-2">
+						<div class="card bg-light card-leave text-center">
+							<div class="credit" v-text="res.leave_credit_policy ? (res.leave_credit_policy.balance ? res.leave_credit_policy.balance : '0'):'0'"></div>
+							<div class="small" v-text="res.name"></div>
+						</div>
+					</div>
+					<div v-if="policy.length == 0" class="col-lg-2 col-sm-3 col-md-4 p-2">
+						<div class="card bg-light card-leave text-center">
+							<div class="credit">0</div>
+							<div class="small text-danger">No Credit Found</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-row" v-if="method=='post'">
+					<div class="form-group col-md-12" v-if="!! errors.approver">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span v-text="errors.approver"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="form-row">
+					<div class="form-group col-md-12" v-if="!form.approver_name">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span>Leave request required approver. Please contact administrator.</span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="head">Approver</label>
+						<input type="text" class="form-control" v-model="form.approver_name" disabled>
+						<div class="form-text form-error" v-if="!! errors.approver_id" v-text="errors.approver_id"></div>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="employee">Employee</label>
+						<select class="form-control" v-model="form.employee" @change="onChangeEmployee($event,null)" v-bind:disabled="method=='put'">
+							<option value="">Select Employee</option>
+							<option v-for="user in users" v-bind:value="user.id" v-text="user.last_name+', '+user.first_name +' : ' + user.employee_number"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.employee" v-text="errors.employee"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="leave_type" class="isRequired">Leave Policy</label>
+						<select id="leave_type" class="form-control" v-model="form.leave_type" v-on:change="checkCredit" name="leave_type">
+							<option value="">— Select —</option>
+							<option v-for="res in policy" v-bind:value="res.id" v-text="res.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.leave_type" v-text="errors.leave_type"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="start_date" class="isRequired">Start Date</label>
+						<datetime type="date" input-class="form-control" input-id="start_date" v-model="form.start_date" @click="changeStatus()" name="start_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="end_date" class="isRequired">End Date</label>
+						<datetime type="date" input-class="form-control" input-id="end_date" v-model="form.end_date"  @click="changeStatus()" :min-datetime="minDate" :max-datetime="maxDate" name="end_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.end_date" v-text="errors.end_date"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="diffDays">
+					<div class="form-group col-md-12">
+						<table class="table table-bordered">
+							<thead class="bg-light">
+								<tr>
+									<th class="text-center" width="25%">Dates</th>
+									<th class="text-center" width="25%">Leave Credit</th>
+									<th class="text-center" width="25%">Leave Duration</th>
+									<th class="text-center" width="25%">File Leave</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr v-for="(leave, index) in leave_object">
+									<td v-text="moment(leave.date).format('ll')"></td>
+									<td>
+										<select :disabled='!leave.date_is_filed' id="credit" v-on:change="process_credit(index, true)" class="form-control" name="credit" v-model="leave.leave_credit">
+											<option value="">None</option>
+											<option value="1" v-if="leave.with_pay">With Pay</option>
+											<option value="2" v-if="!leave.with_pay">Without Pay</option>
+										</select>
+										<div class="form-text form-error" v-text="leave_credit_errors[index]"></div>
+									</td>
+									<td>
+										<select :disabled='!leave.date_is_filed' id="leave_duration" v-on:change="process_credit(index)" class="form-control" name="leave_duration" v-model="!leave.date_is_filed? 'disabled':leave.leave_duration">
+											<option value="">None</option>
+											<option value="0" v-if="leave.whole_day_paid">Whole day</option>
+											<option value="1">First half</option>
+											<option value="2">Second half</option>
+										</select>
+										<div class="form-text form-error" v-text="leave_duration_errors[index]"></div>
+									</td>
+									<td class="text-center">
+										<div class="custom-control custom-switch">
+											<input type="checkbox" class="custom-control-input" v-on:change="process_date_filed(index, $event)" v-bind:id="'date_is_filed'+index" v-model="leave.date_is_filed">
+											<label class="custom-control-label" v-bind:for="'date_is_filed'+index"></label>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="form-text form-error" v-text="file_leave_error"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					
+					<div class="form-group col-md-6">
+						<label for="attachment">Attachment</label>
+						<input type="file" id="attachment" class="form-control-file" accept="image/*, application/pdf" v-on:change="onAttachmentChange($event)" name="attachment">
+						<div class="form-text form-error" v-if="!! errors.attachment" v-text="errors.attachment"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="reason">Reason</label>
+						<textarea name="reason" id="reason" class="form-control" rows="5" v-model="form.reason"></textarea>
+					</div>
+				</div>
+				
+			</div>
+			<div class="footer">
+				<input type="hidden" name="id" v-model="form.id">
+				<input type="hidden" name="credit" v-model="form.credit">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading" v-on:click="addConvertedJSONtoForm">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+		
+	</div>
+</div>

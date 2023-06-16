@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+</head>
+<body>
+	<div id="app">	
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-discipinary inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<button class="btn btn-primary btn-sm" v-on:click=""><i class="mdi mdi-download"></i> Export </button>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col col-sm">
+										<div class="card">
+											<div class="card-header">
+												Disciplinary Entries
+												<% if(user_role.modify){ %>
+													<button class="btn btn-primary" v-on:click="addCases('<%= employee.id %>')">Add New</button>
+												<% } %>
+											</div>
+											<div class="table-responsive">
+												<table class="table table-bordered noBorderLeftRight" v-if="cases.length">
+													<tbody>
+														<tr>
+															<td class="text-center">IRN</td>
+															<td class="text-center">Prepared By</td>
+															<td class="text-center">Recieved by HR</td>
+															<td class="text-center">Date of Incident</td>
+															<!-- <th>Venue of Incident</th> -->
+															<!-- <th>IRN Date Served To Employee</th>
+															<th>IRN Explanation Date Received By HR</th> -->
+															<td class="text-center">Labor Code Violation</td>
+															<!-- <th>Labor Code Violation(OFFENSE)</th>
+															<th>Labor Code Violation(PENALTY)</th> -->
+															<!-- <th>Notice of Decision</th> -->
+															<td class="text-center">Notice of Decision Date Served</td>
+															<td class="text-center">Effectivity Date Start</td>
+															<td class="text-center">Effectivity Date End</td>
+															<% if(user_role.modify){ %>
+																<td class="text-center">Action</td>
+															<% } %>
+														</tr>
+														<tr v-for="(ir, index) in cases">
+															<td>{{ir.title}}<!--<i class="mdi mdi-attachment mdi-18px btn-outline-primary"></i>--></td>
+															<td>{{ir.prepared_by}}</td>
+															<td>{{ir.received_by}}</td>
+															<td>{{ir.incident_date}}</td>
+															<!-- <td>{{ir.venue}}</td> -->
+															<!-- <td>{{ir.servedDate}}</td>
+															<td>{{ir.explanationDate}}</td> -->
+															<td>{{ir.code}}</td>
+															<!--<td>{{ir.offense}}</td>
+															<td>{{ir.penalty}}</td>
+															<td>{{ir.decision}}</td>-->
+															<td>{{ir.date_served}}</td>
+															<td>{{ir.start_date}}</td>
+															<td>{{ir.end_date}}</td>
+															<% if(user_role.modify){ %>
+															<td class="text-center">
+																<button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="editCases(index)">
+																	<i class="mdi mdi-lead-pencil"></i>
+																</button>
+																<button class="btn btn-sm btn-outline-primary" title="Archive" v-on:click="archive(ir.id, 'employee/disciplinary-cases/archive')">
+																	<i class="uil uil-trash-alt"></i>
+																</button>
+															</td>
+															<% } %>
+														</tr>
+													</tbody>
+												</table>
+												<div class="norecord" v-if="!cases.length">
+													<img src="<%= baseUrl + '/img/info.png' %>">
+													<p>Sorry, we couldn't find any matches.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% include ./form %>
+					<% include ../../Include/alert %>
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-discipinary>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

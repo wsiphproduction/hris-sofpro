@@ -1,0 +1,11 @@
+Vue.component('shift-allocation', require('./attendance/ShiftAllocation.vue'));
+Vue.component('leave-management', require('./attendance/LeaveManagement.vue'));
+Vue.component('attendance-biometric', require('./attendance/Biometric.vue'));
+Vue.component('attendance-overtime', require('./attendance/Overtime.vue'));
+Vue.component('attendance-undertime', require('./attendance/Undertime.vue'));
+Vue.component('attendance-summary', require('./attendance/Summary.vue'));
+Vue.component('attendance-shift-calendar', require('./attendance/ShiftCalendar.vue'));
+Vue.component('attendance-absence', require('./attendance/Absence.vue'));
+Vue.component('attendance-tss', require('./attendance/TssSummary.vue'));
+Vue.component('attendance-tss-summary', require('./attendance/Tss.vue'));
+Vue.component('attendance-tss-posted', require('./attendance/TssPosted.vue'));

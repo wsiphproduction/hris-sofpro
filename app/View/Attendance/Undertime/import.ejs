@@ -1,0 +1,65 @@
+<div class="widget search-modal" v-if="importUndertime">
+	<div class="modal-container">
+        <div class="heading">
+            <h4>Import</h4>
+            <button class="close-modal" v-on:click="closeImport"><i class="mdi mdi-close"></i></button>
+        </div>
+
+        <form action="<%- baseUrl %>/attendance/undertime/import" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+            <div class="body">
+                <div class="alert alert-danger" role="alert" v-if="!! errors.csv_format" v-text="errors.csv_format"></div>
+                <div class="alert alert-info" role="alert">
+                    To import biometric data, the file must be in CSV format and <strong>comma separated values</strong>. Supported format: <strong><a href="<%= baseUrl +'/uploads/undertime/undertime_format.csv' %>">Click Here</a></strong>.
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="csv">Select CSV</label>
+                        <input type="file" class="form-control-file" id="csv" v-on:change="fileUpload($event,'csv')" name="csv" accept=".csv">
+                        <div class="form-text form-error" v-if="!! errors.csv" v-text="errors.csv"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+                <button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+                <button type="button" class="btn btn-light" v-on:click="closeImport">Cancel</button>
+            </div>
+        </form>
+    </div>
+		<!-- <form action="<%= baseUrl %>/attendance/dtr-management/download?format=excel&records='+ records" method="get" target="_blank">
+			<div class="body">
+				<div class="alert alert-primary" role="alert">
+					<strong>IMPORTANT:</strong> Do not remove or edit the <strong>"ID"</strong> field.
+				</div>
+				<div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="alert alert-primary" role="alert">
+                            The file must be in <strong>CSV format and comma separated values</strong>.<br> 
+                            Insert format: <strong><a href="<%= baseUrl %>/uploads/imports/insert_format.csv">click here</a></strong>.<br>
+                            Update format: <strong>Must be from exported csv format.</strong>.
+                        </div>
+                        
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="operation">Select Operation</label>
+                        <select id="operation" class="form-control" name="operation" v-model="form.operation">
+                            <option value="">Select</option>
+                            <option value="insert">Insert Employee</option>
+                            <option value="update">Update Employee</option>
+                        </select>
+                        <div class="form-text form-error" v-if="!! errors.operation" v-text="errors.operation"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="import">Select Csv</label>
+                        <input type="file" id="import" class="form-control-file" v-model="form.file" name="file" accept=".csv" v-on:change="onAttachmentChange($event)">
+                        <div class="form-text form-error" v-if="!! errors.file" v-text="errors.file"></div>
+                    </div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeAccount">Cancel</button>
+			</div>
+		</form> -->
+</div>

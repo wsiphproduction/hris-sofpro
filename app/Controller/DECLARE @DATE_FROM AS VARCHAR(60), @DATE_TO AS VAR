@@ -1,0 +1,35 @@
+DECLARE @DATE_FROM AS VARCHAR(60), @DATE_TO AS VARCHAR(60)
+
+--CHANGE TO DESIRED DATE RANGE
+SET @DATE_FROM = '2022-10-11'
+SET @DATE_TO   = '2022-10-25'
+
+SELECT  s.id AS SHIFT_ID,t.id AS TSS_ID, u.id AS USER_ID,ld.id AS LD_DATE,l.id AS LEAVE_ID,ld.date,
+		u.employee_number, CONCAT(u.last_name,', ', u.first_name),
+		(ISNULL(t.Leave01,0) + ISNULL(t.Leave02,0)+ ISNULL(t.Leave03,0)+ ISNULL(t.Leave04,0)+ ISNULL(t.Leave05,0)  
+		+ ISNULL(t.Leave06,0)+ ISNULL(t.Leave07,0)+ ISNULL(t.Leave08,0)+ ISNULL(t.Leave09,0)+ ISNULL(t.Leave10,0)
+		+ ISNULL(t.Leave11,0)+ ISNULL(t.Leave12,0)+ ISNULL(t.Leave13,0)+ ISNULL(t.Leave14,0)+ ISNULL(t.Leave15,0)) AS TOTAL
+
+FROM leaves_date ld
+	LEFT JOIN leaves l ON ld.leave_id = l.id
+	LEFT JOIN shifts s ON ld.date = s.date AND ld.user_id = s.user_id
+	LEFT JOIN tss_data t ON t.shift_id = s.id
+	LEFT JOIN users u ON ld.user_id = u.id
+
+WHERE ld.date_is_filed = 1
+	AND ld.credit = 1
+	AND l.primary_status = 2
+	AND s.check_in IS NOT NULL
+	AND s.check_out IS NOT NULL
+	AND s.actual_check_in IS NULL
+	AND s.actual_check_out IS NULL
+	AND (ISNULL(t.Leave01,0) + ISNULL(t.Leave02,0)+ ISNULL(t.Leave03,0)+ ISNULL(t.Leave04,0)+ ISNULL(t.Leave05,0)  
+		+ ISNULL(t.Leave06,0)+ ISNULL(t.Leave07,0)+ ISNULL(t.Leave08,0)+ ISNULL(t.Leave09,0)+ ISNULL(t.Leave10,0)
+		+ ISNULL(t.Leave11,0)+ ISNULL(t.Leave12,0)+ ISNULL(t.Leave13,0)+ ISNULL(t.Leave14,0)+ ISNULL(t.Leave15,0))<= 0
+	AND ld.date >= @DATE_FROM
+	AND ld.date <= @DATE_TO
+
+ORDER BY ld.date ASC
+
+--SELECT * FROM leaves WHERE id = '21848'
+--SELECT * FROM leaves_date WHERE leave_id = '21848'

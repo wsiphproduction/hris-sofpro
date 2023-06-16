@@ -1,0 +1,215 @@
+09/29/2021
+ALTER TABLE users ADD approver_id INT;
+ALTER TABLE users ADD secretary_id INT;
+
+IF EXISTS (SELECT * FROM sys.all_objects WHERE object_id = OBJECT_ID(N'[dbo].[failed_logs]') AND type IN ('U'))
+	DROP TABLE [dbo].[failed_logs]
+GO
+
+CREATE TABLE [dbo].[failed_logs] (
+  [id] bigint  NOT NULL,
+  [log_name] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [file_name] varchar(255) COLLATE SQL_Latin1_General_CP1_CI_AS  NULL,
+  [created_at] datetime  NULL,
+  [updated_at] datetime  NULL
+)
+GO
+
+ALTER TABLE [dbo].[failed_logs] SET (LOCK_ESCALATION = TABLE)
+GO
+
+
+-- ----------------------------
+-- Primary Key structure for table failed_logs
+-- ----------------------------
+ALTER TABLE [dbo].[failed_logs] ADD CONSTRAINT [PK__failed_l__3213E83FC85DFCEA] PRIMARY KEY CLUSTERED ([id])
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)  
+ON [PRIMARY]
+GO
+
+
+
+10/05/2021
+ALTER TABLE shifts ADD shift_type NVARCHAR(255);
+
+10/07/2021
+ALTER TABLE tss_summary ALTER COLUMN RegHrs FLOAT
+ALTER TABLE tss_summary ALTER COLUMN LateHrs FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UndertimeHrs FLOAT
+ALTER TABLE tss_summary ALTER COLUMN NDHrs FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Absent FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave01 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave02 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave03 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave04 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave05 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave06 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave07 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave08 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave09 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave10 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave11 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave12 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave13 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave14 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave15 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave16 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave17 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave18 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave19 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Leave20 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs01 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs02 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs03 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs04 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs05 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs06 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs07 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs08 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs09 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs10 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs11 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs12 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs13 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs14 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs15 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs16 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs17 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs18 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs19 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs20 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs21 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs22 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs23 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs24 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN OTHrs25 FLOAT
+ALTER TABLE tss_summary ALTER COLUMN Rate FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UnpaidRegHrs FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UnpaidSL FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UnpaidTaxSL FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UnpaidVL FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UnpaidTaxVL FLOAT
+ALTER TABLE tss_summary ALTER COLUMN UnpaidEL FLOAT
+
+ALTER TABLE tss_data ALTER COLUMN RegHrs FLOAT
+ALTER TABLE tss_data ALTER COLUMN LateHrs FLOAT
+ALTER TABLE tss_data ALTER COLUMN UndertimeHrs FLOAT
+ALTER TABLE tss_data ALTER COLUMN NDHrs FLOAT
+ALTER TABLE tss_data ALTER COLUMN Absent FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave01 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave02 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave03 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave04 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave05 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave06 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave07 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave08 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave09 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave10 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave11 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave12 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave13 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave14 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave15 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave16 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave17 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave18 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave19 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Leave20 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs01 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs02 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs03 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs04 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs05 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs06 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs07 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs08 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs09 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs10 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs11 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs12 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs13 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs14 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs15 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs16 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs17 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs18 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs19 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs20 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs21 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs22 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs23 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs24 FLOAT
+ALTER TABLE tss_data ALTER COLUMN OTHrs25 FLOAT
+ALTER TABLE tss_data ALTER COLUMN Rate FLOAT
+ALTER TABLE tss_data ALTER COLUMN UnpaidRegHrs FLOAT
+ALTER TABLE tss_data ALTER COLUMN UnpaidSL FLOAT
+ALTER TABLE tss_data ALTER COLUMN UnpaidTaxSL FLOAT
+ALTER TABLE tss_data ALTER COLUMN UnpaidVL FLOAT
+ALTER TABLE tss_data ALTER COLUMN UnpaidTaxVL FLOAT
+ALTER TABLE tss_data ALTER COLUMN UnpaidEL FLOAT
+
+10/13/2021
+ALTER TABLE shifts ADD new_shift_type NVARCHAR(255);
+
+10/14/2021
+ALTER TABLE tss ADD month_year NVARCHAR(255);
+ALTER TABLE tss ADD period NVARCHAR(1);
+
+
+10/15/2021
+INSERT INTO [dbo].[modules] ([id], [title], [tag], [status], [created_at], [updated_at]) VALUES (N'76', N'Custom Form: Leave', N'custom-form-leave', N'1', N'2021-10-15 21:17:26.430', NULL)
+INSERT INTO [dbo].[modules] ([id], [title], [tag], [status], [created_at], [updated_at]) VALUES (N'77', N'Custom Form: Undertime', N'custom-form-undertime', N'1', N'2021-10-15 21:17:33.140', NULL)
+INSERT INTO [dbo].[modules] ([id], [title], [tag], [status], [created_at], [updated_at]) VALUES (N'78', N'Custom Form: Overtime', N'custom-form-overtime', N'1', N'2021-10-15 21:17:40.483', NULL)
+INSERT INTO [dbo].[modules] ([id], [title], [tag], [status], [created_at], [updated_at]) VALUES (N'79', N'Custom Form: Change Shift', N'custom-form-change-shift', N'1', N'2021-10-15 21:17:47.660', NULL)
+
+10/117/2021
+ALTER TABLE overtimes ADD secretary_id INT NULL
+ALTER TABLE undertime ADD secretary_id INT NULL
+ALTER TABLE shifts ADD secretary_id INT NULL
+ALTER TABLE leaves ADD secretary_id INT NULL
+ALTER TABLE dispute ADD secretary_id INT NULL
+
+10/28/2021
+ALTER TABLE tss_data ADD overtime_id INT NULL
+
+11/03/2021
+ALTER TABLE users ADD old_employee_number NVARCHAR(255) NULL
+
+11/29/2021
+ALTER TABLE overtimes ALTER COLUMN no_of_hours FLOAT
+ALTER TABLE overtimes ADD night_diff FLOAT
+ALTER TABLE overtimes ADD shift_id INT NULL
+
+12/01/2021
+ALTER TABLE shifts ADD break_hour INT NULL
+
+12/26/2021
+ALTER TABLE business_trip ADD secretary_id INT NULL
+
+CREATE TABLE [dbo].[change_log] (
+id BIGINT PRIMARY KEY IDENTITY (1,1),
+user_id INT NOT NULL,
+shift_id INT NOT NULL,
+log_date DATE NOT NULL,
+orig_login_time TIME,
+orig_logout_time TIME,
+req_login_time TIME,
+req_logout_time TIME,
+note NVARCHAR(510),
+primary_status INT NOT NULL,
+primary_approver INT NOT NULL,
+secretary_id INT,
+created_at DATETIME,
+updated_at DATETIME
+);
+
+insert into modules (title, tag, status) values ('Custom Form: Change Log','custom-form-change-log',1);
+insert into modules (title, tag, status) values ('Approval: Change Log','approvals-change-log',1);
+
+01/28/2022
+ALTER TABLE leaves ADD leave_duration INT NOT NULL DEFAULT 0;
+ALTER TABLE leaves_date ADD leave_duration INT NOT NULL DEFAULT 0;
+
+02/16/2022
+ALTER TABLE overtimes ADD attachment NVARCHAR(255) NULL

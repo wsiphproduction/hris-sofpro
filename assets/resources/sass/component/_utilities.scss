@@ -1,0 +1,57 @@
+@use 'sass:math';
+
+// FONT SIZE
+$font-size-base : 1rem;
+// FONT WEIGHT
+
+$font-size-values:(
+    "1" : $font-size-base * 2.5,
+    "2" : $font-size-base * 2,
+    "3" : $font-size-base * 1.75,
+    "4" : $font-size-base * 1.5,
+    "5" : $font-size-base * 1.25,
+    "6" : $font-size-base * 1,
+);
+
+$font-weight-values:(
+    "lighter" :lighter,
+    "light"   :300,
+    "normal"  :400,
+    "bold"    :700,
+    "bolder"  :bolder, 
+);
+
+$border-sizes: (
+    1: 1px,
+    2: 2px,
+    3: 3px,
+    4: 4px,
+    5: 5px
+);
+
+$utilities:(
+    "font-size":(
+        "prefix" : "fs",
+        "values" : $font-size-values,
+    ),
+    "font-weight":(
+        "prefix" : "fw",
+        "values" : $font-weight-values,
+    ),
+    "border-width":(
+        'prefix' : "border",
+        "values" : $border-sizes,
+    ),
+);
+
+//CREATE CLASSES
+@each $classes, $attribs in $utilities{
+    $prefix : map-get($attribs, "prefix");
+    $values : map-get($attribs, "values");
+
+    @each $key, $val in $values{
+        .#{$prefix}-#{$key}{
+            #{$classes} : #{$val};
+        }
+    }
+}

@@ -1,0 +1,31 @@
+<div class="widget search-modal" v-if="modalAvatar">
+	<div class="modal-container sm">
+		<div class="heading">
+			<h4>Update Avatar</h4>
+			<button class="close-modal" v-on:click="closeAvatar"><i class="mdi mdi-close"></i></button>
+		</div>
+
+		<form action="<%= baseUrl %>/myaccount/update-avatar" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col upload text-center">
+						<span>
+						<label for="file" class="md" id="label-file" v-html="form.image">
+							<span>Select Image</span>
+						</label>
+						<input type="file" name="file" id="file" accept="image/*" v-on:change="onImageChange($event)">
+						</span>
+						<div class="form-text form-error" v-if="!! errors.file" v-text="errors.file"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<input type="hidden" name="user_id" v-model="form.user_id">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeAvatar">Cancel</button>
+			</div>
+		</form>
+		
+	</div>
+</div>

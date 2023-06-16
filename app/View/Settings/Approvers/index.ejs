@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Approvers</title>
+	<% include ../../Include/head %>
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-approvers inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Approvers</span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Approvers</h5>
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link active" href="javascript:void(0)">General</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="<%= baseUrl +'/settings/approvers/custom' %>">Custom Approver</a>
+								</li>
+							</ul>
+							<div v-if="records.length">
+								<table class="table table-bordered">
+									<thead class="bg-light">
+										<tr>
+											<th class="text-center">Company</th>
+											<th class="text-center">Department</th>
+											<th class="text-center">Team Leader</th>
+											<th class="text-center">Manager/Head</th>
+											<th width="100" class="text-center">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="record in records">
+											<td v-text="record.branch.company.name +' — '+ record.branch.location"></td>
+											<td v-text="record.department.title"></td>
+											<td v-text="record.backup ? record.backup.first_name +' '+ record.backup.last_name : '—'"></td>
+											<td v-text="record.primary ? record.primary.first_name +' '+ record.primary.last_name : '—'"></td>
+											<td class="text-center">
+												<button class="btn btn-sm btn-outline-success" title="edit" <%- user_role.modify ? 'v-on:click="editApprover(record.id)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="norecord" v-if="!records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./components/form %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-approvers> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

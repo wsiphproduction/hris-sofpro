@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Payroll</title>
+	<% include ../../Include/head %>
+	
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<payment-payroll inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Payment</span></li>
+						<li class="breadcrumb-item"><span class="active">Payroll</span></li>
+					</ol>
+					<% if(user_role.write == 1){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> Import</a>
+					<% } %>
+				</div>
+				
+				<div class="app-container">
+					<div class="row">
+						<div class="col col-sm-12">
+							
+							<h5>Payroll</h5>
+							<div v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table table-bordered" v-if="!fetching && records.length">
+										<thead class="bg-light">
+											<tr>
+												<th width="25%">Period</th>
+												<th>Attachment</th>
+												<th width="150">Date</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="record in records">
+												<td v-text="record.period"></td>
+												<td><a v-bind:href="'<%= baseUrl %>/uploads/import/'+record.attachment" v-text="record.attachment"></a></td>
+												<td v-text="moment(record.date).format('LLL')"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<ul class="pagination" v-if="counts">
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+								</li>
+								<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+									<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+								</li>
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+								</li>
+							</ul>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+					
+					<% include ./form %>
+				</div>
+				<% include ../../Include/alert %>
+			</div>
+		</payment-payroll>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

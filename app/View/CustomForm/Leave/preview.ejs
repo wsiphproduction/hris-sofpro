@@ -1,0 +1,112 @@
+<div class="widget custom-modal preview" v-if="previewModal">
+    <div class="modal-container">
+        <div class="heading">
+            <h4>Leave Detail</h4>
+            <button class="close-modal" v-on:click="previewClose"><i class="mdi mdi-close"></i></button>
+        </div>
+		
+        <div class="body px-3">
+			
+            <div class="row">
+                <div class="col-12 text-center">
+                    <div class="fw-bold">Date Filed</div>
+                    <div v-text="moment(preview.created_at).format('LLLL')"></div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="fs-6 fw-bold">Supervisor</label>
+                    <div>
+                        <span class="fs-6">{{ preview.backup ? preview.backup.first_name +' '+ preview.backup.last_name : '' }}</span>
+                        <small class="rounded bg-primary p-1 text-white" v-if="preview.backup_status == '1'"><i>Pending</i></small>
+                        <small class="rounded bg-success p-1 text-white" v-if="preview.backup_status == '2'"><i>Approved</i></small>
+                        <small class="rounded bg-warning p-1 text-white" v-if="preview.backup_status == '3'"><i>Declined</i></small>
+                        <small class="rounded bg-danger p-1 text-white" v-if="preview.backup_status == '4'"><i>Closed</i></small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="fs-6 fw-bold">Head/Manager</label>
+                    <div>
+                        <span class="fs-6">{{ preview.primary ? preview.primary.first_name +' '+ preview.primary.last_name : '' }}</span>
+                        <small class="rounded bg-primary p-1 text-white" v-if="preview.primary_status == '1'"><i>Pending</i></small>
+                        <small class="rounded bg-success p-1 text-white" v-if="preview.primary_status == '2'"><i>Approved</i></small>
+                        <small class="rounded bg-warning p-1 text-white" v-if="preview.primary_status == '3'"><i>Declined</i></small>
+                        <small class="rounded bg-danger p-1 text-white" v-if="preview.primary_status == '4'"><i>Closed</i></small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="fs-6 fw-bold">Date</label>
+                    <div class="fs-6" v-text="moment(preview.start_date).format('LL') +' to '+ moment(preview.end_date).format('LL')"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="fs-6 fw-bold">Leave Type</label>
+                    <div class="fs-6" v-text="preview.leave_policy.name"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="fs-6 fw-bold">Number of days</label>
+                    <div class="fs-6" v-text="preview.no_of_days +' day(s)'"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="fs-6 fw-bold">Attachment</label>
+                    <div>
+                        <a v-bind:href="'./uploads/attachments/'+ preview.attachment" target="_blank" v-text="preview.attachment"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="fs-6 fw-bold">Reason</label>
+                    <div class="fs-6" v-text="preview.reason"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="fs-6 fw-bold">Approver Note</label>
+                    <div class="fs-6" v-text="preview.approver_note"></div>
+                </div>
+            </div>
+			
+            <hr>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <table class="table table-bordered">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="text-center fs-6" width="25%">Dates</th>
+                                <th class="text-center fs-6" width="25%">Leave Credit</th>
+                                <th class="text-center fs-6" width="25%">Leave Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(leave, index) in leave_object" v-if="leave.date_is_filed">
+                                <td class="text-center">
+                                    <p class="pt-3 fs-6 text-uppercase"  v-text="moment(leave.date).format('ll')"></p>
+                                </td>
+                                <td class="text-center">
+                                    <p class="pt-3 fs-6" v-if="leave.credit == '1'">WITH PAY</p>
+                                    <p class="pt-3 fs-6" v-else-if="leave.credit == '2'">WITHOUT PAY</p>
+                                </td>
+                                <td class="text-center">
+                                    <p class="pt-3 fs-6" v-if="leave.leave_duration == '0'">WHOLE DAY</p>
+                                    <p class="pt-3 fs-6" v-else-if="leave.leave_duration == '1'">FIRST DAY</p>
+                                    <p class="pt-3 fs-6" v-else-if="leave.leave_duration == '2'">SECOND DAY</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <button type="button" class="btn btn-secondary" v-on:click="previewClose">Close</button>
+        </div>
+		
+    </div>
+</div>

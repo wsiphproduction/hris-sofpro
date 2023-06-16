@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> TSS</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-tss-posted inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Attendance</span></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>/attendance/tss">TSS</a></li>
+						<li class="breadcrumb-item"><span class="active">TSS Posted</span></li>
+					</ol>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							
+						</div>
+						<div class="col-sm-12">
+
+							<h5>TSS Posted</h5>	
+											
+							<div v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead class="bg-light noPadding">
+											<tr>
+												<th width="200" class="align-middle text-center">Date Create</th>
+												<th class="align-middle text-center">Label</th>
+												<th class="align-middle text-center">Month Year</th>
+												<th class="align-middle text-center">Cutoff Period</th>
+												<th width="250" class="align-middle text-center">Start Date</th>
+												<th width="250" class="align-middle text-center">End Date</th>
+												
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(record, index) in records">
+												<td v-text="moment(record.created_at).utc().format('MM/DD/YYYY hh:mmA')"></td>
+												<td>
+													<a v-bind:href="'<%=baseUrl%>/attendance/tss/'+record.id" v-text="record.label"></a>
+												</td>
+												<td v-text="record.month_year"></td>
+												<td v-text="record.period ? 'Period '+ record.period : ''"></td>
+												<td v-text="moment(record.start_date).format('MM/DD/YYYY')"></td>
+												<td v-text="moment(record.end_date).format('MM/DD/YYYY')"></td>
+												
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<ul class="pagination" v-if="counts">
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+								</li>
+								<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+									<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+								</li>
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+								</li>
+							</ul>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<% include ../../Include/alert %>
+			</div>
+		</attendance-tss-posted>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

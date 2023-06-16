@@ -1,0 +1,70 @@
+.payment_salary{
+	& .cards{
+		border: $grey-lighten-1 solid 1px;
+		margin: 15px 0;
+		padding: 20px 15px;
+		// max-width: 900px;
+		& .company{
+			margin-top: 15px;
+			text-align: center;
+			margin-bottom: 25px;
+			& img{
+				height: 80px;
+				margin-bottom: 15px;
+			}
+			& h3{
+				font-size: 24px;
+				margin: 0;
+			}
+		}
+		& .employee_info{
+			margin-bottom: 15px;
+			& span{
+				font-weight: 500;
+			}
+		}
+		& ul{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			overflow-x: hidden;
+			& li{
+				line-height: 25px;
+				&:before{
+					float: left;
+					width: 0;
+					white-space: nowrap;
+					content:
+					"· · · · · · · · · · · · · · · · · · · · "
+					"· · · · · · · · · · · · · · · · · · · · "
+					"· · · · · · · · · · · · · · · · · · · · "
+					"· · · · · · · · · · · · · · · · · · · · "
+				}
+				& span:first-child{
+					background: $white;
+					padding-right: 0.33em;
+				}
+				& span + span{
+					float: right;
+					background: $white;
+					padding-left: 0.33em;
+				}
+			}
+		}
+		& table{
+			&.table-borderless{
+				& td{
+					&.gross{
+						font-weight: 500;
+					}
+					&.net{
+						font-size: 22px;
+						font-weight: 500;
+					}
+				}
+			}
+		}
+		
+		
+	}
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><%= APP_NAME ? APP_NAME +' — ' : '' %> Leave</title>
+    <% include ../Include/head %>
+</head>
+<body>
+    <div id="app">
+        <% include ../Include/header %>
+        <% include ../Include/aside %>
+        
+        <main  v-bind:class="fluid ? 'full-width':''">
+            <monitoring inline-template>
+                <div class="wrapper">
+                    <div class="bread-crumb">
+                        <ol>
+                            <li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+                            <li class="breadcrumb-item"><span>Log Issue Monitoring</span></li>
+                            <li class="search">
+                                <div class="search-container">
+                                    <div class="input-group">
+                                        <input type="search" id="txtfilter" class="form-control form-control-sm" v-model="param.key" placeholder="Search employees">
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                        <!-- <a v-bind:href="exportLinkLV" class="btn btn-primary btn-sm" target="_blank"><i class="mdi mdi-download"></i> Export</a> -->
+                    </div>
+                    
+                    <div class="app-container">
+                        <div class="row">
+                            <div class="col col-sm-12">
+                                <h5>Log Issue Monitoring</h5>
+                                
+                                <div class="form-inline">
+                                    <select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.type">
+                                        <option value="1">Time In and Time Out</option>
+                                        <option value="2">Shift with Leave but not Recorded</option>
+                                        <!-- <option value="2">TSS Data Without Shift</option>
+                                        <option value="3">Approved OT no Actual Time In and Out or No Shift</option>
+                                        <option value="4">Duplicate TSS Data Record</option>
+                                        <option value="5">Duplicate Shift</option> -->
+                                    </select>
+                                    <select class="form-control mb-2 mr-sm-2 form-control-sm" v-if="param.type <= '2'" v-model="param.type_status">
+                                        <option value="1">Active</option>
+                                        <option value="2">Deleted</option>
+                                    </select>
+                                    <label class="mb-2 mr-sm-2">Limit</label>
+                                    <select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="75">75</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <button type="reset" v-on:click="reset" class="btn btn-light mb-2">Reset</button>
+                                </div>
+
+                                <div class="col-12 alert alert-primary alert-dismissible fade show">
+                                    <b>Note:&nbsp;</b> The list below will be based on the selected cutoff.
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div v-if="!fetching && records.length">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th class="text-center" width="20">No</th>
+                                                    <th class="text-center" width="120">Employee No</th>
+                                                    <th class="text-center" width="200">Employee</th>
+                                                    <th class="text-center" width="200">DTR Date</th>
+                                                    <th class="text-center" width="120">ShiftID</th>
+                                                    <th class="text-center" width="150">Issue</th>
+                                                    <th class="text-center" width="250">Suggested Fix</th>
+                                                    <th class="text-center" width="100">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(log,index) in records">
+                                                    <td class="text-center" v-text="(param.limit*(param.page - 1)) + (index+1)"></td>
+                                                    <td v-text="log.user.employee_number"></td>
+                                                    <td v-text="log.user.last_name + ', '+ log.user.first_name"></td>
+                                                    <td v-text="log.date"></td>
+                                                    <td v-text="!log.shift_type?'--':log.shift_type"></td>
+                                                    <td v-text="log.problem"></td>
+                                                    <td v-html="log.solution"></td>
+                                                    <td class="text-center">
+                                                        <a title="Edit" v-if="param.type <= 2" :href="baseUrl + 'attendance/dtr-management' + '?employee_number=' + log.user.employee_number + '&dtr_date=' + log.date" class="btn btn-outline-primary btn-sm" target="_blank"><i class="mdi mdi-pen fs-5"></i></a>
+                                                        <button v-if="param.type <= 1 && param.type_status == 1" title="Delete" @click="deleteRecord(log.id)" class="btn btn-sm btn-outline-danger"><i class="mdi mdi-trash-can-outline fs-5"></i></button>
+                                                        <button v-if="param.type <= 1 && param.type_status == 2" title="Restore" @click="deleteRecord(log.id)" class="btn btn-sm btn-outline-danger"><i class="mdi mdi-restore fs-5"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+    
+                                    </div>
+                                </div>
+    
+                                <ul class="pagination" v-if="counts">
+                                    <li class="page-item">
+                                        <a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+                                    </li>
+                                    <li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+                                        <a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col col-sm-12">
+                                <div class="loading" v-if="fetching">
+                                    <img src="<%= baseUrl + '/img/loading.gif' %>">
+                                    <p>Loading.....</p>
+                                </div>
+                            </div>
+                            <div class="col col-sm-12" v-if="!fetching && !records.length">
+                                <div class="norecord">
+                                    <img src="<%= baseUrl + '/img/info.png' %>">
+                                    <p>Sorry, we couldn't find any matches.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <% include ../Include/alert %>
+                </div>
+            </monitoring>
+        </main>
+    </div>
+    <% include ../Include/javascript %>
+</body>
+</html>

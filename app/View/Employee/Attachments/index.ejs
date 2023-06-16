@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-attachments inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+                        <button class="btn btn-primary btn-sm" v-on:click="addAttachment('<%= employee.id %>')"><i class="mdi mdi-plus"></i> Add Attachment</button>
+                    <% } %>
+				</div><!-- Breadcrumb -->
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col-sm-12">
+										<h4 class="text-center">Attachments</h4>
+										<table class="table table-bordered" v-if="attachments.length">
+											<thead class="bg-light">
+												<tr>
+                                                    <th class="text-center">Document</th>
+													<th class="text-center">Description</th>
+													<th class="text-center">Document Number</th>
+                                                    <th class="text-center">Place of Issue</th>
+                                                    <th class="text-center">Document Type</th>
+                                                    <th class="text-center">Remarks</th>
+                                                    <% if(user_role.modify){ %>
+                                                        <td class="text-center">Action</td>
+                                                    <% } %>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(attach, index) in attachments">
+                                                    <!--<td class="text-center" v-text="attach.attachment ? attach.attachment : '-'"></td>-->
+													<td>
+														<span v-if="attach.attachment"><a v-bind:href="'./uploads/attachments/' + attach.attachment" target="_blank" title="Attachment"><i class="mdi mdi-attachment mdi-18px"></i></a></span>
+													</td>
+                                                    <td class="text-center" v-text="attach.description"></td>
+                                                    <td class="text-center" v-text="attach.document_number"></td>
+                                                    <td class="text-center" v-text="attach.place_of_issue"></td>
+                                                    <td class="text-center" v-text="attach.document_type"></td>
+                                                    <td class="text-center" v-text="attach.remarks"></td>
+                                                    <% if(user_role.modify){ %>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="edit(index)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                        </button>
+														<button class="btn btn-sm btn-outline-primary" title="Archive" v-on:click="archive(attach.id, 'employee/attachment/archive')">
+															<i class="mdi mdi-trash-can-outline"></i>
+														</button>
+                                                    </td>
+                                                    <% } %>
+                                                </tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!attachments.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+				<% include ./form %>
+                <% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-attachments>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

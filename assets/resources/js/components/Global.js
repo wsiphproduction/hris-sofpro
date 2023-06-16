@@ -1,0 +1,1 @@
+Vue.component('nav-menu', require('./global/Menu.vue'));

@@ -1,0 +1,4 @@
+2020-06-01 11:24:59, SHIFT, Shift created! 
+2020-06-01 11:24:59, LOAN, Loan created! 
+2020-06-01 11:24:59, SHIFT, Shift created! 
+2020-06-01 11:24:59, SHIFT, Shift created! 

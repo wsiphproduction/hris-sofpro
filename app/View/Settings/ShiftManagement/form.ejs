@@ -1,0 +1,222 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form v-bind:action="form_action" method="post" @submit.prevent="onSubmit" v-bind="form_attrs">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="shift_id" class="isRequired">Shift ID</label>
+						<input type="text" id="shift_id" class="form-control" v-model="form.shift_id">
+						<div class="form-text form-error" v-if="!! errors.shift_id" v-text="errors.shift_id"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="shift_desc" class="isRequired">Shift Description</label>
+						<input type="text" id="shift_desc" class="form-control" v-model="form.shift_desc">
+						<div class="form-text form-error" v-if="!! errors.shift_desc" v-text="errors.shift_desc"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="shift_opt" class="isRequired">Shift Option</label>
+						<input type="text" id="shift_opt" class="form-control" v-model="form.shift_opt">
+						<div class="form-text form-error" v-if="!! errors.shift_opt" v-text="errors.shift_opt"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-3">
+						<label for="credit_time_in">Credit Time-in</label>
+						<datetime type="time" input-class="form-control" input-id="credit_time_in" v-model="form.credit_time_in" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.credit_time_in" v-text="errors.credit_time_in"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="credit_time_out">Credit Time-out</label>
+						<datetime type="time" input-class="form-control" input-id="credit_time_out" v-model="form.credit_time_out" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.credit_time_out" v-text="errors.credit_time_out"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="time_in" class="isRequired">Time-in</label>
+						<datetime type="time" input-class="form-control" input-id="time_in" v-model="form.time_in" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.time_in" v-text="errors.time_in"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="time_out" class="isRequired">Time-out</label>
+						<datetime type="time" input-class="form-control" input-id="time_out" v-model="form.time_out" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.time_out" v-text="errors.time_out"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-3">
+						<label for="gp">GP</label>
+						<input type="number" id="gp" class="form-control" v-model="form.gp" >
+						<div class="form-text form-error" v-if="!! errors.gp" v-text="errors.gp"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="break_in">Break in</label>
+						<datetime type="time" input-class="form-control" input-id="break_in" v-model="form.break_in" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.break_in" v-text="errors.break_in"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="break_out">Break out</label>
+						<datetime type="time" input-class="form-control" input-id="break_out" v-model="form.break_out" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.break_out" v-text="errors.break_out"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="num_hours" class="isRequired">Number of Hours</label>
+						<input type="number" id="num_hours" class="form-control" v-model="form.num_hours">
+						<div class="form-text form-error" v-if="!! errors.num_hours" v-text="errors.num_hours"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-3">
+						<label for="cbamin">CB AM In</label>
+						<datetime type="time" input-class="form-control" input-id="cbamin" v-model="form.cbamin" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.cbamin" v-text="errors.cbamin"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="cbamout">CB AM Out</label>
+						<datetime type="time" input-class="form-control" input-id="cbamout" v-model="form.cbamout" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.cbamout" v-text="errors.cbamout"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="cbpmin">CB PM In</label>
+						<datetime type="time" input-class="form-control" input-id="cbpmin" v-model="form.cbpmin" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.cbpmin" v-text="errors.cbpmin"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="cbpmout">CB PM Out</label>
+						<datetime type="time" input-class="form-control" input-id="cbpmout" v-model="form.cbpmout" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.cbpmout" v-text="errors.cbpmout"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-2">
+						<label for="trig_late">Trig Late</label>
+						<datetime type="time" input-class="form-control" input-id="trig_late" v-model="form.trig_late" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.trig_late" v-text="errors.trig_late"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="trig_under">Trig Undertime</label>
+						<datetime type="time" input-class="form-control" input-id="trig_under" v-model="form.trig_under" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.trig_under" v-text="errors.trig_under"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="early_in">Early In</label>
+						<datetime type="time" input-class="form-control" input-id="early_in" v-model="form.early_in" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.early_in" v-text="errors.early_in"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="early_out">Early Out</label>
+						<datetime type="time" input-class="form-control" input-id="early_out" v-model="form.early_out" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.early_out" v-text="errors.early_out"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="late_in">Late In</label>
+						<datetime type="time" input-class="form-control" input-id="late_in" v-model="form.late_in" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.late_in" v-text="errors.late_in"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="late_out">Late Out</label>
+						<datetime type="time" input-class="form-control" input-id="late_out" v-model="form.late_out" :minute-step="1" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.late_out" v-text="errors.late_out"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-2">
+						<label for="flex_am_break">Flex AM Break</label>
+						<input type="number" id="flex_am_break" class="form-control" v-model="form.flex_am_break">
+						<div class="form-text form-error" v-if="!! errors.flex_am_break" v-text="errors.flex_am_break"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="flex_pm_break">Flex PM Break</label>
+						<input type="number" id="flex_pm_break" class="form-control" v-model="form.flex_pm_break">
+						<div class="form-text form-error" v-if="!! errors.flex_pm_break" v-text="errors.flex_pm_break"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="flex_break" >Flex Break</label>
+						<input type="number" id="flex_break" class="form-control" v-model="form.flex_break">
+						<div class="form-text form-error" v-if="!! errors.flex_break" v-text="errors.flex_break"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="min_ot" >Minimum OT</label>
+						<input type="number" id="min_ot" class="form-control" v-model="form.min_ot">
+						<div class="form-text form-error" v-if="!! errors.min_ot" v-text="errors.min_ot"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="hday_by_late" >Halfday by late</label>
+						<input type="number" id="hday_by_late" class="form-control" v-model="form.hday_by_late">
+						<div class="form-text form-error" v-if="!! errors.hday_by_late" v-text="errors.hday_by_late"></div>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="ot_type" >OT Type</label>
+						<input type="text" id="ot_type" class="form-control" v-model="form.ot_type">
+						<div class="form-text form-error" v-if="!! errors.ot_type" v-text="errors.ot_type"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-3">
+						<label for="break_hours" >Break hours</label>
+						<input type="number" id="break_hours" class="form-control" v-model="form.break_hours">
+						<div class="form-text form-error" v-if="!! errors.break_hours" v-text="errors.break_hours"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="seq_id" >Seq ID</label>
+						<input type="number" id="seq_id" class="form-control" v-model="form.seq_id">
+						<div class="form-text form-error" v-if="!! errors.seq_id" v-text="errors.seq_id"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="gp2" >GP2</label>
+						<input type="number" id="gp2" class="form-control" v-model="form.gp2">
+						<div class="form-text form-error" v-if="!! errors.gp2" v-text="errors.gp2"></div>
+					</div>
+					<div class="form-group col-md-3">
+						<label for="trig_absent" >Trig absent</label>
+						<input type="text" id="trig_absent" class="form-control" v-model="form.trig_absent">
+						<div class="form-text form-error" v-if="!! errors.trig_absent" v-text="errors.trig_absent"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="min_workhours_1h">Min workhours 1h</label>
+						<input type="number" id="min_workhours_1h" class="form-control" v-model="form.min_workhours_1h">
+						<div class="form-text form-error" v-if="!! errors.min_workhours_1h" v-text="errors.min_workhours_1h"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="min_workhours_2h">Min workhours 2h</label>
+						<input type="number" id="min_workhours_2h" class="form-control" v-model="form.min_workhours_2h">
+						<div class="form-text form-error" v-if="!! errors.min_workhours_2h" v-text="errors.min_workhours_2h"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="terminal">Terminal</label>
+						<input type="number" id="terminal" class="form-control" v-model="form.terminal">
+						<div class="form-text form-error" v-if="!! errors.terminal" v-text="errors.terminal"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="status" class="isRequired">Status</label>
+						<select id="status" class="form-control" v-model="form.status">
+							<option value="">Select Status</option>
+							<option value="0">Inactive</option>
+							<option value="1">Active</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="from-previous" class="isRequired">Get Time In From Previous Date</label>
+						<select id="from-previous" class="form-control" v-model="form.is_from_previous">
+							<option value="">Select</option>
+							<option value="0">False</option>
+							<option value="1">True</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.is_from_previous" v-text="errors.is_from_previous"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

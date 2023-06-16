@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Salary Creation</title>
+	<% include ../../Include/head %>
+	
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<payment-salary inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Payment</span></li>
+						<li class="breadcrumb-item"><span class="active">Salary</span></li>
+					</ol>
+				</div>
+				
+				<div class="app-container">
+					<div class="row">
+						<div class="col col-sm-12">
+							
+							<h5>Salary</h5>
+							<div class="row">
+								<div class="col-sm-10">
+									<form class="form-inline">
+										<select class="form-control mb-2 mr-sm-2" v-model="param.year">
+											<option value="">Year</option>
+											<% for(let i = moment().format('YYYY'); i >= 2018; i--){ %>
+											<option value="<%= i %>"><%= i %></option>
+											<% } %>
+										</select>
+										<select class="form-control mb-2 mr-sm-2" v-model="param.month">
+											<option value="">Month</option>
+											<option value="01">January</option>
+											<option value="02">February</option>
+											<option value="03">March</option>
+											<option value="04">April</option>
+											<option value="05">May</option>
+											<option value="06">June</option>
+											<option value="07">July</option>
+											<option value="08">August</option>
+											<option value="09">September</option>
+											<option value="10">October</option>
+											<option value="11">November</option>
+											<option value="12">December</option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2" v-model="param.period">
+											<option value="">Period</option>
+											<option value="A">A</option>
+											<option value="B">B</option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2" id="company" v-model="param.company">
+											<option value="">Company</option>
+											<option v-for="res in companies" v-bind:value="res.id" v-text="res.company.name +' - '+ res.location"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2" id="department" v-model="param.department">
+											<option value="">Department</option>
+											<option v-for="res in departments" v-bind:value="res.id" v-text="res.title"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2" id="job_title" v-model="param.job_title">
+											<option value="">Designation</option>
+											<option v-for="res in jobs" v-bind:value="res.id" v-text="res.title"></option>
+										</select>
+										<!-- 
+										<select class="form-control mb-2 mr-sm-2" id="limit" v-model="param.limit">
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="75">75</option>
+											<option value="100">100</option>
+										</select> -->
+										
+									</form>
+								</div>
+								<div class="col-sm-2">
+									<div class="btn-group float-right">
+										<a v-if="records.length" v-bind:href="'<%= baseUrl %>/payment/salary/download?year='+ param.year +'&month='+ param.month +'&period='+ param.period +'&company='+ param.company +'&department='+ param.department +'&designation='+ param.job_title" class="btn btn-outline-primary" target="_blank">
+											<i class="mdi mdi-download"></i> Download
+										</a>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col">
+									<div class="payment_salary" v-if="!fetching && records.length">
+										<div class="cards" v-for="record in records">
+											<div class="company">
+												<img v-if="record.company.logo" v-bind:src="'<%= baseUrl %>/uploads/logo/'+ record.company.logo">
+												<img v-if="!record.company.logo" src="<%= baseUrl %>/img/logo.png">
+												<h3 v-text="record.company.name ? record.company.name : ''"></h3>
+												<div>
+													<span v-text="record.company.address ? record.company.address : ''"></span><br>
+													<span v-text="record.company.location ? record.company.location : ''"></span>
+												</div>
+											</div>
+											<div class="employee_info">
+												<h4 v-text="record.first_name +' '+ record.last_name"></h4>
+												<div>Payroll Period: <span v-text="record.period"></span></div>
+												<div>Department: <span v-text="record.department"></span></div>
+												<div>Designation: <span v-text="record.designation"></span></div>
+												<div>Rate: <span v-text="record.salary.month ? $Global.currencyFormat(record.salary.month) : '0.00'"></span></div>
+											</div>
+											<table class="table table-bordered">
+												<thead class="bg-light">
+													<tr>
+														<td width="50%">
+															Earnings
+															<span class="float-right">Amount</span>
+														</td>
+														<td width="50%">
+															Deductions
+															<span class="float-right">Amount</span>
+														</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td class="align-top">
+															<ul>
+																<li v-if="record.payment.Basic">
+																	<span>Basic Pay</span>
+																	<span v-text="$Global.currencyFormat(record.payment.Basic)"></span>
+																</li>
+																<li v-if="record.summary.PaidLeave">
+																	<span>Paid Leave ({{ record.summary.PaidLeave }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.PaidLeave)"></span>
+																</li>
+																<li v-if="record.summary.NightShift">
+																	<span>Night Shift ({{ record.summary.NightShift }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.NightShift)"></span>
+																</li>
+																<li v-if="record.summary.Overtime">
+																	<span>Regular Overtime ({{ record.summary.Overtime }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.Overtime)"></span>
+																</li>
+																<li v-if="record.summary.OvertimeND">
+																	<span>Regular Overtime : Night Shift ({{ record.summary.OvertimeND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.OvertimeND)"></span>
+																</li>
+																<li v-if="record.summary.RestDayPay">
+																	<span>Rest Day Pay ({{ record.summary.RestDayPay }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.RestDayPay)"></span>
+																</li>
+																<li v-if="record.summary.RestDayPayND">
+																	<span>Rest Day Pay : Night Shift ({{ record.summary.RestDayPayND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.RestDayPayND)"></span>
+																</li>
+																<li v-if="record.summary.RestDayOvertime">
+																	<span>Rest Day : Overtime ({{ record.summary.RestDayOvertime }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.RestDayOvertime)"></span>
+																</li>
+																<li v-if="record.summary.RestDayOvertimeND">
+																	<span>Rest Day Overtime : Night Shift ({{ record.summary.RestDayOvertimeND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.RestDayOvertimeND)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHoliday">
+																	<span>Special Holiday ({{ record.summary.SpecialHoliday }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHoliday)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayND">
+																	<span>Special Holiday : Night Shift ({{ record.summary.SpecialHolidayND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayND)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayOvertime">
+																	<span>Special Holiday : Overtime ({{ record.summary.SpecialHolidayOvertime }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayOvertime)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayOvertimeND">
+																	<span>Special Holiday : Overtime : Night Shift ({{ record.summary.SpecialHolidayOvertimeND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayOvertimeND)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayRestDay">
+																	<span>Special Holiday : Rest Day ({{ record.summary.SpecialHolidayRestDay }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayRestDay)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayRestDayND">
+																	<span>Special Holiday : Rest Day : Night Shift ({{ record.summary.SpecialHolidayRestDayND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayRestDayND)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayRestDayOvertime">
+																	<span>Special Holiday : Rest Day Overtime ({{ record.summary.SpecialHolidayRestDayOvertime }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayRestDayOvertime)"></span>
+																</li>
+																<li v-if="record.summary.SpecialHolidayRestDayOvertimeND">
+																	<span>Special Holiday : Rest Day Overtime : Night Shift ({{ record.summary.SpecialHolidayRestDayOvertimeND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SpecialHolidayRestDayOvertimeND)"></span>
+																</li>
+																<li v-if="record.summary.LegalHoliday">
+																	<span>Legal Holiday ({{ record.summary.LegalHoliday }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHoliday)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayND">
+																	<span>Legal Holiday : Night Shift ({{ record.summary.LegalHolidayND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayND)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayOvertime">
+																	<span>Legal Holiday : Overtime ({{ record.summary.LegalHolidayOvertime }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayOvertime)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayOvertimeND">
+																	<span>Legal Holiday : Overtime : Night Shift ({{ record.summary.LegalHolidayOvertimeND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayOvertimeND)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayRestDay">
+																	<span>Legal Holiday : Rest Day ({{ record.summary.LegalHolidayRestDay }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayRestDay)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayRestDayND">
+																	<span>Legal Holiday : Rest Day : Night Shift ({{ record.summary.LegalHolidayRestDayND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayRestDayND)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayRestDayOvertime">
+																	<span>Legal Holiday : Rest Day Overtime ({{ record.summary.LegalHolidayRestDayOvertime }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayRestDayOvertime)"></span>
+																</li>
+																<li v-if="record.summary.LegalHolidayRestDayOvertimeND">
+																	<span>Legal Holiday : Rest Day Overtime : Night Shift ({{ record.summary.LegalHolidayRestDayOvertimeND }}Hr)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.LegalHolidayRestDayOvertimeND)"></span>
+																</li>
+																<li v-for="adjustment in record.adjustment">
+																	<span>Salary Adjustment</span>
+																	<span v-text="$Global.currencyFormat(adjustment.amount)"></span>
+																</li>
+																<li v-if="record.summary.disputeRestDay">
+																	<span>Dispute : Rest Day</span>
+																	<span v-text="$Global.currencyFormat(record.payment.disputeRestDay)"></span>
+																</li>
+																<li v-if="record.summary.disputeOvertime">
+																	<span>Dispute : Overtime</span>
+																	<span v-text="$Global.currencyFormat(record.payment.disputeOvertime)"></span>
+																</li>
+																<li v-if="record.summary.disputeLeave">
+																	<span>Dispute : Leave with pay</span>
+																	<span v-text="$Global.currencyFormat(record.payment.disputeLeave)"></span>
+																</li>
+																<li v-if="record.summary.disputeNolog">
+																	<span>Dispute : No time in/ time out</span>
+																	<span v-text="$Global.currencyFormat(record.payment.disputeNolog)"></span>
+																</li>
+															</ul>
+														</td>
+														<td class="align-top">
+															<ul>
+																<li v-if="record.summary.Absent">
+																	<span>Absent ({{ record.summary.Absent }}Day)</span>
+																	<span v-text="$Global.currencyFormat(record.payment.Absent)"></span>
+																</li>
+																<li v-if="record.summary.LateUndertime">
+																	<span>Late/Undertime (Min)</span>
+																	<span v-text="record.summary.LateUndertime"></span>
+																</li>
+																<li>
+																	<span>SSS Contribution</span>
+																	<span v-text="$Global.currencyFormat(record.payment.SSS)"></span>
+																</li>
+																<li>
+																	<span>Philhealth Contribution</span>
+																	<span v-text="$Global.currencyFormat(record.payment.Philhealth)"></span>
+																</li>
+																<li>
+																	<span>Pagibig Contribution</span>
+																	<span v-text="$Global.currencyFormat(record.payment.Pagibig)"></span>
+																</li>
+																<li>
+																	<span>Withholding Tax</span>
+																	<span v-text="$Global.currencyFormat(record.payment.WithholdingTax)"></span>
+																</li>
+																<li>
+																	<span><strong>OTHERS</strong></span>
+																</li>
+																<li v-for="loan in record.loans">
+																	<span v-text="loan.loan.label"></span>
+																	<span v-text="$Global.currencyFormat(loan.amount)"></span>
+																</li>
+																<li v-for="incentive in record.incentive">
+																	<span v-text="incentive.label"></span>
+																	<span v-text="$Global.currencyFormat(incentive.amount)"></span>
+																</li>
+															</ul>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<table class="table table-borderless">
+												<tbody>
+													<tr>
+														<td class="gross" width="50%">
+															GROSS PAY
+															<span class="float-right" v-text="$Global.currencyFormat(record.payment.Gross)"></span>
+														</td>
+														<td class="gross" width="50%">
+															TOTAL DEDUCTIONS
+															<span class="float-right" v-text="$Global.currencyFormat(record.payment.totalDeduction)"></span>
+														</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td class="net">
+															NET PAY
+															<span class="float-right" v-text="$Global.currencyFormat(record.payment.NetPay)"></span>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
+									</div>
+
+									<div class="loading" v-if="fetching">
+										<img src="<%= baseUrl + '/img/loading.gif' %>">
+										<p>Loading.....</p>
+									</div>
+									<div class="norecord" v-if="!fetching && !records.length">
+										<img src="<%= baseUrl + '/img/info.png' %>">
+										<p>Sorry, we couldn't find any matches.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</payment-salary>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

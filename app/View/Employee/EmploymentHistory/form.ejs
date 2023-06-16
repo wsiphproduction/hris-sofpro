@@ -1,0 +1,90 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="modal = false"><i class="mdi mdi-close"></i></button>
+		</div>
+		<form action="<%= baseUrl +'/employee/employment-history/'+ employee.shortid %>" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-4">
+                        <label for="company">Company</label>
+                        <input type="text" class="form-control" id="company" v-model="form.company">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="position">Position</label>
+                        <input type="text" class="form-control" id="position" v-model="form.position">
+                    </div>
+				</div>
+                <div class="form-row">
+					<div class="form-group col-md-4">
+                        <label for="date_started">Date Started</label>
+                        <datetime type="date" input-class="form-control" input-id="date_started" v-model="form.date_started"></datetime>                    
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="date_ended">Date Ended</label>
+                        <datetime type="date" input-class="form-control" input-id="date_ended" v-model="form.date_ended"></datetime>                    
+                    </div>
+				</div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="reason_of_leaving">Reason of Leaving</label>
+                        <input type="text" class="form-control" id="reason_of_leaving" v-model="form.reason_of_leaving">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="country">Country</label>
+                        <select id="country" class="form-control" v-model="form.country">
+                            <option value="Philippines" selected>Philippines</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="region">Region</label>
+                        <select id="country" :disabled="!form.country" class="form-control" v-model="form.region" @change="onRegionChange">
+                            <option v-for="region in regions" v-text="region.name" :key="region.reg_code" :value="region.reg_code"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="state_or_province">State | Province</label>
+                        <select id="state_or_province" :disabled="!form.region" class="form-control" v-model="form.state_or_province" @change="onProvinceChange">
+                            <option v-for="province in provinces" :key="province.prov_code" :value="province.prov_code" v-text="province.name"></option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="city">City</label>
+                        <select id="city" :disabled="!form.state_or_province" class="form-control" v-model="form.city" @change="onCityChange">
+                            <option v-for="city in city_mun" v-text="city.name" :key="city.mun_code" :value="city.mun_code"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="brgy">Brgy</label>
+                        <select id="city" :disabled="!form.city" class="form-control" v-model="form.brgy">
+                            <option v-for="brgy in barangays" v-text="brgy.name" :value="brgy.name"></option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="unit_building_residence_number">Unit | Building | Residence # </label>
+                        <input type="text" class="form-control" id="unit_building_residence_number" v-model="form.unit_building_residence_number">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="street">Street</label>
+                        <input type="text" class="form-control" id="street" v-model="form.street">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="zip_code">Zip Code</label>
+                        <input type="text" class="form-control" id="zip_code" v-model="form.zip_code">
+                    </div>
+                </div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="modal = false">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

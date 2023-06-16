@@ -1,0 +1,43 @@
+<div class="widget search-modal" v-if="exportDTR">
+	<div class="modal-container sm">
+		<div class="heading">
+			<h4>Export Records</h4>
+			<button class="close-modal" v-on:click="closeExport"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl %>/attendance/dtr-management/download?format=excel&records='+ records" method="get" target="_blank">
+			<div class="body">
+				<div class="alert alert-primary" role="alert">
+					<strong>IMPORTANT:</strong> Do not remove or edit the <strong>"ID"</strong> field.
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="company">Records to Export</label>
+						<select id="company" class="form-control" name="option">
+                            <option value="1">Daily Time Record</option>
+                            <option value="2">DTR Summary</option>
+                            <option value="3">Individual DTR</option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+                        <input type="hidden" class="form-control form-control-sm" name="key" v-model="form.key">
+                        <input type="hidden" class="form-control form-control-sm" name="company" v-model="form.company">
+                        <input type="hidden" class="form-control form-control-sm" name="division" v-model="form.division">
+                        <input type="hidden" class="form-control form-control-sm" name="department" v-model="form.department">
+                        <input type="hidden" class="form-control form-control-sm" name="section" v-model="form.section">
+                        <input type="hidden" class="form-control form-control-sm" name="absenteeism" v-model="form.absenteeism">
+                        <input type="hidden" class="form-control form-control-sm" name="start" v-model="form.start">
+                        <input type="hidden" class="form-control form-control-sm" name="end" v-model="form.end">
+                        <input type="hidden" class="form-control form-control-sm" name="month_date" v-model="form.month_date">
+                        <input type="hidden" class="form-control form-control-sm" name="period" v-model="form.period">
+                        <input type="hidden" class="form-control form-control-sm" name="filter" v-model="form.filter">
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="submit" class="btn btn-primary"><i class="mdi mdi-download"></i> Download</button>
+				<button type="button" class="btn btn-light" v-on:click="closeExport">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

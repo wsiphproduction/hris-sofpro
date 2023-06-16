@@ -1,0 +1,122 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+
+		<form action="<%- baseUrl %>/custom-leave" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+			<div class="body">
+				<div class="alert alert-primary" role="alert">
+					<strong>NOTE:</strong> If leave application is more than 1 (one) day. <strong>Number of Days</strong> should be a whole number
+				</div>
+				<div class="row">
+					<div v-for="res in policy" class="col">
+						<div class="card bg-light card-leave text-center">
+							<div class="credit" v-text="res.leave_credit_policy ? (res.leave_credit_policy.balance ? res.leave_credit_policy.balance : '0'):'0'"></div>
+							<div class="small" v-text="res.name"></div>
+						</div>
+					</div>
+				</div>
+				<div class="form-row" v-if="method=='post'">
+					<div class="form-group col-md-12" v-if="!! errors.approver">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span v-text="errors.approver"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-row" v-if="method=='post'">
+					<div class="form-group col-md-6">
+						<label for="team_leader">Supervisor</label>
+						<input type="text" class="form-control" v-model="approver.backup" disabled>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="head">Head/Manager</label>
+						<input type="text" class="form-control" v-model="approver.primary" disabled>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="employee">Employee</label>
+						<select class="form-control" id="employee" v-model="form.employee" name="employee">
+							<option value="">Select Employee</option>
+							<% for(let x in users){ %>
+							<option value="<%= users[x].id %>"><%= users[x].first_name+' '+users[x].last_name %></option>
+							<% } %>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.employee" v-text="errors.employee"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="leave_type" class="isRequired">Leave Policy</label>
+						<select id="leave_type" class="form-control" v-model="form.leave_type" v-on:change="checkCredit" name="leave_type">
+							<option value="">— Select —</option>
+							<option v-for="res in policy" v-bind:value="res.id" v-text="res.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.leave_type" v-text="errors.leave_type"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="leave_type" class="isRequired">Date</label>
+						<date-picker @update-date="setDate" name="dates" v-model="form.dates"></date-picker>
+						<div class="form-text form-error" v-if="!! errors.dates" v-text="errors.dates"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="credit" class="isRequired">Leave Credit</label>
+						<select id="credit" class="form-control" v-model="form.credit" name="credit">
+							<option value="">— Select —</option>
+							<option value="1" v-if="withPay">With Pay</option>
+							<option value="2">Without Pay</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.credit" v-text="errors.credit"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					
+					<!-- <div class="form-group col-md-6">
+						<label for="no_of_days">Number of days</label>
+						<input type="number" class="form-control" id="no_of_days" v-model="form.no_of_days" name="no_of_days" :readonly="readonly" v-bind:step="step" min="0" v-bind:max="numday">
+						<div class="form-text form-error" v-if="!! errors.no_of_days" v-text="errors.no_of_days"></div>
+					</div> -->
+				</div>
+				<!-- <div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="start_date" class="isRequired">Start Date</label>
+						<datetime type="date" input-class="form-control " input-id="start_date" v-model="form.start_date" name="start_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="end_date" class="isRequired">End Date</label>
+						<datetime type="date" input-class="form-control " input-id="end_date" v-model="form.end_date" :min-datetime="minDate" :max-datetime="maxDate" name="end_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.end_date" v-text="errors.end_date"></div>
+					</div>
+				</div> -->
+				<div class="form-row">
+					
+					<div class="form-group col-md-6">
+						<label for="attachment">Attachment</label>
+						<input type="file" id="attachment" class="form-control-file" accept="image/*, application/pdf" v-on:change="onAttachmentChange($event)" name="attachment">
+						<div class="form-text form-error" v-if="!! errors.attachment" v-text="errors.attachment"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="reason">Reason</label>
+						<textarea name="reason" id="reason" class="form-control" rows="5" v-model="form.reason"></textarea>
+					</div>
+				</div>
+				
+			</div>
+			<div class="footer">
+				<input type="hidden" name="id" v-model="form.id">
+				<input type="hidden" name="credit" v-model="form.credit">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+		
+	</div>
+</div>

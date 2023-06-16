@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> CRON Management</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-cron-management inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Cron Management</span></li>
+					</ol>
+					<button @click="reprocessOT()" class="btn btn-primary btn-sm"><i class="mdi mdi-refresh"></i>&nbsp;Reprocess OT</button>
+					<button @click="reprocessLeave()" class="btn btn-primary btn-sm"><i class="mdi mdi-refresh"></i>&nbsp;Reprocess Leaves</button>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>CRON Management</h5>
+							<div class="">
+								<div class="form-inline">
+									<datetime type="date" input-class="form-control mb-2 mr-sm-2 form-control-sm" placeholder="Start Date" v-model="param.start"></datetime>
+									<datetime type="date" input-class="form-control mb-2 mr-sm-2 form-control-sm" placeholder="End Date" v-model="param.end" :min-datetime="param.start"></datetime>
+									<label class="mb-2 mr-sm-2">Status</label>
+									<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.status">
+										<option value="">All</option>
+										<option value="1">Completed</option>
+										<option value="2">Failed</option>
+										<option value="4">Processing</option>
+									</select>
+									<label class="mb-2 mr-sm-2">Limit</label>
+									<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="75">75</option>
+										<option value="100">100</option>
+									</select>
+									<button type="reset" v-on:click="reset" class="btn btn-light mb-2">Reset</button>
+								</div>
+							</div>
+						    <div v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead class="bg-light">
+											<tr>
+												<th width="250" class="align-middle">Dates</th>
+												<th width="250" class="text-center">Target Date</th>
+												<th width="250" class="text-center">Status</th>
+												<th width="150" class="text-center align-middle">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="record in records">
+												<td v-text="moment(record.datetime_initiated).utc().format('MMMM DD, YYYY, h:mm:ss a')"></td>
+												<td v-text="moment(record.target_date).format('MMMM DD, YYYY')"></td>
+												
+												<td>
+													<div v-if="record.status == '1'"><span class="status success"></span> Completed</div>
+													<div v-if="record.status == '2'"><span class="status danger"></span> Failed</div>
+													<div v-if="record.status == '3'"><span class="status primary"></span> Unprocessed</div>
+													<div v-if="record.status == '4'"><span class="status warning"></span> Processing</div>
+												</td>
+                                                <td class="text-center">
+                                                    <button :disabled="record.status == '4'" class="btn btn-sm btn-outline-primary" v-on:click="reProcess(record.id, record.target_date)">Reprocess</button>
+                                                    <button :disabled="record.status == '4'" class="btn btn-sm btn-outline-primary" v-on:click="reCalculate(record.id, record.target_date)">Recalculate</button>
+                                                </td>
+											</tr>
+										</tbody>
+									</table>
+									<ul class="pagination" v-if="counts">
+										<li class="page-item">
+											<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+										</li>
+										<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+											<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+										</li>
+										<li class="page-item">
+											<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+										</li>
+									</ul>	
+								</div>
+							</div>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+						
+					</div><!-- App Container -->
+					<% include ../../Include/alert %>
+				</div> <!-- Wrapper -->
+			</div>
+
+		</setting-cron-management> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

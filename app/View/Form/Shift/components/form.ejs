@@ -1,0 +1,166 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="close"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%- baseUrl %>/forms/shift" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row" v-if="method=='post'">
+					<div class="form-group col-md-12" v-if="!! errors.approver">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span v-text="errors.approver"></span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="team_leader">Supervisor</label>
+						<input type="text" class="form-control" v-model="approver.backup" disabled>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="head">Head/Manager</label>
+						<input type="text" class="form-control" v-model="approver.primary" disabled>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="type" class="isRequired">Shift Type</label>
+						<select id="type" class="form-control" v-model="form.type">
+							<option value="" disabled>--Select Shift--</option>
+							<option value="1">Fixed Schedule</option>
+							<option value="2">Flexible</option>
+							<option value="3">Flexible Between</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.type" v-text="errors.type"></div>
+					</div>
+					<div class="form-group col-md-6" v-if="action == 'add'">
+						<label for="repeat" class="isRequired">Shift Repeat</label>
+						<select id="repeat" class="form-control" v-model="form.repeat">
+							<option value="" disabled>--Select Repeat--</option>
+							<option value="1">No Repeat</option>
+							<option value="2">Daily</option>
+							<option value="3">Weekly</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.repeat" v-text="errors.repeat"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="shift_length" class="isRequired">Shift Length (in hours)</label>
+						<input type="number" class="form-control" id="shift_length" step="1" min="1" max="24" v-model="form.shift_length">
+						<div class="form-text form-error" v-if="!! errors.shift_length" v-text="errors.shift_length"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="paid_hours" class="isRequired">Paid Hours</label>
+						<input type="number" class="form-control" id="paid_hours" step="1" min="1" max="24" v-model="form.paid_hours">
+						<div class="form-text form-error" v-if="!! errors.paid_hours" v-text="errors.paid_hours"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="action == 'add'">
+					<div class="form-group col-md-6">
+						<label for="start_date" class="isRequired">Start Date</label>
+						<datetime type="date" input-class="form-control " input-id="start_date" v-model="form.start_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="end_date" class="isRequired">End Date</label>
+						<datetime type="date" input-class="form-control " input-id="end_date" v-model="form.end_date" :min-datetime="minDate" :disabled="form.repeat==1"></datetime>
+						<div class="form-text form-error" v-if="!! errors.end_date" v-text="errors.end_date"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="form.type == 1">
+					<div class="form-group col-md-6">
+						<label for="start_time" class="isRequired">Start Time</label>
+						<datetime type="time" input-class="form-control" input-id="start_time" v-model="form.start_time" :minute-step="15" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_time" v-text="errors.start_time"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="end_time" class="isRequired">End Time</label>
+						<datetime type="time" input-class="form-control" input-id="end_time" v-model="form.end_time" :minute-step="15" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.end_time" v-text="errors.end_time"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="form.type == 2">
+					<div class="form-group col-md-6">
+						<label for="onsite" class="isRequired">On Site (Biometric log is not required if set to YES)</label>
+						<select id="onsite" class="form-control" v-model="form.onsite">
+							<option value="0">No</option>
+							<option value="1">Yes</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.onsite" v-text="errors.onsite"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="form.type == 3">
+					<div class="form-group col-md-6">
+						<label for="between" class="isRequired">Time Between</label>
+						<div class="input-group">
+							<datetime type="time" input-class="form-control" input-id="between_start" v-model="form.between_start" :minute-step="15" use12-hour></datetime>
+							<datetime type="time" input-class="form-control" input-id="between_end" v-model="form.between_end" :minute-step="15" use12-hour></datetime>
+						</div>
+						<div class="form-text form-error" v-if="!! errors.between_start" v-text="errors.between_start"></div>
+						<div class="form-text form-error" v-if="!! errors.between_end" v-text="errors.between_end"></div>
+					</div>
+				</div>
+				<div class="form-row" v-if="form.repeat == 3 && action == 'add'">
+					<div class="form-group col-md-12">
+						<label class="isRequired">Applicable Days</label>
+						<div class="row">
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="monday" value="monday" v-model="form.days">
+									<label class="custom-control-label" for="monday">Monday</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="tuesday" value="tuesday" v-model="form.days">
+									<label class="custom-control-label" for="tuesday">Tuesday</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="wednesday" value="wednesday" v-model="form.days">
+									<label class="custom-control-label" for="wednesday">Wednesday</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="thursday" value="thursday" v-model="form.days">
+									<label class="custom-control-label" for="thursday">Thursday</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="friday" value="friday" v-model="form.days">
+									<label class="custom-control-label" for="friday">Friday</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="saturday" value="saturday" v-model="form.days">
+									<label class="custom-control-label" for="saturday">Saturday</label>
+								</div>
+							</div>
+							<div class="col-sm">
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input" id="sunday" value="sunday" v-model="form.days">
+									<label class="custom-control-label" for="sunday">Sunday</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-text form-error" v-if="!! errors.days" v-text="errors.days"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="close">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

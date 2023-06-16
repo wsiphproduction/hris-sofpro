@@ -1,0 +1,20 @@
+.j-toast{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	padding: 0.75rem;
+	& .toast-list{
+		background: $grey-darken-3;
+		color: $white;
+		border: $grey-darken-3 solid 1px;
+		border-radius: 3px;
+		& .toast-header{
+			background: $grey-darken-3;
+			color: $white;
+			border-bottom: $grey-darken-2 solid 1px;
+			& button{
+				color: $white;
+			}
+		}
+	}
+}

@@ -1,0 +1,114 @@
+.accounts{
+	& .cards{
+		border-radius: 2px;
+		min-height: 800px;
+		height: calc(100vh - 140px);
+		position: relative;
+		&.chase{
+			border:#81d4fa solid 1px;
+			& .header{
+				border-bottom: #81d4fa solid 1px;
+				background: rgba(129, 212, 250, 0.3);
+			}
+		}
+		&.win{
+			border:#69f0ae solid 1px;
+			& .header{
+				border-bottom: #69f0ae solid 1px;
+				background: rgba(105, 240, 174, 0.3);
+			}
+			& .collection.onHover{
+				border:#69f0ae solid 1px;
+				border-bottom-left-radius: 2px;
+				border-bottom-right-radius: 2px;
+			}
+		}
+		&.loss{
+			border:#ffd54f solid 1px;
+			& .header{
+				border-bottom: #ffd54f solid 1px;
+				background: rgba(255, 213, 79, 0.3);
+			}
+			& .collection.onHover{
+				border:#ffd54f solid 1px;
+				border-bottom-left-radius: 2px;
+				border-bottom-right-radius: 2px;
+			}
+		}
+		&.drop{
+			border:#e0e0e0 solid 1px;
+			& .header{
+				border-bottom: #e0e0e0 solid 1px;
+				background: rgba(224, 224, 224, 0.3);
+			}
+			& .collection.onHover{
+				border:#e0e0e0 solid 1px;
+				border-bottom-left-radius: 2px;
+				border-bottom-right-radius: 2px;
+			}
+		}
+		& .header{
+			height: 50px;
+			padding: 15px 0.75rem;
+			
+			position: relative;
+			& span{
+				font-weight: 500;
+				font-size: 18px;
+				text-transform: uppercase;
+				line-height: 24px;
+				float: left;
+			}
+			& img{
+				height: 23px;
+				position: absolute;
+				right: 0.75rem;
+				top: 15px;
+			}
+			& a.filter{
+				
+				color: $black;
+				margin-left: 25px;
+				& i.mdi{
+					font-size: 24px;
+					line-height: 24px;
+				}
+			}
+		}
+		& .collection{
+			width: 100%;
+			position: absolute;
+			top: 50px;
+			bottom: 0;
+			overflow: auto;
+			overflow-x: hidden;
+			& .list-group-item{
+				border-radius: 3px;
+				background: $white;
+				margin: 10px 0.75rem;
+				padding-left: 15px;
+				padding-right: 15px;
+				cursor: move;
+				& .items{
+					display: table;
+					width: 100%;
+					& .label,
+					& .text{
+						display: table-cell;
+					}
+					& .label{
+						width: 80px;
+						font-size: 12px;
+						font-weight: 500;
+					}
+					& .text{
+						&:before{
+							content: ':';
+							margin-right: 5px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

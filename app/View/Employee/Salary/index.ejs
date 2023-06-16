@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-salary inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<button class="btn btn-primary btn-sm" v-on:click="add('salary')"><i class="mdi mdi-plus"></i> Add Salary</button>
+					<button class="btn btn-primary btn-sm" v-on:click="add('incentive')"><i class="mdi mdi-plus"></i> Add Incentive</button>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									<div class="col-sm-5">
+										<h4>Salary</h4>
+										<table class="table table-bordered" v-if="salary.length">
+											<thead class="bg-light">
+												<tr>
+													<th class="text-center">Basic Pay</th>
+													<th class="text-center">Mode</th>
+													<th class="text-center">From (Date)</th>
+													<th class="text-center">To (Date)</th>
+													<th class="text-center">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(res, index) in salary">
+													<td class="text-center" v-text="res.amount ? $Global.currencyFormat(res.amount) : '0.00'"></td>
+													<td class="text-center">
+														<div class="uppercase">
+															<span v-if="res.mode == '0'">Per Month</span>
+															<span v-if="res.mode == '1'">Per Week</span>
+															<span v-if="res.mode == '2'">Per Day</span>
+															<span v-if="res.mode == '3'">Per Hour</span>
+														</div>
+													</td>
+													<td class="text-center" v-text="res.start_date ? moment(res.start_date).format('MM/DD/YYYY') : '—'"></td>
+													<td class="text-center" v-text="res.end_date ? moment(res.end_date).format('MM/DD/YYYY') : 'Present'"></td>
+													<td class="text-center">
+														<button class="btn btn-outline-primary btn-sm" <%- !user_role.modify ? 'disabled':'v-on:click="edit(\'salary\', index)"' %> ><i class="mdi mdi-lead-pencil"></i></button>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!salary.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+										
+									</div>
+									<div class="col-sm-7">
+										<h4>Incentive</h4>
+										<table class="table table-bordered" v-if="incentive.length">
+											<thead class="bg-light">
+												<tr>
+													<th class="text-center" width="100">Amount</th>
+													<th class="text-center">Label</th>
+													<th class="text-center">Period</th>
+													<th class="text-center">From (Date)</th>
+													<th class="text-center">To (Date)</th>
+													<th class="text-center" width="150">Mode</th>
+													<th class="text-center" width="100">Taxable</th>
+													<th class="text-center" width="100">Status</th>
+													<th class="text-center" width="100">Action</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(res, index) in incentive">
+													<td v-text="res.amount ? $Global.currencyFormat(res.amount) : '0.00'"></td>
+													<td v-text="res.label"></td>
+													<td>
+														<span v-if="res.period== '0'">A Only</span>
+														<span v-if="res.period== '1'">B Only</span>
+														<span v-if="res.period== '2'">A and B</span>
+													</td>
+													<td class="text-center" v-text="res.from ? moment(res.from).format('MM/DD/YYYY') : '—'"></td>
+													<td class="text-center" v-text="res.to ? moment(res.to).format('MM/DD/YYYY') : 'Present'"></td>
+													<td>
+														<span v-if="res.mode == '0'">Cash</span>
+														<span v-if="res.mode == '1'">Check</span>
+														<span v-if="res.mode == '2'">Salary Addition</span>
+													</td>
+													<td v-text="res.taxable == 0 ? 'No':'Yes'"></td>
+													<td v-text="res.status == 0 ? 'Inactive':'Active'"></td>
+													<td class="text-center">
+														<button class="btn btn-sm btn-outline-primary" <%- !user_role.modify ? 'disabled':'v-on:click="edit(\'incentive\', index)"' %> ><i class="mdi mdi-lead-pencil"></i></button>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!incentive.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+				<% include ./form %>
+				<% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-salary>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<div class="widget custom-modal" v-if="memoInfo">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="memoInfo = false"><i class="mdi mdi-close"></i></button>
+		</div>
+		<form action="<%= baseUrl +'/employee/memorandum/' + employee.id %>" method="post" @submit.prevent="onSubmit">
+			 <div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="memo" class="isRequired">Memo</label>
+                        <input class="form-control"  v-model="form.memo"/>   
+						<div class="form-text form-error" v-if="!! errors.memo" v-text="errors.memo"></div>
+					</div>
+                    <div class="form-group col-md-4">
+						<label for="subject" class="isRequired">Subject</label>
+                        <input class="form-control"  v-model="form.subject"/>
+						<div class="form-text form-error" v-if="!! errors.subject" v-text="errors.subject"></div>
+					</div>
+                    <div class="form-group col-md-4">
+						<label for="description" class="isRequired">Description</label>
+                        <input class="form-control"  v-model="form.description"/>
+						<div class="form-text form-error" v-if="!! errors.description" v-text="errors.description"></div>
+					</div>
+                    <div class="form-group col-md-4">
+						<label for="date" class="isRequired">Date</label>
+                        <datetime type="date" input-class="form-control" input-id="start_date" v-model="form.date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.date" v-text="errors.date"></div>
+					</div>
+                    <div class="form-group col-md-4">
+						<label for="issued_by" class="isRequired">Issue By</label>
+                        <input class="form-control"  v-model="form.issued_by"/>
+						<div class="form-text form-error" v-if="!! errors.issued_by" v-text="errors.issued_by"></div>
+					</div>
+                    <div class="form-group col-md-4">
+						<label for="issued_to" class="isRequired">Issue To</label>
+                        <input class="form-control"  v-model="form.issued_to"/>
+						<div class="form-text form-error" v-if="!! errors.issued_to" v-text="errors.issued_to"></div>
+					</div>
+                    <div class="form-group col-md-4">
+						<label for="effectivity_date" class="isRequired">Effectivity Date</label>
+						<datetime type="date" input-class="form-control" input-id="effectivity_date" v-model="form.effectivity_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.effectivity_date" v-text="errors.effectivity_date"></div>
+					</div>
+                    
+				</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="memoInfo = false">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div> 

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> TSS</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-tss-summary inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Attendance</span></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>/attendance/tss">TSS</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= tss.label %></span></li>
+					</ol>
+					<a href="<%=baseUrl%>/attendance/tss/export_tss/<%= tss.id %>">
+						<button class="btn btn-primary btn-sm" v-bind:disabled="!records.length"><i class="mdi mdi-download"></i> Export</button>
+					</a>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							
+						</div>
+						<div class="col-sm-12">
+
+							<h5><%= tss.label %></h5>	
+											
+							<% if(records){ %>
+							<div>
+								<div class="table-scrollable">
+									<table class="table table-bordered">
+										<thead class="bg-light noPadding">
+											<tr>
+												<th width="200" class="align-middle text-center nowrap">Employee ID</th>
+												<th width="200" class="align-middle text-center nowrap">Old Employee ID</th>
+												<th width="200" class="align-middle text-center nowrap">Employee</th>
+												<th width="100" class="text-center nowrap">RegHrs</th>
+												<th width="100" class="text-center nowrap">LateHrs</th>
+												<th width="100" class="text-center nowrap">UndertimeHrs</th>
+												<th width="100" class="text-center nowrap">NDHrs</th>
+												<th width="100" class="text-center nowrap">Absent</th>
+												<th width="100" class="text-center nowrap">Leave01</th>
+												<th width="100" class="text-center nowrap">Leave02</th>
+												<th width="100" class="text-center nowrap">Leave03</th>
+												<th width="100" class="text-center nowrap">Leave04</th>
+												<th width="100" class="text-center nowrap">Leave05</th>
+												<th width="100" class="text-center nowrap">Leave06</th>
+												<th width="100" class="text-center nowrap">Leave07</th>
+												<th width="100" class="text-center nowrap">Leave08</th>
+												<th width="100" class="text-center nowrap">Leave09</th>
+												<th width="100" class="text-center nowrap">Leave10</th>
+												<th width="100" class="text-center nowrap">Leave11</th>
+												<th width="100" class="text-center nowrap">Leave12</th>
+												<th width="100" class="text-center nowrap">Leave13</th>
+												<th width="100" class="text-center nowrap">Leave14</th>
+												<th width="100" class="text-center nowrap">Leave15</th>
+												<th width="100" class="text-center nowrap">Leave16</th>
+												<th width="100" class="text-center nowrap">Leave17</th>
+												<th width="100" class="text-center nowrap">Leave18</th>
+												<th width="100" class="text-center nowrap">Leave19</th>
+												<th width="100" class="text-center nowrap">Leave20</th>
+												<th width="100" class="text-center nowrap">OTHrs01</th>
+												<th width="100" class="text-center nowrap">OTHrs02</th>
+												<th width="100" class="text-center nowrap">OTHrs03</th>
+												<th width="100" class="text-center nowrap">OTHrs04</th>
+												<th width="100" class="text-center nowrap">OTHrs05</th>
+												<th width="100" class="text-center nowrap">OTHrs06</th>
+												<th width="100" class="text-center nowrap">OTHrs07</th>
+												<th width="100" class="text-center nowrap">OTHrs08</th>
+												<th width="100" class="text-center nowrap">OTHrs09</th>
+												<th width="100" class="text-center nowrap">OTHrs10</th>
+												<th width="100" class="text-center nowrap">OTHrs11</th>
+												<th width="100" class="text-center nowrap">OTHrs12</th>
+												<th width="100" class="text-center nowrap">OTHrs13</th>
+												<th width="100" class="text-center nowrap">OTHrs14</th>
+												<th width="100" class="text-center nowrap">OTHrs15</th>
+												<th width="100" class="text-center nowrap">OTHrs16</th>
+												<th width="100" class="text-center nowrap">OTHrs17</th>
+												<th width="100" class="text-center nowrap">OTHrs18</th>
+												<th width="100" class="text-center nowrap">OTHrs19</th>
+												<th width="100" class="text-center nowrap">OTHrs20</th>
+												<th width="100" class="text-center nowrap">OTHrs21</th>
+												<th width="100" class="text-center nowrap">OTHrs22</th>
+												<th width="100" class="text-center nowrap">OTHrs23</th>
+												<th width="100" class="text-center nowrap">OTHrs24</th>
+												<th width="100" class="text-center nowrap">OTHrs25</th>
+												<th width="100" class="text-center nowrap">Rate</th>
+												<th width="100" class="text-center nowrap">UnpaidRegHrs</th>
+												<th width="100" class="text-center nowrap">UnpaidSL</th>
+												<th width="100" class="text-center nowrap">UnpaidTaxSL</th>
+												<th width="100" class="text-center nowrap">UnpaidVL</th>
+												<th width="100" class="text-center nowrap">UnpaidTaxVL</th>
+												<th width="100" class="text-center nowrap">UnpaidEL</th>
+												<th width="100" class="text-center nowrap">EffectivityDate</th>
+												<th width="100" class="text-center nowrap">EmpStatus</th>
+												<th width="100" class="text-center nowrap">EffectivityDateResign</th>
+											</tr>
+										</thead>
+										<tbody>
+											<% for(let i in records){ %>
+											<tr>
+												<td class="nowrap"><%= records[i].user ? records[i].user.employee_number : '--' %></td>
+												<td class="nowrap"><%= records[i].user ? records[i].user.old_employee_number : '--' %></td>
+												<td class="nowrap"><%= records[i].user ? records[i].user.first_name+' '+records[i].user.last_name : '' %></td>
+												<td><%= records[i].RegHrs.toFixed(1) %></td>
+												<td><%= records[i].LateHrs.toFixed(1) %></td>
+												<td><%= records[i].UndertimeHrs.toFixed(1) %></td>
+												<td><%= records[i].NDHrs.toFixed(1) %></td>
+												<td><%= records[i].Absent.toFixed(1) %></td>
+												<td><%= records[i].Leave01.toFixed(1) %></td>
+												<td><%= records[i].Leave02.toFixed(1) %></td>
+												<td><%= records[i].Leave03.toFixed(1) %></td>
+												<td><%= records[i].Leave04.toFixed(1) %></td>
+												<td><%= records[i].Leave05.toFixed(1) %></td>
+												<td><%= records[i].Leave06.toFixed(1) %></td>
+												<td><%= records[i].Leave07.toFixed(1) %></td>
+												<td><%= records[i].Leave08.toFixed(1) %></td>
+												<td><%= records[i].Leave09.toFixed(1) %></td>
+												<td><%= records[i].Leave10.toFixed(1) %></td>
+												<td><%= records[i].Leave11.toFixed(1) %></td>
+												<td><%= records[i].Leave12.toFixed(1) %></td>
+												<td><%= records[i].Leave13.toFixed(1) %></td>
+												<td><%= records[i].Leave14.toFixed(1) %></td>
+												<td><%= records[i].Leave15.toFixed(1) %></td>
+												<td><%= records[i].Leave16.toFixed(1) %></td>
+												<td><%= records[i].Leave17.toFixed(1) %></td>
+												<td><%= records[i].Leave18.toFixed(1) %></td>
+												<td><%= records[i].Leave19.toFixed(1) %></td>
+												<td><%= records[i].Leave20.toFixed(1) %></td>
+												<td><%= records[i].OTHrs01.toFixed(1) %></td>
+												<td><%= records[i].OTHrs02.toFixed(1) %></td>
+												<td><%= records[i].OTHrs03.toFixed(1) %></td>
+												<td><%= records[i].OTHrs04.toFixed(1) %></td>
+												<td><%= records[i].OTHrs05.toFixed(1) %></td>
+												<td><%= records[i].OTHrs06.toFixed(1) %></td>
+												<td><%= records[i].OTHrs07.toFixed(1) %></td>
+												<td><%= records[i].OTHrs08.toFixed(1) %></td>
+												<td><%= records[i].OTHrs09.toFixed(1) %></td>
+												<td><%= records[i].OTHrs10.toFixed(1) %></td>
+												<td><%= records[i].OTHrs11.toFixed(1) %></td>
+												<td><%= records[i].OTHrs12.toFixed(1) %></td>
+												<td><%= records[i].OTHrs13.toFixed(1) %></td>
+												<td><%= records[i].OTHrs14.toFixed(1) %></td>
+												<td><%= records[i].OTHrs15.toFixed(1) %></td>
+												<td><%= records[i].OTHrs16.toFixed(1) %></td>
+												<td><%= records[i].OTHrs17.toFixed(1) %></td>
+												<td><%= records[i].OTHrs18.toFixed(1) %></td>
+												<td><%= records[i].OTHrs19.toFixed(1) %></td>
+												<td><%= records[i].OTHrs20.toFixed(1) %></td>
+												<td><%= records[i].OTHrs21.toFixed(1) %></td>
+												<td><%= records[i].OTHrs22.toFixed(1) %></td>
+												<td><%= records[i].OTHrs23.toFixed(1) %></td>
+												<td><%= records[i].OTHrs24.toFixed(1) %></td>
+												<td><%= records[i].OTHrs25.toFixed(1) %></td>
+												<td><%= records[i].Rate.toFixed(1) %></td>
+												<td><%= records[i].UnpaidRegHrs.toFixed(1) %></td>
+												<td><%= records[i].UnpaidSL.toFixed(1) %></td>
+												<td><%= records[i].UnpaidTaxSL.toFixed(1) %></td>
+												<td><%= records[i].UnpaidVL.toFixed(1) %></td>
+												<td><%= records[i].UnpaidTaxVL.toFixed(1) %></td>
+												<td><%= records[i].UnpaidEL.toFixed(1) %></td>
+												<td><%= records[i].EffectivityDate %></td>
+												<td><%= records[i].EmpStatus %></td>
+												<td><%= records[i].EffectivityDateResign %></td>
+											</tr>
+											<% } %>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<% }else{ %>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							<% } %>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</attendance-tss-summary>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

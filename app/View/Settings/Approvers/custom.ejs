@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Approvers</title>
+	<% include ../../Include/head %>
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-approvers-custom inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Approvers</span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Approvers</h5>
+							<ul class="nav nav-tabs" id="myTab" role="tablist">
+								<li class="nav-item">
+									<a class="nav-link" href="<%= baseUrl +'/settings/approvers' %>">General</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link active" href="javascript:void(0)">Custom Approver</a>
+								</li>
+							</ul>
+							<p>&nbsp;</p>
+							<form class="form-inline">
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.team">
+									<option value="">--All Teams--</option>
+									<% if(team.length){
+										for(let x in team){ 
+									%>
+									<option value="<%= team[x].id %>"><%= team[x].title %></option>
+									<% }} %>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.manager">
+									<option value="">--Manager/Head--</option>
+									<option v-for="approver in approvers" v-bind:value="approver.id" v-text="approver.first_name+' '+approver.last_name"></option>
+								</select>
+							</form>
+							<div v-if="!fetching && records.length">
+								<table class="table table-bordered">
+									<thead class="bg-light">
+										<tr>
+											<th class="text-center">Employee</th>
+											<th class="text-center">Company</th>
+											<th class="text-center">Department</th>
+											<th class="text-center">Team</th>
+											<th class="text-center">Team Leader</th>
+											<th class="text-center">Manager/Head</th>
+											<th width="100" class="text-center">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(record, index) in records">
+											<td v-text="record.applicant.first_name +' '+ record.applicant.last_name"></td>
+											<td v-text="record.applicant.branch.company.name +' - '+ record.applicant.branch.location"></td>
+											<td v-text="record.applicant.department.title"></td>
+											<td v-text="record.applicant.team ? record.applicant.team.title : ''"></td>
+											<td v-text="record.backup.first_name +' '+ record.backup.last_name"></td>
+											<td v-text="record.primary.first_name +' '+ record.primary.last_name"></td>
+											<td class="text-center">
+												<button class="btn btn-sm btn-outline-success" title="edit" <%- user_role.modify ? 'v-on:click="edit(index)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+												<button class="btn btn-sm btn-outline-warning" title="edit" <%- user_role.destroy ? 'v-on:click="archive(record.id, \'settings/approvers/custom/archive\')"':'disabled' %>><i class="mdi mdi-trash-can-outline"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./components/form-custom %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-approvers-custom> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

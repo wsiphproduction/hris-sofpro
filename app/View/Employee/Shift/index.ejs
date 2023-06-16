@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-shift inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									
+									<div class="col col-sm-8">
+										<calendar :events="events" class="smallcalendar"></calendar>
+									</div>
+
+									<div class="col col-sm-4">
+										<div class="card card-legend">
+											<div class="card-header">
+												LEGENDS
+											</div>
+											<div class="card-body">
+												<ul>
+													<li>
+														<span class="bg-primary"></span> Pending
+													</li>
+													<li>
+														<span class="bg-success"></span> Approved
+													</li>
+													<li>
+														<span class="bg-warning"></span> Declined
+													</li>
+													<li>
+														<span class="bg-dark"></span> Closed
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-shift>
+		<!-- Inline Template -->
+		
+	</main>
+
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

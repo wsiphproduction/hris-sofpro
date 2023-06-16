@@ -1,0 +1,73 @@
+.uppercase{
+	text-transform: uppercase;
+}
+.noBorderTop{
+	border-top: 0;
+}
+.relative{
+	position: relative;
+}
+.pointer{
+	cursor: pointer;
+}
+.bg-shift{
+	background: $bg-shift;
+}
+.bg-tardy{
+	background: $bg-tardy;
+}
+.bg-absent{
+	background: $bg-absent;
+}
+.bg-leave{
+	background: $bg-leave;
+}
+.bg-perfect{
+	background: $bg-perfect;
+}
+.bg-onsite{
+	background: $bg-onsite;
+}
+
+.bg-primary-light{
+	background: $bg-primary-light !important;
+	color: $dark !important;
+}
+.bg-white{
+	background: $white;
+}
+
+.bg-success-light{
+	background: $bg-success-light !important;
+	color: $dark !important;
+}
+
+.bg-warning-light{
+	background: $bg-warning-light !important;
+	color: $dark !important;
+}
+
+.dotted{
+	border: $gray dashed 1px;
+	border-radius: 3px;
+	padding: 2rem 15px;
+}
+.strong{
+	font-weight: 700;
+}
+.nowrap{
+	white-space: nowrap;
+}
+
+.truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 768px) {
+	.hide-on-sm{
+		display: none;
+	}
+}

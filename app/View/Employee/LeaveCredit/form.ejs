@@ -1,0 +1,61 @@
+<div class="widget custom-modal" v-if="modal_edit">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Leave Credit</h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%- baseUrl %>/employee/leave-credit/update" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<table class="table table-bordered">
+					<tr class="bg-light">
+						<td class=" text-center">Leave Policy</td>
+						<td class=" text-center" width="200">Balance</td>
+						<td class=" text-center" width="200">Utilized</td>
+					</tr>
+					<tr v-for="(credit, index) in form.credit">
+						<td v-text="credit.label"></td>
+						<td><input type="number" class="form-control" v-model="credit.balance" min="0" step="0.5"></td>
+						<td><input type="number" class="form-control" v-model="credit.utilized" min="0" readonly></td>
+					</tr>
+				</table>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+		
+	</div>
+</div>
+
+<div class="widget search-modal" v-if="modal">
+	<div class="modal-container">
+        <div class="heading">
+            <h4>Import</h4>
+            <button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+        </div>
+
+        <form action="<%- baseUrl %>/employee/leave-credit/import" method="put" @submit.prevent="onSubmit" enctype="multipart/form-data">
+            <div class="body">
+                <div class="alert alert-danger" role="alert" v-if="!! errors.csv_format" v-text="errors.csv_format"></div>
+                <div class="alert alert-info" role="alert">
+                    To import Leave Credit data, the file must be in CSV format and <strong>comma separated values</strong>. Supported format: <strong><a href="<%= baseUrl +'/uploads/leave_credit/leave_credit_format.csv' %>">Click Here</a></strong>.
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="csv">Select CSV</label>
+                        <input type="file" class="form-control-file" id="csv" v-on:change="fileUpload($event,'csv')" name="csv" accept=".csv">
+                        <div class="form-text form-error" v-if="!! errors.csv" v-text="errors.csv"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+                <button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+                <button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

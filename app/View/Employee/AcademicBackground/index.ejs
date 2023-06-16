@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-academic-background inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+                        <button class="btn btn-primary btn-sm" v-on:click="add"><i class="mdi mdi-plus"></i> Add Academic Background & Qualifications</button>
+                        <% } %>
+				</div><!-- Breadcrumb -->
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col-sm-12">
+										<h4 class="text-center">Academic Background & Qualifications</h4>
+										<table class="table table-bordered" v-if="educations.length">
+											<thead class="bg-light">
+												<tr>
+                                                    <th class="text-center">Form of Study</th>
+													<th class="text-center">Education Level</th>
+													<th class="text-center">School</th>
+                                                    <th class="text-center">Date From</th>
+                                                    <th class="text-center">Date To</th>
+                                                    <th class="text-center">Course</th>
+                                                    <th class="text-center">Specialization</th>
+                                                    <th class="text-center">Honors</th>
+                                                    <% if(user_role.modify){ %>
+                                                        <td class="text-center">Action</td>
+                                                    <% } %>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(education, index) in educations">
+                                                    <td class="text-center" v-text="education.educational_attainment"></td>
+                                                    <td class="text-center" v-text="education.degree"></td>
+                                                    <td class="text-center" v-text="education.school"></td>
+                                                    <td class="text-center" v-text="education.date_from ? moment(education.date_from).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="education.date_to ? moment(education.date_to).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="education.course"></td>
+                                                    <td class="text-center" v-text="education.specialization"></td>
+                                                    <td class="text-center" v-text="education.honors"></td>
+                                                    <% if(user_role.modify){ %>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="edit(index)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                        </button>
+                                                    </td>
+                                                    <% } %>
+                                                </tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!educations.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+
+				<% include ./form %>
+                <% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-academic-background>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

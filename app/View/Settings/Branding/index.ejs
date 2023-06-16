@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Configuration</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-branding inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Branding</span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<form action="<%= baseUrl %>/settings/branding" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Branding</h5>
+						</div>
+						<div class="col-sm-12 col-md-6 col-lg-4">
+							<div class="card">
+								<div class="card-header">
+									Branding Details
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-md-6 upload">
+											<label for="file" id="label-file" v-html="form.image">
+												<span>Select Image</span>
+											</label>
+											<input type="file" name="file" id="file" accept="image/*" v-on:change="onImageChange($event)">
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-12">
+											<label for="name">App Name</label>
+											<input type="text" id="name" class="form-control" v-model="form.name" name="name">
+											<div class="form-text form-error" v-if="!! errors.name" v-text="errors.name"></div>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="branding">Branding</label>
+											<select id="branding" class="form-control" v-model="form.branding" name="branding">
+												<option value="1">Text</option>
+												<option value="2">Logo</option>
+												<option value="3">Text and Logo</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.branding" v-text="errors.branding"></div>
+										</div>
+									</div>
+									<% if(user_role.modify){ %>
+									<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+									<button type="submit" class="btn btn-primary" v-else="loading">Save Changes</button>
+									<a href="" class="btn btn-light">Cancel</a>
+									<% } %>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					</form>
+				</div><!-- App Container -->
+				<% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+
+		</setting-branding> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

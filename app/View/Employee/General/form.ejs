@@ -1,0 +1,441 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		<form action="<%= baseUrl +'/employee/general/'+ employee.id %>" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div v-if="type.personal">
+					<h5>Personal Detail</h5>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="employee_number">Employee Number</label>
+							<input type="text" class="form-control" id="employee_number" v-model="form.employee_number">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="first_name" class="isRequired">First Name</label>
+							<input type="text" class="form-control" id="first_name" v-model="form.first_name">
+							<div class="form-text form-error" v-if="!! errors.first_name" v-text="errors.first_name"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="middle_name">Middle Name</label>
+							<input type="text" class="form-control" id="middle_name" v-model="form.middle_name">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="last_name" class="isRequired">Last Name</label>
+							<input type="text" class="form-control" id="last_name" v-model="form.last_name">
+							<div class="form-text form-error" v-if="!! errors.last_name" v-text="errors.last_name"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="nick_name">Nickame</label>
+							<input type="text" class="form-control" id="nick_name" v-model="form.nick_name">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="suffix">Suffix</label>
+							<input type="text" class="form-control" id="suffix" v-model="form.suffix">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="gender" class="isRequired">Gender</label>
+							<select name="gender" id="gender" class="form-control" v-model="form.gender">
+								<option value="">--Select--</option>
+								<option value="Male">Male</option>
+								<option value="Female">Female</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.gender" v-text="errors.gender"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="birthday" class="isRequired">Birthday</label>
+							<datetime type="date" input-class="form-control" input-id="birthday" v-model="form.birthday"></datetime>
+							<div class="form-text form-error" v-if="!! errors.birthday" v-text="errors.birthday"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="marital_status" class="isRequired">Civil Status</label>
+							<select id="marital_status" class="form-control" v-model="form.marital_status">
+								<option value="">--Select--</option>
+								<option value="Single">Single</option>
+								<option value="Married">Married</option>
+								<option value="Separated">Separated</option>
+								<option value="Divorced">Divorced</option>
+								<option value="Widowed">Widowed</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.marital_status" v-text="errors.marital_status"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="nationality" class="isRequired">Nationality</label>
+							<select class="form-control" id="nationality" v-model="form.nationality">
+								<option value="">--Select--</option>
+								<option v-for="nationality in init.nationalities" v-bind:value="nationality.value" v-text="nationality.text"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.nationality" v-text="errors.nationality"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="email">Email</label>
+							<input type="email" class="form-control" id="email" v-model="form.email">
+							<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="contact_number">Contact Number</label>
+							<input type="text" class="form-control" id="contact_number" v-model="form.contact_number">
+							<div class="form-text form-error" v-if="!! errors.contact_number" v-text="errors.contact_number"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="philhealth_number">Philhealth Number</label>
+							<input type="text" id="philhealth_number" class="form-control" v-model="form.philhealth_number" maxlength="14">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="sss_number">SSS Number</label>
+							<input type="text" id="sss_number" class="form-control" v-model="form.sss_number" maxlength="12">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="pagibig_number">Pagibig Number</label>
+							<input type="text" id="pagibig_number" class="form-control" v-model="form.pagibig_number" maxlength="14">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="tin_number">TIN Number</label>
+							<input type="text" id="tin_number" class="form-control" v-model="form.tin_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="employee_type" class="isRequired">Employee Type</label>
+							<select class="form-control" id="employee_type" v-model="form.employee_type">
+								<option value="">--Select--</option>
+								<option v-for="employee_type in init.employee_types" v-bind:value="employee_type.value" v-text="employee_type.text"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.employee_type" v-text="errors.employee_type"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="salary_type">Salary Type</label>
+							<select class="form-control" id="salary_type" v-model="form.salary_type">
+								<option value="">None</option>
+								<option value="1">Daily</option>
+								<option value="2">Monthly</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.salary_type" v-text="errors.salary_type"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="height">Height</label>
+							<input type="text" class="form-control" id="height" v-model="form.height" @keydown="numberOnly" @paste.prevent>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="weight">Weight</label>
+							<input type="text" class="form-control" id="weight" v-model="form.weight" @keydown="numberOnly" @paste.prevent>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="tribe">Tribe</label>
+							<input type="text" class="form-control" id="tribe" v-model="form.tribe">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="religion">Religion</label>
+							<input type="text" class="form-control" id="religion" v-model="form.religion">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="blood-type">Blood Type</label>
+							<input type="text" class="form-control" id="blood-type" v-model="form.blood_type">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="citizienship" class="isRequired">Citizenship</label>
+							<input type="text" class="form-control" id="citizienship" v-model="form.citizenship">
+							<div class="form-text form-error" v-if="!! errors.citizenship" v-text="errors.citizenship"></div>
+						</div>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" id="defaultCheck1" v-model="form.is_solo_parent">
+						<label class="form-check-label" for="defaultCheck1">
+						  Solo Parent
+						</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<input class="form-check-input" type="checkbox" id="defaultCheck2" v-model="form.is_with_disability">
+						<label class="form-check-label" for="defaultCheck2">
+						  With disability
+						</label>
+					</div><br>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="type-of-disability">Type of Disability</label>
+							<input type="text" :disabled="!form.is_with_disability" class="form-control" id="type-of-disability" v-model="form.type_of_disability">
+						</div>
+					</div>
+					<!-- Birth Place -->
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="birthplace"><strong>Birth Place</strong></label>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="country">Country</label>
+							<select id="country" class="form-control" v-model="form.bp_country">
+								<option value="Philippines" selected>Philippines</option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="region">Region</label>
+							<select id="country" :disabled="!form.bp_country" class="form-control" v-model="form.bp_region" @change="onRegionChange('birth_place')">
+								<option v-for="region in regions" v-text="region.name" :key="region.reg_code" :value="region.reg_code"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="state_or_province">State | Province</label>
+							<select id="state_or_province" :disabled="!form.bp_region" class="form-control" v-model="form.bp_state_or_province" @change="onProvinceChange('birth_place')">
+								<option v-for="province in computedBpProvinces" :key="province.prov_code" :value="province.prov_code" v-text="province.name"></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="city">City</label>
+							<select id="city" :disabled="!form.bp_state_or_province" class="form-control" v-model="form.bp_city_mun" @change="onCityChange('birth_place')">
+								<option v-for="city in computedBpCityMun" v-text="city.name" :key="city.mun_code" :value="city.mun_code"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="brgy">Brgy</label>
+							<select id="city" :disabled="!form.bp_city_mun" class="form-control" v-model="form.bp_brgy">
+								<option v-for="brgy in computedBpBrgy" v-text="brgy.name" :value="brgy.name"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="unit_building_residence_number">Unit | Building | Residence # </label>
+							<input type="text" class="form-control" id="unit_building_residence_number" v-model="form.bp_unit_building_residence_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="street">Street</label>
+							<input type="text" class="form-control" id="street" v-model="form.bp_street">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="zip_code">Zip Code</label>
+							<input type="text" class="form-control" id="zip_code" v-model="form.bp_zip_code">
+						</div>
+					</div><hr>
+					<!-- Birth Place -->
+					
+					<!--Permanent Address-->
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="permanent_address"><strong>Permanent Address</strong></label>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="country">Country</label>
+							<select id="country" class="form-control" v-model="form.pa_country">
+								<option value="Philippines" selected>Philippines</option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="region">Region</label>
+							<select id="country" :disabled="!form.pa_country" class="form-control" v-model="form.pa_region" @change="onRegionChange('permanent_address')">
+								<option v-for="region in regions" v-text="region.name" :key="region.reg_code" :value="region.reg_code"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="state_or_province">State | Province</label>
+							<select id="state_or_province" :disabled="!form.pa_region" class="form-control" v-model="form.pa_state_or_province" @change="onProvinceChange('permanent_address')">
+								<option v-for="province in computedPaProvinces" :key="province.prov_code" :value="province.prov_code" v-text="province.name"></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="city">City</label>
+							<select id="city" :disabled="!form.pa_state_or_province" class="form-control" v-model="form.pa_city_mun" @change="onCityChange('permanent_address')">
+								<option v-for="city in computedPaCityMun" v-text="city.name" :key="city.mun_code" :value="city.mun_code"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="brgy">Brgy</label>
+							<select id="city" :disabled="!form.pa_city_mun" class="form-control" v-model="form.pa_brgy">
+								<option v-for="brgy in computedPaBrgy" v-text="brgy.name" :value="brgy.name"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="unit_building_residence_number">Unit | Building | Residence # </label>
+							<input type="text" class="form-control" id="unit_building_residence_number" v-model="form.pa_unit_building_residence_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="street">Street</label>
+							<input type="text" class="form-control" id="street" v-model="form.pa_street">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="zip_code">Zip Code</label>
+							<input type="text" class="form-control" id="zip_code" v-model="form.pa_zip_code">
+						</div>
+					</div><hr>
+					<!-- Permanent Address -->
+					
+					<!--Temporary Address -->
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="permanent_address"><strong>Temporary Address</strong></label>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="country">Country</label>
+							<select id="country" class="form-control" v-model="form.ta_country">
+								<option value="Philippines" selected>Philippines</option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="region">Region</label>
+							<select id="country" :disabled="!form.ta_country" class="form-control" v-model="form.ta_region" @change="onRegionChange('temporary_address')">
+								<option v-for="region in regions" v-text="region.name" :key="region.reg_code" :value="region.reg_code"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="state_or_province">State | Province</label>
+							<select id="state_or_province" :disabled="!form.ta_region" class="form-control" v-model="form.ta_state_or_province" @change="onProvinceChange('temporary_address')">
+								<option v-for="province in computedTaProvinces" :key="province.prov_code" :value="province.prov_code" v-text="province.name"></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="city">City</label>
+							<select id="city" :disabled="!form.ta_state_or_province" class="form-control" v-model="form.ta_city_mun" @change="onCityChange('temporary_address')">
+								<option v-for="city in computedTaCityMun" v-text="city.name" :key="city.mun_code" :value="city.mun_code"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="brgy">Brgy</label>
+							<select id="city" :disabled="!form.ta_city_mun" class="form-control" v-model="form.ta_brgy">
+								<option v-for="brgy in computedTaBrgy" v-text="brgy.name" :value="brgy.name"></option>
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="unit_building_residence_number">Unit | Building | Residence # </label>
+							<input type="text" class="form-control" id="unit_building_residence_number" v-model="form.ta_unit_building_residence_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="street">Street</label>
+							<input type="text" class="form-control" id="street" v-model="form.ta_street">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="zip_code">Zip Code</label>
+							<input type="text" class="form-control" id="zip_code" v-model="form.ta_zip_code">
+						</div>
+					</div><hr>
+					<!-- Temporary Address -->
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label for="destination_entitlement">Destination Entitlement</label>
+							<input type="text" class="form-control" id="destination_entitlement" v-model="form.destination_entitlement">
+						</div>
+					</div>
+				</div>
+				<div v-if="type.login">
+					<h5>Login Detail</h5>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="email">Email</label>
+							<input type="email" class="form-control" id="email" v-model="form.email">
+							<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="password" class="isRequired">Password</label>
+							<input type="password" class="form-control" id="password" v-model="form.password">
+							<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="status">Status</label>
+							<select id="status" class="form-control" v-model="form.status">
+								<option value="">--Select--</option>
+								<option value="1">Active</option>
+								<option value="2">Inactive</option>
+								<option value="3">Resigned</option>
+								<option value="4">Terminated</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+						</div>
+					</div>
+				</div>
+				<div v-if="type.education">
+					<h5>Education Detail</h5>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="school">College/University</label>
+							<input type="text" class="form-control" id="school" v-model="form.school">
+							<div class="form-text form-error" v-if="!! errors.school" v-text="errors.school"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="degree">Degree</label>
+							<input type="text" class="form-control" id="degree" v-model="form.degree">
+							<div class="form-text form-error" v-if="!! errors.degree" v-text="errors.degree"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="year_attended">Year Attended</label>
+							<input type="text" class="form-control" id="year_attended" v-model="form.year_attended">
+							<div class="form-text form-error" v-if="!! errors.year_attended" v-text="errors.year_attended"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label for="post_graduate">Post Graduate Courses</label>
+							<textarea id="post_graduate" class="form-control" rows="3" v-model="form.post_graduate"></textarea>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label for="others">Others</label>
+							<textarea id="others" class="form-control" rows="3" v-model="form.others"></textarea>
+						</div>
+					</div>
+				</div>
+				<div v-if="type.work">
+					<h5>Employment Detail</h5>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="department">Department</label>
+							<select id="company" class="form-control" v-model="form.department">
+								<option value="">--Select--</option>
+								<option v-for="department in init.departments" v-bind:value="department.value" v-text="department.text"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.department" v-text="errors.department"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="team">Team</label>
+							<select id="team" class="form-control" v-model="form.team">
+								<option value="">--Select--</option>
+								<option v-for="team in init.teams" v-bind:value="team.id" v-text="team.title"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.team" v-text="errors.team"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="job_title">Designation</label>
+							<select id="job_title" class="form-control" v-model="form.job_title">
+								<option value="">--Select--</option>
+								<option v-for="job_title in init.job_titles" v-bind:value="job_title.value" v-text="job_title.text"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.job_title" v-text="errors.job_title"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="start_date">Start Date</label>
+							<datetime type="date" input-class="form-control" input-id="start_date" v-model="form.start_date"></datetime>
+							<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,81 @@
+<div class="widget custom-modal preview" v-if="previewModal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Overtime Detail</h4>
+			<button class="close-modal" v-on:click="previewClose"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<div class="body">
+			<div class="row">
+				<div class="col-md-6">
+					<small>Date Filed</small>
+					<div v-text="moment(preview.created_at).format('LLLL')"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Supervisor</small>
+					<div>
+						{{ preview.backup.first_name +' '+ preview.backup.last_name }}
+						<small v-if="preview.backup_status == '1'"><i>Pending</i></small>
+						<small v-if="preview.backup_status == '2'"><i>Approved</i></small>
+						<small v-if="preview.backup_status == '3'"><i>Declined</i></small>
+						<small v-if="preview.backup_status == '4'"><i>Closed</i></small>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<small>Head/Manager</small>
+					<div>
+						{{ preview.primary.first_name +' '+ preview.primary.last_name }}
+						<small v-if="preview.primary_status == '1'"><i>Pending</i></small>
+						<small v-if="preview.primary_status == '2'"><i>Approved</i></small>
+						<small v-if="preview.primary_status == '3'"><i>Declined</i></small>
+						<small v-if="preview.primary_status == '4'"><i>Closed</i></small>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>From [Date and time]</small>
+					<div v-text="moment(preview.start_date +' '+ preview.start_time).format('LLL')"></div>
+				</div>
+				<div class="col-md-6">
+					<small>To [Date and time]</small>
+					<div v-text="moment(preview.end_date +' '+ preview.end_time).format('LLL')"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Break Time</small>
+					<div v-text="preview.no_of_hours + ' hour(s)'"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Type</small>
+					<div>
+						<span v-if="preview.type == '1'">Regular Overtime</span>
+						<span v-if="preview.type == '2'">Restday or Special Holiday</span>
+						<span v-if="preview.type == '3'">Regular Holiday</span>
+						<span v-if="preview.type == '4'">Restday and Special Holiday</span>
+						<span v-if="preview.type == '5'">Restday and Regular Holiday</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<small>Purpose</small>
+					<div v-text="preview.purpose"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<small>Approver Note</small>
+					<div v-text="preview.approver_note"></div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<button type="button" class="btn btn-secondary" v-on:click="previewClose">Close</button>
+		</div>
+		
+	</div>
+</div>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Recruitment</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<recruitment-candidate inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Recruitment</span></li>
+						<li class="breadcrumb-item"><span class="active">Candidates</span></li>
+						
+					</ol>
+					<% if(user_role.write){ %>
+					<button class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</button>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Candidate Record</h5>
+							<div class="card" v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table noborder-top">
+										<thead class="bg-light">
+											<tr>
+												<th width="250">Applicant</th>
+												<th>Position</th>
+												<th>Email</th>
+												<th>Phone</th>
+												<th>Address</th>
+												<th class="text-center" width="150">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="record in records">
+												<td v-text="record.first_name +' '+ record.last_name"></td>
+												<td v-text="record.position_applying_for"></td>
+												<td v-text="record.email"></td>
+												<td v-text="record.phone_number"></td>
+												<td v-text="record.current_address"></td>
+												<td class="action text-center">
+													<button title="Information" class="btn btn-outline-primary btn-sm" v-on:click="info(record.id)"><i class="mdi mdi-information-outline"></i></button>
+													<button title="edit" class="btn btn-outline-success btn-sm" <%- user_role.modify ? 'v-on:click="edit(record.id)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+													<button title="delete" class="btn btn-outline-danger btn-sm" <%- user_role.destroy ? 'v-on:click="archive(record.id, \'recruitment/candidate-profile/archive\')"':'disabled' %>><i class="mdi mdi-delete"></i></button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<ul class="pagination" v-if="counts">
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+								</li>
+								<li class="page-item" v-for="count in counts" v-bind:class="page == count ? 'active':''">
+									<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+								</li>
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+								</li>
+							</ul>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./components/form %>
+					<% include ./components/preview %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</recruitment-candidate> <!-- Inline Template -->
+		
+	</main>
+	</div>
+	
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

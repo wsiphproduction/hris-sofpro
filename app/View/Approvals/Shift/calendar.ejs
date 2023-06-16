@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Overtime</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<approval-shift-calendar inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Approvals</span></li>
+						<li class="breadcrumb-item"><span class="active">Shift</span></li>
+					</ol>
+					<div class="buttons">
+						<div class="btn-group" style="margin-right: 15px;">
+							<a href="<%= baseUrl + '/approvals/shift' %>" class="btn btn-outline-primary btn-sm"><i class="mdi mdi-format-list-bulleted"></i></a>
+							<a href="javascript:void(0);" class="btn btn-primary btn-sm"><i class="mdi mdi-calendar-check"></i></a>
+						</div>
+					</div>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col col-sm-12">
+
+							<h5>Shift Record</h5>
+							<div class="form-inline">
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-on:change="applicant" v-model="param.applicant">
+									<option value="">--All Employees--</option>
+									<option v-for="user in users" v-bind:value="user.user_id" v-text="user.applicant.first_name +' '+ user.applicant.last_name"></option>
+								</select>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.status">
+									<option value="">All</option>
+									<option value="1">Pending</option>
+									<option value="2">Approved</option>
+									<option value="3">Declined</option>
+									<option value="4">Closed</option>
+								</select>
+								<button type="reset" v-on:click="reset" class="btn btn-light mb-2">Reset</button>
+							</div>
+							<calendar :events="events"></calendar>
+
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+		</approval-shift-calendar>
+	</main>
+	</div>
+	
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

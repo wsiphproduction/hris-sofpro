@@ -1,0 +1,14 @@
+::ffff:192.168.1.164 - - [21/May/2019:00:04:38 +0000] "GET / HTTP/1.1" 200 7312
+::ffff:192.168.1.164 - - [21/May/2019:00:04:39 +0000] "GET /lib/popper.js/1.14.7/umd/popper.min.js.map HTTP/1.1" 404 181
+::ffff:192.168.1.164 - - [21/May/2019:00:04:39 +0000] "GET /js/regionDayMap.js.map HTTP/1.1" 404 161
+::ffff:192.168.1.164 - - [21/May/2019:00:10:10 +0000] "GET /forms/shift HTTP/1.1" 200 62412
+::ffff:192.168.1.164 - - [21/May/2019:00:10:10 +0000] "GET /lib/popper.js/1.14.7/umd/popper.min.js.map HTTP/1.1" 404 181
+::ffff:192.168.1.164 - - [21/May/2019:00:10:11 +0000] "GET /js/regionDayMap.js.map HTTP/1.1" 404 161
+::ffff:192.168.1.164 - - [21/May/2019:00:10:11 +0000] "POST /settings/approvers/get HTTP/1.1" 200 106
+::ffff:192.168.1.164 - - [21/May/2019:00:10:36 +0000] "GET /forms/shift HTTP/1.1" 200 62412
+::ffff:192.168.1.164 - - [21/May/2019:00:10:37 +0000] "GET /lib/popper.js/1.14.7/umd/popper.min.js.map HTTP/1.1" 404 181
+::ffff:192.168.1.164 - - [21/May/2019:00:10:37 +0000] "GET /js/regionDayMap.js.map HTTP/1.1" 404 161
+::ffff:192.168.1.164 - - [21/May/2019:00:10:37 +0000] "POST /settings/approvers/get HTTP/1.1" 200 106
+::ffff:192.168.1.164 - - [21/May/2019:00:10:54 +0000] "GET /forms/shift HTTP/1.1" 200 62412
+::ffff:192.168.1.164 - - [21/May/2019:00:10:55 +0000] "GET /lib/popper.js/1.14.7/umd/popper.min.js.map HTTP/1.1" 404 181
+::ffff:192.168.1.164 - - [21/May/2019:00:10:55 +0000] "GET /js/regionDayMap.js.map HTTP/1.1" 404 161

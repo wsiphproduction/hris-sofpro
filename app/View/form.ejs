@@ -1,0 +1,29 @@
+<div class="widget search-modal" v-if="isFirstLogin && isSupervisor">
+	<div class="modal-container sm">
+		<div class="heading">
+			<h4>Default Cut-off</h4>
+			<button class="close-modal" v-on:click="closeModal()"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%- baseUrl %>/home/save/cutoff" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<date-picker-2 class="form-group col-6 col-2" type="month" v-model="form.month_date" format="YYYY-MM" style="width: 150px;"></date-picker-2>
+					
+					<div class="form-group col-6 col-2">
+						<select class="form-control" v-model="form.period">
+							<option value="">Select Period</option>
+							<option value="A">Period A</option>
+							<option value="B">Period B</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal()">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,52 @@
+{
+  "_from": "vue-month-picker",
+  "_id": "vue-month-picker@1.2.2",
+  "_inBundle": false,
+  "_integrity": "sha512-VNagwzfNdB+X4LbVFtKSi6naFsLPGL+HuFMMhgLKq3a2kA0eKD/87zf9+G2AvyZ2CPZ8DmWIJOJA4tb6pReyJQ==",
+  "_location": "/vue-month-picker",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-month-picker",
+    "name": "vue-month-picker",
+    "escapedName": "vue-month-picker",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-month-picker/-/vue-month-picker-1.2.2.tgz",
+  "_shasum": "436c2c25f6fb43c78a0e8c7edda640711b51b78b",
+  "_spec": "vue-month-picker",
+  "_where": "D:\\Node\\admin",
+  "author": {
+    "name": "Andreas Rein"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A simple and elegant month picker for Vue",
+  "devDependencies": {
+    "poi": "^12.4.3",
+    "vue": "^2.5.22",
+    "vue-template-compiler": "^2.5.22"
+  },
+  "homepage": "https://github.com/kleinrein/vue-month-picker",
+  "keywords": [
+    "vue",
+    "month",
+    "year",
+    "picker"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "name": "vue-month-picker",
+  "scripts": {
+    "build": "poi --prod",
+    "dev": "poi --serve"
+  },
+  "version": "1.2.2"
+}

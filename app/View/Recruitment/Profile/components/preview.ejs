@@ -1,0 +1,97 @@
+<div class="widget custom-modal preview" v-if="previewModal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Applicant Detail</h4>
+			<button class="close-modal" v-on:click="previewClose"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<div class="body">
+			<div class="row">
+				<div class="col-md-6">
+					<small>Applicant</small>
+					<div v-text="preview.applicant"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Position</small>
+					<div v-text="preview.position"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Birthday</small>
+					<div v-text="preview.birthday"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Gender</small>
+					<div v-text="preview.gender"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Nationality</small>
+					<div v-text="preview.nationality"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Marital Status</small>
+					<div v-text="preview.marital_status"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Phone Number</small>
+					<div v-text="preview.phone_number"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Alternate Number</small>
+					<div v-text="preview.alternate_number"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Email</small>
+					<div v-text="preview.email"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Attachment</small>
+					<div v-text="preview.attachment"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>SSS Number</small>
+					<div v-text="preview.sss_number"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Pagibig Number</small>
+					<div v-text="preview.pagibig_number"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Philhealth Number</small>
+					<div v-text="preview.philhealth_number"></div>
+				</div>
+				<div class="col-md-6">
+					<small>TIN Number</small>
+					<div v-text="preview.tin_number"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<small>Current Address</small>
+					<div v-text="preview.current_address"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<small>Permanent Address</small>
+					<div v-text="preview.permanent_address"></div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<button type="button" class="btn btn-secondary" v-on:click="previewClose">Close</button>
+		</div>
+		
+	</div>
+</div>

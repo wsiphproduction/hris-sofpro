@@ -1,0 +1,54 @@
+<div class="widget custom-modal preview" v-if="previewModal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Undertime Detail</h4>
+			<button class="close-modal" v-on:click="previewClose"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<div class="body">
+			<div class="row">
+				<div class="col-md-6">
+					<small>Date Filed</small>
+					<div v-text="moment(preview.created_at).format('LLLL')"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Manager</small>
+					<div>
+						{{ preview.primary.first_name +' '+ preview.primary.last_name }}
+						<small v-if="preview.primary_status == '1'"><i>Pending</i></small>
+						<small v-if="preview.primary_status == '2'"><i>Approved</i></small>
+						<small v-if="preview.primary_status == '3'"><i>Declined</i></small>
+						<small v-if="preview.primary_status == '4'"><i>Closed</i></small>
+					</div>
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Date [Date and time]</small>
+					<div v-text="moment(preview.date +' '+ preview.time).format('LLL')"></div>
+				</div>
+				
+			</div>
+			
+			<div class="row">
+				<div class="col-md-12">
+					<small>Reason</small>
+					<div v-text="preview.reason"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<small>Approver Note</small>
+					<div v-text="preview.approver_note"></div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<button type="button" class="btn btn-secondary" v-on:click="previewClose">Close</button>
+		</div>
+		
+	</div>
+</div>

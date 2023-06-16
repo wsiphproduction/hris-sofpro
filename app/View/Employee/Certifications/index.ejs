@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-certifications inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+                        <button class="btn btn-primary btn-sm" v-on:click="add"><i class="mdi mdi-plus"></i> Add Certifications</button>
+                        <% } %>
+				</div><!-- Breadcrumb -->
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col-sm-12">
+										<h4 class="text-center">Certifications</h4>
+										<table class="table table-bordered" v-if="certifications.length">
+											<thead class="bg-light">
+												<tr>
+                                                    <th class="text-center">Certification</th>
+													<th class="text-center">Description</th>
+													<th class="text-center">Issued Date</th>
+                                                    <th class="text-center">Start Date</th>
+                                                    <th class="text-center">End Date</th>
+                                                    <th class="text-center">Expiratation Date</th>
+                                                    <% if(user_role.modify){ %>
+                                                        <td class="text-center">Action</td>
+                                                    <% } %>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(certification, index) in certifications">
+                                                    <td class="text-center" v-text="certification.name"></td>
+                                                    <td class="text-center" v-text="certification.description"></td>
+                                                    <td class="text-center" v-text="certification.date_issued ? moment(certification.date_issued).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="certification.start_date ? moment(certification.start_date).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="certification.end_date ? moment(certification.end_date).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="certification.expiry_date ? moment(certification.expiry_date).format('MM/DD/YYYY') : ''"></td>
+                                                    <% if(user_role.modify){ %>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="edit(index)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                        </button>
+                                                    </td>
+                                                    <% } %>
+                                                </tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!certifications.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+
+                <% include ./form %>
+                <% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-certifications>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

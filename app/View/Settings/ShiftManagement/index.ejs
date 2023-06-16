@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			/* display: none; <- Crashes Chrome on hover */
+			-webkit-appearance: none;
+			margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+		}
+
+		input[type=number] {
+			-moz-appearance:textfield; /* Firefox */
+		}
+	</style>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Shift Management</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-shift-management inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Shift Management</span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Shift Management</h5>
+							<div class="">
+								<div class="form-inline">
+									<label class="mb-2 mr-sm-2">Status</label>
+									<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.status">
+										<option value="">All</option>
+										<option value="1">Active</option>
+										<option value="0">Inactive</option>
+									</select>
+									<label class="mb-2 mr-sm-2">Limit</label>
+									<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="75">75</option>
+										<option value="100">100</option>
+									</select>
+									<button type="reset" v-on:click="reset" class="btn btn-light mb-2">Reset</button>
+								</div>
+							</div>
+							<div v-if="!fetching && records.length">
+								<div class="table-scrollable">
+									<table class="table table-bordered">
+										<thead class="bg-light noPadding">
+											<tr>
+												<th width="200" class="align-middle text-center nowrap">Shift ID</th>
+												<th width="200" class="align-middle text-center nowrap">Shift Desc</th>
+												<th width="100" class="text-center nowrap">Shift Opt</th>
+                                                <th width="100" class="text-center nowrap">Credit Time-in</th>
+                                                <th width="100" class="text-center nowrap">Credit Time-out</th>
+                                                <th width="100" class="text-center nowrap">Time in</th>
+                                                <th width="100" class="text-center nowrap">Time out</th>
+                                                <th width="100" class="text-center nowrap">Gp</th>
+                                                <th width="100" class="text-center nowrap">Break in</th>
+                                                <th width="100" class="text-center nowrap">Break out</th>
+                                                <th width="100" class="text-center nowrap">Num hours</th>
+                                                <th width="100" class="text-center nowrap">Cbamin</th>
+                                                <th width="100" class="text-center nowrap">Cbamout</th>
+                                                <th width="100" class="text-center nowrap">Cbpmin</th>
+                                                <th width="100" class="text-center nowrap">Cbpmout</th>
+                                                <th width="100" class="text-center nowrap">Trig late</th>
+                                                <th width="100" class="text-center nowrap">Trig under</th>
+                                                <th width="100" class="text-center nowrap">Early in</th>
+                                                <th width="100" class="text-center nowrap">Early out</th>
+                                                <th width="100" class="text-center nowrap">Late in</th>
+                                                <th width="100" class="text-center nowrap">Late out</th>
+                                                <th width="100" class="text-center nowrap">Flex am break</th>
+                                                <th width="100" class="text-center nowrap">Flex pm break</th>
+                                                <th width="100" class="text-center nowrap">Flex break</th>
+                                                <th width="100" class="text-center nowrap">Min ot</th>
+                                                <th width="100" class="text-center nowrap">Hday by late</th>
+                                                <th width="100" class="text-center nowrap">Ot type</th>
+                                                <th width="100" class="text-center nowrap">Break hours</th>
+                                                <th width="100" class="text-center nowrap">Seq id</th>
+                                                <th width="100" class="text-center nowrap">Gp2</th>
+                                                <th width="100" class="text-center nowrap">Trig absent</th>
+                                                <th width="100" class="text-center nowrap">Min workhours 1h</th>
+                                                <th width="100" class="text-center nowrap">Min workhours 2h</th>
+                                                <th width="100" class="text-center nowrap">Created by</th>
+                                                <th width="100" class="text-center nowrap">Updated by</th>
+                                                <th width="100" class="text-center nowrap">Created terminal</th>
+                                                <th width="100" class="text-center nowrap">Updated terminal</th>
+                                                <th width="100" class="text-center nowrap">Date Created</th>
+                                                <th width="100" class="text-center nowrap">Status</th>
+                                                <th width="100" class="text-center nowrap">From Previous Date</th>
+											    <th width="100" class="text-center nowrap">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(record, index) in records">
+												<td class="nowrap" v-text="records[index].shift_id"></td>
+												<td class="nowrap" v-text="records[index].shift_desc"></td>
+												<td class="nowrap" v-text="records[index].shift_opt"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].credit_time_in)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].credit_time_out)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].time_in)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].time_out)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].gp)"></td>
+                                                
+                                                <td class="nowrap" v-text="convertTime(records[index].break_in)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].break_out)"></td>
+
+                                                <td class="nowrap" v-text="records[index].num_hours ? records[index].num_hours +' hour(s)' : '0'"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].cbamin)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].cbamout)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].cbpmin)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].cbpmout)"></td>
+                                                
+                                                <td class="nowrap" v-text="convertTime(records[index].trig_late)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].trig_under)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].early_in)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].early_out)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].late_in)"></td>
+                                                <td class="nowrap" v-text="convertTime(records[index].late_out)"></td>
+
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].flex_am_break)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].flex_pm_break)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].flex_break)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].min_ot)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].hday_by_late)"></td>
+
+                                                <td class="nowrap" v-text="changeIfEmptyString(records[index].ot_type)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].break_hours)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].seq_id)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].gp2)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyString(records[index].trig_absent)"></td>
+
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].min_workhours_1h)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].min_workhours_2h)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].created_by)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].updated_by)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].created_terminal)"></td>
+                                                <td class="nowrap" v-text="changeIfEmptyInt(records[index].updated_terminal)"></td>
+                                                <td class="nowrap" v-text="convertDateAndTime(records[index].createdAt)"></td>
+                                                <td class="nowrap">
+                                                    <div v-if="records[index].status == '1'"><span class="status primary"></span> Active</div>
+                                                    <div v-if="records[index].status == '0'"><span class="status secondary"></span> Inactive</div>
+                                                </td>
+                                                <td class="nowrap text-center">
+                                                    <div v-if="records[index].is_from_previous == '1'"> TRUE</div>
+                                                    <div v-if="records[index].is_from_previous == '0'"> FALSE</div>
+                                                </td>
+                                                <td class="nowrap">
+                                                    <button class="btn btn-outline-primary btn-sm" <%- user_role.modify ? 'v-on:click="edit(index)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+                                                    <button class="btn btn-outline-warning btn-sm" <%- user_role.destroy ? 'v-on:click="archive(record.id, \'settings/division/archive\')"':'disabled' %>><i class="mdi mdi-trash-can-outline"></i></button>
+                                                </td>
+											</tr>
+										</tbody>
+									</table>
+								<!-- Need to add pagination -->
+								<ul class="pagination" v-if="counts">
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+									</li>
+									<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+										<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+									</li>
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+									</li>
+								</ul>
+								</div>
+							</div>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./form %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-shift-management> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

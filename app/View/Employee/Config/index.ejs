@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-config inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									<div class="col-sm-4">
+										<div class="card">
+											<div class="card-header">
+												<strong>Shift</strong>
+											</div>
+											<div class="card-body">
+												<form action="<%= baseUrl %>/employee/config/update/work" method="post" @submit.prevent="onSubmit">
+													<div class="form-row">
+														<div class="form-group col-sm-12">
+															<div hidden class="alert alert-primary" v-if="form.method == 1"><strong>Approval method:</strong> Employees are required their work schedule for approval.</div>
+															<div hidden class="alert alert-primary" v-if="form.method == 2"><strong>Automated:</strong> Work schedule auto update based on the selected setting.</div>
+															<label for="break_type" >Break Type</label>
+															<select id="break_type" class="form-control" v-model="form.break_type">
+																<option value="">Select</option>
+																<option value="1">Roster Break</option>
+																<option value="2">Weekender</option>
+															</select>
+															<div class="form-text form-error" v-if="!! errors.break_type" v-text="errors.break_type"></div>
+														</div>
+													</div>
+													<div class="form-row">
+														<div class="form-group col-sm-12" v-if="form.break_type==1">
+															<label for="rooster_break" >Rooster Break</label>
+																<select id="rooster_break" class="form-control" v-model="form.rooster_break">
+																	<option v-for="rooster_break_option in rooster_break_options" v-bind:value="rooster_break_option.value" v-text="rooster_break_option.text"></option>
+																</select>
+															<div class="form-text form-error" v-if="!! errors.rooster_break" v-text="errors.rooster_break"></div>
+														</div>
+													</div>
+													<div class="form-row" v-if="form.break_type == 1">
+														<div class="form-group col-md-12">
+															<label for="destination_entitlement" >Destination Entitlement</label>
+															<input type="text" class="form-control" id="destination_entitlement" v-model="form.destination_entitlement">
+															<div class="form-text form-error" v-if="!! errors.destination_entitlement" v-text="errors.destination_entitlement"></div>
+														</div>
+													</div>
+													<div class="form-row">
+														<div class="form-group col-sm-12" v-if="form.break_type==1">
+															<label for="shift_type" >Shift Type</label>
+															<select id="shift_type" class="form-control" v-model="form.shift_type">
+																<option value="">--Select--</option>
+																<option v-for="shift_type in shift_types" v-bind:value="shift_type.id" v-text="shift_type.shift_id"></option>
+															</select>
+															<div class="form-text form-error" v-if="!! errors.shift_type" v-text="errors.shift_type"></div>
+														</div>
+													</div>
+													<div class="form-row">
+														<div class="form-group col-sm-12">
+															<label for="effective_date">Effective Date</label>
+															<datetime type="date" input-class="form-control" input-id="effective_date" v-model="form.effective_date"></datetime>
+															<div class="form-text form-error" v-if="!! errors.effective_date" v-text="errors.effective_date"></div>
+														</div>
+													</div>
+													<div class="form-row" hidden>
+														<div class="form-group col-sm-12">
+															<div class="alert alert-primary" v-if="form.method == 1"><strong>Approval method:</strong> Employees are required their work schedule for approval.</div>
+															<div class="alert alert-primary" v-if="form.method == 2"><strong>Automated:</strong> Work schedule auto update based on the selected setting.</div>
+															<label for="method">Work schedule method.</label>
+															<select id="method" class="form-control" v-model="form.method">
+																<option value="">Select</option>
+																<option value="1">Approval method</option>
+																<option value="2">Automated</option>
+															</select>
+															<div class="form-text form-error" v-if="!! errors.method" v-text="errors.method"></div>
+														</div>
+													</div>
+													<div v-if="form.method == 2">
+													<div class="form-row">
+														<div class="form-group col-sm-6" hidden>
+															<label for="type">Type.</label>
+															<select id="type" class="form-control" v-model="form.type">
+																<option value="">Select</option>
+																<option value="1">Fixed Schedule</option>
+																<option value="2">Flexible</option>
+																<option value="3">Semi-flexible</option>
+															</select>
+															<div class="form-text form-error" v-if="!! errors.type" v-text="errors.type"></div>
+														</div>
+														<div class="form-group col-sm-12">
+															<label for="effective_date">Effective Date</label>
+															<datetime type="date" input-class="form-control" input-id="effective_date" v-model="form.effective_date"></datetime>
+															<div class="form-text form-error" v-if="!! errors.effective_date" v-text="errors.effective_date"></div>
+														</div>
+													</div>
+													<div class="form-row" hidden>
+														<div class="form-group col-md-6">
+															<label for="shift_length" class="isRequired">Shift Length (in hours)</label>
+															<input type="number" class="form-control" id="shift_length" step="1" min="1" max="24" v-model="form.shift_length">
+															<div class="form-text form-error" v-if="!! errors.shift_length" v-text="errors.shift_length"></div>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="paid_hours" class="isRequired">Paid Hours</label>
+															<input type="number" class="form-control" id="paid_hours" step="1" min="1" max="24" v-model="form.paid_hours">
+															<div class="form-text form-error" v-if="!! errors.paid_hours" v-text="errors.paid_hours"></div>
+														</div>
+													</div>
+													<div class="form-row" v-if="form.type == 3" hidden>
+														<div class="form-group col-md-12">
+															<label for="between" class="isRequired">Time Between</label>
+															<div class="form-row">
+																<div class="form-group col-sm-6">
+																	<datetime type="time" input-class="form-control" input-id="between_start" v-model="form.between_start" :minute-step="15" use12-hour></datetime>
+																	<div class="form-text form-error" v-if="!! errors.between_start" v-text="errors.between_start"></div>
+																</div>
+																<div class="form-group col-sm-6">
+																	<datetime type="time" input-class="form-control" input-id="between_end" v-model="form.between_end" :minute-step="15" use12-hour></datetime>
+																	<div class="form-text form-error" v-if="!! errors.between_end" v-text="errors.between_end"></div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="form-row" v-if="form.type == 1" hidden>
+														<div class="form-group col-md-6">
+															<label for="start_time" class="isRequired">Start Time</label>
+															<datetime type="time" input-class="form-control" input-id="start_time" v-model="form.start_time" :minute-step="15" use12-hour></datetime>
+															<div class="form-text form-error" v-if="!! errors.start_time" v-text="errors.start_time"></div>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="end_time" class="isRequired">End Time</label>
+															<datetime type="time" input-class="form-control" input-id="end_time" v-model="form.end_time" :minute-step="15" use12-hour></datetime>
+															<div class="form-text form-error" v-if="!! errors.end_time" v-text="errors.end_time"></div>
+														</div>
+													</div>
+													<div class="form-row" hidden>
+														<div class="form-group col-md-12">
+															<label>Applicable Days</label>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="monday" v-model="form.monday">
+																<label class="custom-control-label" for="monday">Monday</label>
+															</div>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="tuesday" v-model="form.tuesday">
+																<label class="custom-control-label" for="tuesday">Tuesday</label>
+															</div>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="wednesday" v-model="form.wednesday">
+																<label class="custom-control-label" for="wednesday">Wednesday</label>
+															</div>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="thursday" v-model="form.thursday">
+																<label class="custom-control-label" for="thursday">Thursday</label>
+															</div>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="friday" v-model="form.friday">
+																<label class="custom-control-label" for="friday">Friday</label>
+															</div>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="saturday" v-model="form.saturday">
+																<label class="custom-control-label" for="saturday">Saturday</label>
+															</div>
+															<div class="custom-control custom-checkbox">
+																<input type="checkbox" class="custom-control-input" id="sunday" v-model="form.sunday">
+																<label class="custom-control-label" for="sunday">Sunday</label>
+															</div>
+															<div class="form-text form-error" v-if="!! errors.days" v-text="errors.days"></div>
+														</div>
+													</div>
+													</div>
+													<button type="submit" class="btn btn-primary">Save changes</button>
+												</form>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="card">
+											<div class="card-header">
+												<strong>Others</strong>
+											</div>
+											<div class="card-body">
+												<form action="<%= baseUrl %>/employee/config/update/setting" method="post" @submit.prevent="onSubmit">
+													<div class="form-row">
+														<div class="form-group col-sm-6">
+															<label for="holiday">No work on holiday?</label>
+															<select id="holiday" class="form-control" v-model="form.holiday">
+																<option value="">Select</option>
+																<option value="1">Yes</option>
+																<option value="0">No</option>
+															</select>
+															<div class="form-text form-error" v-if="!! errors.holiday" v-text="errors.holiday"></div>
+														</div>
+														<div class="form-group col-sm-6">
+															<label for="overtime">Overtime</label>
+															<select id="overtime" class="form-control" v-model="form.overtime">
+																<option value="">Select</option>
+																<option value="1">Allowed</option>
+																<option value="0">Not Allowed</option>
+															</select>
+															<div class="form-text form-error" v-if="!! errors.overtime" v-text="errors.overtime"></div>
+														</div>
+													</div>
+													<button type="submit" class="btn btn-primary">Save changes</button>
+												</form>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-4">
+										<div class="card">
+											<div class="card-header">
+												<strong>Biometric Number</strong>
+												<% if(user_role.write){ %>
+													<button class="btn btn-primary btn-sm" v-on:click="add()"> Add New</button>
+												<% } %>
+											</div>
+											<table class="table" v-if="records.length">
+												<thead class="bg-light">
+													<tr>
+														<th>Site</th>
+														<th width="100">Number</th>
+														<th class="text-center" width="150">Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr v-for="(record, index) in records">
+														<td v-text="record.biometric.label"></td>
+														<td v-text="record.biometric_number"></td>
+														<td class="text-center">
+															<button class="btn btn-outline-primary btn-sm" <%- !user_role.modify ? 'disabled':'v-on:click="edit(index)"' %>><i class="mdi mdi-lead-pencil"></i></button>
+															<button class="btn btn-outline-warning btn-sm" <%- !user_role.destroy ? 'disabled':'v-on:click="archive(record.id, \'employee/biometric/record/delete\')"' %>><i class="mdi mdi-trash-can-outline"></i></button>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<div class="norecord" v-if="!records.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+										
+										
+									</div>
+
+									<!-- <div class="col-sm-4">
+										<h5>Holiday Off</h5>
+										<div class="card">
+											<div class="card-body">
+												
+											</div>
+										</div>
+									</div> -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+				<% include ./form %>
+				<% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-config>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

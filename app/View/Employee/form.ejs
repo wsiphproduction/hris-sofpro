@@ -1,0 +1,321 @@
+<div class="widget " v-bind:class="action == 'import' ? 'search-modal':'custom-modal'"  v-if="accountModal">
+	<div class="modal-container" v-bind:class="action == 'import' ? 'sm':''">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeAccount"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form v-bind:action="action == 'default' ? '<%= baseUrl %>/employee' : '<%= baseUrl %>/employee/import'" v-bind:enctype="action == 'import' ? 'multipart/form-data':''" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div v-if="action != 'import'">
+				<div v-if="accountDetail">
+					<h5>Personal Detail</h5>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="old_employee_number">Old Employee Number</label>
+							<input type="text" class="form-control" id="old_employee_number" v-model="form.old_employee_number">
+							<div class="form-text form-error" v-if="!! errors.old_employee_number" v-text="errors.old_employee_number"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="first_name" class="isRequired">First Name</label>
+							<input type="text" class="form-control" id="first_name" v-model="form.first_name">
+							<div class="form-text form-error" v-if="!! errors.first_name" v-text="errors.first_name"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="middle_name">Middle Name</label>
+							<input type="text" class="form-control" id="middle_name" v-model="form.middle_name">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="last_name" class="isRequired">Last Name</label>
+							<input type="text" class="form-control" id="last_name" v-model="form.last_name">
+							<div class="form-text form-error" v-if="!! errors.last_name" v-text="errors.last_name"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="nick_name">Nickname</label>
+							<input type="text" class="form-control" id="nick_name" v-model="form.nick_name">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="suffix">Suffix</label>
+							<input type="text" class="form-control" id="suffix" v-model="form.suffix">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="gender" class="isRequired">Gender</label>
+							<select name="gender" id="gender" class="form-control" v-model="form.gender">
+								<option value="">--Select--</option>
+								<option value="Male">Male</option>
+								<option value="Female">Female</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.gender" v-text="errors.gender"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="birthday" class="isRequired">Birthday</label>
+							<datetime type="date" input-class="form-control" input-id="end_date" v-model="form.birthday"></datetime>
+							<div class="form-text form-error" v-if="!! errors.birthday" v-text="errors.birthday"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="marital_status" class="isRequired">Marital Status</label>
+							<select id="marital_status" class="form-control" v-model="form.marital_status">
+								<option value="">--Select--</option>
+								<option value="Single">Single</option>
+								<option value="Married">Married</option>
+								<option value="Separated">Separated</option>
+								<option value="Divorced">Divorced</option>
+								<option value="Widowed">Widowed</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.marital_status" v-text="errors.marital_status"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="nationality" class="isRequired">Nationality</label>
+							<select class="form-control" id="nationality" v-model="form.nationality">
+								<option value="">--Select--</option>
+								<option v-for="nationality in init.nationalities" v-bind:value="nationality.value" v-text="nationality.text"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.nationality" v-text="errors.nationality"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="email" class="isRequired">Email</label>
+							<input type="email" class="form-control" id="email" v-model="form.email">
+							<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="contact_number">Contact Number</label>
+							<input type="text" class="form-control" id="contact_number" v-model="form.contact_number">
+							<div class="form-text form-error" v-if="!! errors.contact_number" v-text="errors.contact_number"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="sss_number">SSS Number</label>
+							<input type="text" id="sss_number" class="form-control" v-model="form.sss_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="pagibig_number">Pagibig Number</label>
+							<input type="text" id="pagibig_number" class="form-control" v-model="form.pagibig_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="philhealth_number">Philhealth Number</label>
+							<input type="text" id="philhealth_number" class="form-control" v-model="form.philhealth_number">
+						</div>
+						<div class="form-group col-md-4">
+							<label for="tin_number">TIN Number</label>
+							<input type="text" id="tin_number" class="form-control" v-model="form.tin_number">
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label for="current_address">Current Address</label>
+							<input type="text" class="form-control" id="current_address" v-model="form.current_address">
+							<div class="form-text form-error" v-if="!! errors.current_address" v-text="errors.current_address"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label for="permanent_address">Permanent Address</label>
+							<input type="text" class="form-control" id="permanent_address" v-model="form.permanent_address">
+							<div class="form-text form-error" v-if="!! errors.permanent_address" v-text="errors.permanent_address"></div>
+						</div>
+					</div>
+
+					<h5 hidden>Employment Detail</h5>
+					
+					<div class="form-row" hidden>
+						
+						<div class="form-group col-md-4">
+							<label for="department" class="isRequired">Department</label>
+							<select id="department" class="form-control" v-model="form.department">
+								<option value="">--Select--</option>
+								<option v-for="department in init.departments" v-bind:value="department.value" v-text="department.text"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.department" v-text="errors.department.toUpperCase()"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="team" class="isRequired">Team</label>
+							<select id="team" class="form-control" v-model="form.team">
+								<option value="">--Select--</option>
+								<option v-for="team in init.teams" v-bind:value="team.id" v-text="team.title"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.team" v-text="errors.team"></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label for="job_title" class="isRequired">Position</label>
+							<select id="job_title" class="form-control" v-model="form.job_title">
+								<option value="">--Select--</option>
+								<option v-for="job_title in init.job_titles" v-bind:value="job_title.value" v-text="job_title.text.toUpperCase()"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.job_title" v-text="errors.job_title"></div>
+						</div>
+					</div>
+					<div class="form-row" hidden>
+						<div class="form-group col-md-4">
+							<label for="start_date">Start Date</label>
+							<datetime type="date" input-class="form-control" input-id="start_date" v-model="form.start_date"></datetime>
+							<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+						</div>
+					</div>
+				</div>
+				<div v-else="accountDetail">
+					<h5>Login Detail</h5>
+					<div class="alert alert-warning" v-if="form.status == 3 || form.status == 4">Warning! Are you sure you want to change employee status. Leave credits will be emptied.</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="email">Email</label>
+							<input type="email" class="form-control" id="username" v-model="form.email">
+							<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="password" class="isRequired">Password</label>
+							<input type="password" class="form-control" id="password" v-model="form.password">
+							<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="status" class="isRequired">Status</label>
+							<select id="status" class="form-control" v-model="form.status">
+								<option value="">--Select--</option>
+								<option value="1">Active</option>
+								<option value="2">Inactive</option>
+								<option value="3">Resigned</option>
+								<option value="4">Terminated</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="resignation_date">Date</label>
+							<datetime type="date" input-class="form-control" input-id="resignation_date" v-model="form.resignation_date"></datetime>
+							<div class="form-text form-error" v-if="!! errors.resignation_date" v-text="errors.resignation_date"></div>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div v-if="action == 'import'">
+					<div class="form-row">
+						<div class="form-group col-md-12">
+						<div class="alert alert-danger" role="alert" v-if="!! errors.csv_format" v-text="errors.csv_format"></div>
+							<div class="alert alert-primary" role="alert" v-if="form.operation == 'insert_employment'">
+								The file must be in <strong>CSV format and comma separated values</strong>.<br> 
+								Insert Employment format: <strong><a href="<%= baseUrl %>/uploads/imports/insert_employment_format.csv">click here</a></strong>.<br>
+							</div>
+							<div class="alert alert-primary" role="alert" v-else>
+								The file must be in <strong>CSV format and comma separated values</strong>.<br> 
+								Insert format: <strong><a href="<%= baseUrl %>/uploads/imports/insert_format.csv">click here</a></strong>.<br>
+								Update format: <strong>Must be from exported csv format.</strong>.<br>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="operation">Select Operation</label>
+							<select id="operation" class="form-control" name="operation" v-model="form.operation">
+								<option value="">Select</option>
+								<option value="insert">Insert Employee</option>
+								<option value="update">Update Employee</option>
+								<option value="insert_employment">Insert Employment details</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.operation" v-text="errors.operation"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="import">Select Csv</label>
+							<input type="file" id="import" class="form-control-file" name="file" accept=".csv" v-on:change="onAttachmentChange($event)">
+							<div class="form-text form-error" v-if="!! errors.file" v-text="errors.file"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeAccount">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<div class="widget search-modal" v-if="roleModal">
+	<div class="modal-container sm">
+		<div class="heading">
+			<h4>User Role</h4>
+			<button class="close-modal" v-on:click="closeRole"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl %>/employee/role" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row" v-for="(role, index) in form.user_roles">
+					<div class="form-group col-md-6">
+						<div class="p-icon p-smooth pretty" p-checkbox="">
+							<input type="checkbox" v-model="role.role_id"> 
+							<div class="state p-primary">
+								<i class="icon mdi mdi-check"></i> 
+								<label v-text="role.label"></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeRole">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="widget search-modal" v-if="exportEmployee">
+	<div class="modal-container sm">
+		<div class="heading">
+			<h4>Export Employees</h4>
+			<button class="close-modal" v-on:click="closeExport"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl %>/employee/export" method="get" target="_blank">
+			<div class="body">
+				<div class="alert alert-primary" role="alert">
+					<strong>IMPORTANT:</strong> Do not remove or edit the <strong>"ID"</strong> field.
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="company">Company</label>
+						<select id="company" class="form-control" v-model="exports.company" name="company">
+							<option value="">All</option>
+							<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="division">Division</label>
+						<select id="division" class="form-control" v-model="exports.division" name="division">
+							<option value="">All</option>
+							<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+						</select>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="department">Department</label>
+						<select id="department" class="form-control" v-model="exports.department" name="department">
+							<option value="">All</option>
+							<option v-for="department in departments" v-bind:style="exports.division == department.division_id ? '': 'display: none;'" v-bind:value="department.id" v-text="department.department_name"></option>
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="section">Section</label>
+						<select id="section" class="form-control" v-model="exports.section" name="section">
+							<option value="">All</option>
+							<option v-for="section in sections" v-bind:style="exports.department == section.department_id ? '': 'display: none;'" v-bind:value="section.id" v-text="section.section_name"></option>
+						</select>
+					</div>
+					
+				</div>
+			</div>
+			<div class="footer">
+				<button type="submit" class="btn btn-primary"><i class="mdi mdi-download"></i> Download</button>
+				<button type="button" class="btn btn-light" v-on:click="closeExport">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

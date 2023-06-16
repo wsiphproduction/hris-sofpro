@@ -1,0 +1,8 @@
+division_name,division_code,company_code,manager_id,assistant_manager_id,secretary_id,description
+Engineering and Construction Services Division,ECSD,PMC,A4349,,A0355,"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+Corporate Davao,CD,PMC,A2407,,A1534,"Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+Exploration Division,EXD,PMC,A0608,,A3899,"Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt."
+Mill Division,MD,PMC,A4312,,A4032,"Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet."
+Executive Division,ED,PMC,D7903,,A3840,"Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus"
+Administration Division,AD,PMC,A4041,,A2136,At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident
+Mine Division,MID,PMC,A4303,,A1437,

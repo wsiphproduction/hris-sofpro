@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-common inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									<div class="col-sm-12">
+										<h5>Overtime</h5>
+										<form class="form-inline">
+											<datetime type="date" input-class="form-control mb-2 mr-sm-2 form-control-sm" placeholder="Start Date" v-model="param.start"></datetime>
+											<datetime type="date" input-class="form-control mb-2 mr-sm-2 form-control-sm" placeholder="End Date" v-model="param.end" :min-datetime="minDate"></datetime>
+											<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.status">
+												<option value="">All</option>
+												<option value="1">Pending</option>
+												<option value="2">Approved</option>
+												<option value="3">Declined</option>
+												<option value="4">Closed</option>
+											</select>
+											<label class="mb-2 mr-sm-2">Limit</label>
+											<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+												<option value="25">25</option>
+												<option value="50">50</option>
+												<option value="75">75</option>
+												<option value="100">100</option>
+											</select>
+										</form>
+									</div>
+									<div class="col col-sm-9">
+										<div v-if="!fetching && records.length">
+											<table class="table table-bordered">
+												<thead class="bg-light">
+													<tr>
+														<th class="text-center" scope="col">Filed</th>
+														<th class="text-center" scope="col">Date (Start-End)</th>
+														<th class="text-center" scope="col">No. of hours</th>
+														<th class="text-center" scope="col">Type</th>
+														<th class="text-center" scope="col">Supervisor</th>
+														<th class="text-center" scope="col">Head/Manager</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr v-for="record in records">
+														<td v-text="$Carbon(record.created_at)">1</td>
+														<td v-text="moment(record.start_date +' '+ record.start_time).format('MM/DD/YYYY, hh:mmA') +' — '+moment(record.end_date +' '+ record.end_time).format('hh:mmA')"></td>
+														<td v-text="record.no_of_hours +' hour(s)'"></td>
+														<td>
+															<span v-if="record.type == '1'">Regular Overtime</span>
+															<span v-if="record.type == '2'">Restday or Special Holiday</span>
+															<span v-if="record.type == '3'">Regular Holiday</span>
+															<span v-if="record.type == '4'">Restday and Special Holiday</span>
+															<span v-if="record.type == '5'">Restday and Regular Holiday</span>
+														</td>
+														<td>
+															<div v-if="record.backup_status == '1'"><span class="status primary"></span> Pending</div>
+															<div v-if="record.backup_status == '2'"><span class="status success"></span> Approved</div>
+															<div v-if="record.backup_status == '3'"><span class="status warning"></span> Declined</div>
+															<div v-if="record.backup_status == '4'"><span class="status secondary"></span> Closed</div>
+														</td>
+														<td>
+															<div v-if="record.primary_status == '1'"><span class="status primary"></span> Pending</div>
+															<div v-if="record.primary_status == '2'"><span class="status success"></span> Approved</div>
+															<div v-if="record.primary_status == '3'"><span class="status warning"></span> Declined</div>
+															<div v-if="record.primary_status == '4'"><span class="status secondary"></span> Closed</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
+										<ul class="pagination" v-if="counts">
+											<li class="page-item">
+												<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+											</li>
+											<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+												<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+											</li>
+											<li class="page-item">
+												<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+											</li>
+										</ul>
+										<div class="loading" v-if="fetching">
+											<img src="<%= baseUrl + '/img/loading.gif' %>">
+											<p>Loading.....</p>
+										</div>
+										<div class="norecord" v-if="!fetching && !records.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<div class="card card-legend">
+											<div class="card-header">
+												LEGENDS
+											</div>
+											<div class="card-body">
+												<ul>
+													<li>
+														<span class="bg-primary"></span> Pending
+													</li>
+													<li>
+														<span class="bg-success"></span> Approved
+													</li>
+													<li>
+														<span class="bg-warning"></span> Declined
+													</li>
+													<li>
+														<span class="bg-dark"></span> Closed
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-common>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

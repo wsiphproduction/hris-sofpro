@@ -1,0 +1,96 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%- baseUrl %>/custom/overtime" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-12" v-if="!form.approver_name" v-if="method=='post'">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span>Overtime request required approver. Please contact administrator.</span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group col-md-6" v-if="method=='post'">
+						<label for="head">Approver</label>
+						<input type="text" class="form-control" v-model="form.approver_name" disabled>
+						<div class="form-text form-error" v-if="!! errors.approver_id" v-text="errors.approver_id"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="employee" class="isRequired">Employee</label>
+						<select class="form-control" v-model="form.employee" @change="onChangeEmployee($event)" v-bind:disabled="method=='put'">
+							<option value="">Select Employee</option>
+							<option v-for="user in users" v-bind:value="user.id" v-text="user.last_name+', '+user.first_name +' : ' + user.employee_number"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.employee" v-text="errors.employee"></div>
+					</div>
+				</div>
+				
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="start_date" class="isRequired">Start [Date and Time]</label>
+						<datetime type="datetime" input-class="form-control " input-id="start_date" v-model="form.start_date" :minute-step="30" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="end_date" class="isRequired">End [Date and Time]</label>
+						<datetime type="datetime" input-class="form-control" input-id="end_date" v-model="form.end_date" :min-datetime="minOt" :minute-step="30" use12-hour></datetime>
+						<div class="form-text form-error" v-if="!! errors.end_date" v-text="errors.end_date"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-lg-4 col-sm-12 col-md-12">
+						<label for="selec_shift">Target Shift Date</label>
+						<select class="form-control" v-model="form.shift_id" :disabled="!selected_user_shifts.length">
+							<option value="" selected="selected" hidden>Select a Shift</option>
+							<option v-for="shift_row in selected_user_shifts" :selected="shift_row.id == form.shift_id"
+								:value="shift_row.id" v-text="shift_row.date"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.shift_id" v-text="errors.shift_id"></div>
+					</div>
+					<div class="form-group col-lg-4 col-sm-12 col-md-12">
+						<label for="shifts">Shift Type</label>
+						<!-- <input type="text" class="form-control" v-model="form.shift_type" :disabled="hasShift"> -->
+						<!-- <select class="form-control" v-model="form.shift_type" :disabled="hasShift" @change="setBreakHours($event)" input-id="shift_type"> -->
+						<select class="form-control" v-model="form.shift_type" @change="setBreakHours($event)" input-id="shift_type">
+							<option value="" selected="selected">Select Shift ID</option>
+							<option v-for="shift_id in shift_types" :selected="form.shift_type == shift_id.shift_id" v-bind:value="shift_id.id" v-text="shift_id.shift_id"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.shift_type" v-text="errors.shift_type"></div>
+					</div>
+					<div class="form-group col-lg-4 col-sm-12 col-md-12">
+						<label for="no_of_hours">Total Hours</label>
+						<input type="Number" class="form-control" v-model="form.no_of_hours" disabled>
+						<div class="form-text form-error" v-if="validation.isValueZeroOrNegative" v-text="validation.errorMessage"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="attachment">Attachment</label>
+						<input type="file" id="attachment" class="form-control-file" accept="image/*, application/pdf" v-on:change="onAttachmentChange($event)" name="attachment">
+						<div class="form-text form-error" v-if="!! errors.attachment" v-text="errors.attachment"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="purpose">Purpose</label>
+						<textarea id="purpose" class="form-control" rows="5" v-model="form.purpose"></textarea>
+						<div class="form-text form-error" v-if="!! errors.purpose" v-text="errors.purpose"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<input type="hidden" name="id" v-model="form.id">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading" :disabled="validation.isValueZeroOrNegative">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

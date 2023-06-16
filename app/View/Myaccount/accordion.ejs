@@ -1,0 +1,70 @@
+<div class="accordion" id="account">
+	<div class="card">
+		<div class="card-header" id="headingOne">
+			<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				<i class="mdi mdi-two-factor-authentication"></i> Two-Factor Authentication
+			</button>
+		</div>
+		
+		<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#account">
+			<div class="card-body">
+				<p>Enabling two-factor authentication adds an extra layer security when accessing your account by requiring you to enter one time passcode sent to your email.</p>
+				<% if(account.email){ %>
+				<form action="<%= baseUrl %>/myaccount/two-factor-authentication" method="post" @submit.prevent="onSubmit">
+					<div class="form-group">
+						<div class="custom-control custom-switch">
+							<input type="checkbox" class="custom-control-input" id="twoFactor" v-model="form.twoFactor">
+							<label class="custom-control-label" for="twoFactor">{{ form.twoFactor ? 'Enabled':'Disabled' }}</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password">Enter your current password.</label>
+						<input type="password" class="form-control" id="password" v-model="form.password">
+						<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+				<% }else{ %>
+				<div class="dotted text-center">You dont have an email. Please contact administrator.</div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-header" id="headingTwo">
+			<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+				<i class="mdi mdi-security-lock"></i> Change Password
+			</button>
+		</div>
+
+		<div id="collapseTwo" class="collapse" aria-labelledby="headingThree" data-parent="#account">
+			<div class="card-body">
+				<div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+					<span v-text="successMessage"></span>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form action="<%= baseUrl %>/myaccount/change-password" method="post" @submit.prevent="onSubmit">
+					<div class="form-group">
+						<label for="current">Current Password</label>
+						<input type="password" class="form-control" id="current" v-model="form.current">
+						<div class="form-text form-error" v-if="!! errors.current" v-text="errors.current"></div>
+					</div>
+					<div class="form-group">
+						<label for="new">New Password</label>
+						<input type="password" class="form-control" id="new" v-model="form.new">
+						<div class="form-text form-error" v-if="!! errors.new" v-text="errors.new"></div>
+					</div>
+					<div class="form-group">
+						<label for="confirm">Confirm Password</label>
+						<input type="password" class="form-control" id="confirm" v-model="form.confirm">
+						<div class="form-text form-error" v-if="!! errors.confirm" v-text="errors.confirm"></div>
+					</div>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

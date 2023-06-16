@@ -1,0 +1,57 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%- baseUrl %>/settings/taxonomy" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="parent">Parent</label>
+						<select class="form-control" id="parent" name="parent" v-model="form.parent" :disabled="disabled">
+							<option value="0">--Select--</option>
+							<%- options %>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.parent" v-text="errors.parent"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="title" class="isRequired">Title</label>
+						<input type="text" class="form-control" id="title" v-model="form.title" name="title">
+						<div class="form-text form-error" v-if="!! errors.title" v-text="errors.title"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="country">Code</label>
+						<input type="text" class="form-control" id="code" v-model="form.code" name="code">
+						<div class="form-text form-error" v-if="!! errors.code" v-text="errors.code"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="description">Description</label>
+						<textarea name="description" id="description" class="form-control" rows="5" v-model="form.description"></textarea>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="status" class="isRequired">Status</label>
+						<select name="status" name="status" id="status" class="form-control" v-model="form.status" :disabled="disabled">
+							<option value="">--Select--</option>
+							<option v-for="stats in status" v-bind:value="stats.value" v-text="stats.text"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

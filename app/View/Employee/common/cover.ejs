@@ -1,0 +1,34 @@
+<div class="account-header">
+	<div class="avatar">
+		<span class="image">
+			<% if(employee.avatar){ %>
+			<img src="<%= baseUrl + '/uploads/avatar/'+ employee.avatar %>">
+			<% }else{ %>
+			<img src="<%= baseUrl + '/uploads/avatar/'+ employee.gender +'.png' %>">
+			<% } %>
+		</span>
+		<span class="camera" v-on:click="changeAvatar('<%= employee.id %>')">
+			<i class="mdi mdi-camera"></i>
+		</span>
+	</div>
+	<div class="info">
+		<% 
+			let middlename = employee.middle_name != null ? employee.middle_name.charAt(0) : '';
+			let suffix = employee.suffix != null && employee.suffix != '' ? ` ${employee.suffix}.` : '';
+			let nickName = employee.nick_name ? `"${employee.nick_name}"` : ''
+		%>
+		<h1><%= employee.last_name + suffix + ', ' + employee.first_name + ', ' + middlename + ' ' + nickName %></h1>
+		<ul>
+			<li>
+				<i class="mdi mdi-fingerprint"></i>
+				<span><%= employee.employee_number %></span>
+			</li>
+			<li>
+				<i class="mdi mdi-at"></i>
+				<span><%= employee.email %></span>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<% include ./avatar %>

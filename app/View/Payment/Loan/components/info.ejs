@@ -1,0 +1,80 @@
+<div class="widget custom-modal preview" v-if="previewModal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Loan Details</h4>
+			<button class="close-modal" v-on:click="previewClose"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<div class="body">
+			<div class="row">
+				<div class="col-md-6">
+					<small>Applicant</small>
+					<div v-text="preview.user.first_name +' '+ preview.user.last_name"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Label</small>
+					<div v-text="preview.label"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Amount</small>
+					<div v-text="$Global.currencyFormat(preview.amount)"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Mode of Payment</small>
+					<div v-text="preview.mode_of_payment == 0 ? 'Cash':'Salary Deduction'"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<small>Loan Frequency</small>
+					<div v-text="preview.frequency"></div>
+				</div>
+				<div class="col-md-6">
+					<small>Status</small>
+					<div>
+						<span v-if="preview.status == 0">Processing</span>
+						<span v-if="preview.status == 1">Approved</span>
+						<span v-if="preview.status == 2">Complete</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-bordered">
+						<thead class="bg-light">
+							<tr>
+								<th class="text-center">Year</th>
+								<th class="text-center">Month</th>
+								<th class="text-center">Period</th>
+								<th class="text-center">Amount</th>
+								<th class="text-center">Status</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="payment in preview.loan_payments">
+								<td class="text-center" v-text="payment.year"></td>
+								<td class="text-center" v-text="moment(payment.year +'-'+ payment.month).format('MMMM')"></td>
+								<td class="text-center" v-text="payment.period"></td>
+								<td class="text-center" v-text="$Global.currencyFormat(payment.amount)"></td>
+								<td class="text-center">
+									<span v-if="payment.status == 1" class="text-success"><i class="mdi mdi-check"></i> Complete</span>
+									<span v-if="payment.status == 0">Pending</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-md-6">
+					<small>Balance</small>
+					<div><h3 v-text="preview.balance"></h3></div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<button type="button" class="btn btn-secondary" v-on:click="previewClose">Close</button>
+		</div>
+		
+	</div>
+</div>

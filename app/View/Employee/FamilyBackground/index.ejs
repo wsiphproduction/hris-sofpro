@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-family-background inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<button class="btn btn-primary btn-sm" v-on:click="add"><i class="mdi mdi-plus"></i> Add Family Background</button>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col-sm-12">
+										<h4 class="text-center">Family Background</h4>
+										<table class="table table-bordered" v-if="familyBackground.length">
+											<thead class="bg-light">
+												<tr>
+                                                    <th class="text-center">Family Member Name</th>
+													<th class="text-center">Relationship</th>
+													<th class="text-center">Full Address</th>
+                                                    <th class="text-center">Contact Number</th>
+                                                    <th class="text-center">Date of Birth</th>
+                                                    <th class="text-center">Age</th>
+                                                    <th class="text-center">Occupation</th>
+                                                    <th class="text-center">Assign As Dependent</th>
+                                                    <% if(user_role.modify){ %>
+                                                        <td class="text-center">Action</td>
+                                                    <% } %>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(family, index) in familyBackgroundDisplay">
+                                                    <td class="text-center" col="6" v-text="`${family.first_name} ${family.middle_name} ${family.last_name}`"></td>
+                                                    <td class="text-center" v-text="family.relationship"></td>
+                                                    <td v-if="family.address" v-text="
+															`${family.address ? family.address.unit_building_residence_number : ''}
+															${family.address ? family.address.street : ''}
+															${family.address ? family.address.brgy : ''}
+															${family.address ? family.address.city : ''}
+															${family.address ? family.address.state_or_province : ''}
+															${family.address ? family.address.region : ''}
+															${family.address ? family.address.country : ''}
+															${family.address ? family.address.zip_code : ''}`"
+														>
+													</td>
+                                                    <td class="text-center" v-text="family.contact_number"></td>
+                                                    <td class="text-center" v-text="family.birthdate"></td>
+                                                    <td class="text-center" v-text="family.age"></td>
+                                                    <td class="text-center" v-text="family.occupation"></td>
+                                                    <td class="text-center" v-text="family.assign_as_dependent ? 'Yes' : 'No'"></td>
+                                                    <% if(user_role.modify){ %>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="edit(index)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                        </button>
+                                                    </td>
+                                                    <% } %>
+                                                </tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!familyBackground.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+				
+                <% include ./form %>
+                <% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-family-background>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Role</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-biometric inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Role</span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Biometics</h5>
+							<div v-if="!fetching && records.length">
+								<table class="table table-bordered">
+									<thead class="bg-light">
+										<tr>
+											<th>Label</th>
+											<th>IP Address</th>
+											<th class="text-center" width="100">Status</th>
+											<th class="text-center" width="120">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="record in records">
+											<td v-text="record.label"></td>
+											<td v-text="record.site"></td>
+											<td>
+												<div v-if="record.status == '1'"><span class="status active"></span> Active</div>
+												<div v-if="record.status != '1'"><span class="status"></span> Inactive</div>
+											</td>
+											<td class="text-center">
+												<button class="btn btn-sm btn-outline-primary" <%- user_role.modify ? 'v-on:click="edit(record.id)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+					<% if(user_role.write || user_role.modify){ %>
+					<!-- Modal -->
+					<% include ./components/form %>
+					<!-- Modal -->
+					<% } %>
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-biometric> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

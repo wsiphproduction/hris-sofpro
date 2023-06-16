@@ -1,0 +1,14 @@
+/node_modules
+.env
+/New Folder
+.DS_Store
+/assets/js/app.js
+/assets/reports/*
+/assets/uploads/avatar/*
+/assets/uploads/shifts/*
+/assets/uploads/imports/*
+/assets/uploads/biometric/*
+/assets/uploads/attachments/*
+/assets/uploads/leave_credit/*
+/assets/css/app.css
+/docs

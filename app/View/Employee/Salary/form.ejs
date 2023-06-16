@@ -1,0 +1,108 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl +'/employee/salary/'+ employee.shortid %>" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-sm-6">
+						<label for="from">From (Date)</label>
+						<datetime type="date" input-class="form-control " input-id="from" v-model="form.from"></datetime>
+						<div class="form-text form-error" v-if="!! errors.from" v-text="errors.from"></div>
+					</div>
+					<div class="form-group col-sm-6">
+						<label for="to">To (Date)</label>
+						<datetime type="date" input-class="form-control " input-id="to" v-model="form.to" :min-datetime="form.from"></datetime>
+						<div class="form-text form-error" v-if="!! errors.to" v-text="errors.to"></div>
+					</div>
+				</div>
+				<div v-if="type == 'salary'">
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label for="basic_pay">Basic Pay</label>
+							<input type="text" class="form-control" id="basic_pay" v-model="form.basic_pay">
+							<div class="form-text form-error" v-if="!! errors.basic_pay" v-text="errors.basic_pay"></div>
+						</div>
+						<div class="form-group col-sm-6">
+							<label for="mode">Mode</label>
+							<select class="form-control" id="mode" v-model="form.mode">
+								<option value="">--Select--</option>
+								<option value="0">Per Month</option>
+								<option value="1">Per Week</option>
+								<option value="2">Per Day</option>
+								<option value="3">Per Hour</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.mode" v-text="errors.mode"></div>
+						</div>
+					</div>
+				</div>
+				<div v-if="type == 'incentive'">
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label>Amount</label>
+							<input type="text" class="form-control" v-model="form.amount">
+							<div class="form-text form-error" v-if="!! errors.amount" v-text="errors.amount"></div>
+						</div>
+						<div class="form-group col-sm-6">
+							<label for="mode">Mode</label>
+							<select class="form-control" id="mode" v-model="form.mode">
+								<option value="">--Select--</option>
+								<option value="0">Cash</option>
+								<option value="1">Check</option>
+								<option value="2">Salary Addition</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.mode" v-text="errors.mode"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-12">
+							<label>Label</label>
+							<input type="text" class="form-control" v-model="form.label">
+							<div class="form-text form-error" v-if="!! errors.label" v-text="errors.label"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label for="period">Period</label>
+							<select class="form-control" id="period" v-model="form.period">
+								<option value="">--Select--</option>
+								<option value="0">A Only</option>
+								<option value="1">B Only</option>
+								<option value="2">A and B</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.period" v-text="errors.period"></div>
+						</div>
+						<div class="form-group col-sm-6">
+							<label for="status">Status</label>
+							<select class="form-control" id="status" v-model="form.status">
+								<option value="">--Select--</option>
+								<option value="1">Active</option>
+								<option value="0">Inactive</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-sm-6">
+							<label for="taxable">Taxable</label>
+							<select class="form-control" id="taxable" v-model="form.taxable">
+								<option value="">--Select--</option>
+								<option value="0">No</option>
+								<option value="1">Yes</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.status" v-text="errors.taxable"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,242 @@
+.home{
+	padding-top: 0.75rem;
+	& .menuSlider{
+		border:#000 solid 0;
+		& ul#announcement{
+			& li{
+				& a{
+					display: table;
+					width: 100%;
+					font-family: 'Open Sans', sans-serif;
+					background-color: $primary;
+					color: $white;
+					position: relative;
+					&:after{
+						content: "";
+						background-image: url('../img/4117072.jpg');
+						background-repeat: no-repeat;
+						background-position: center center; 
+						opacity: 0.1;
+						top: 0;
+						left: 0;
+						bottom: 0;
+						right: 0;
+						position: absolute;
+					}
+					&:hover{
+						text-decoration: none;
+					}
+					& .quote,
+					& .info{
+						display: table-cell;
+						vertical-align: top;
+						padding: 2rem 1rem;
+					}
+					& .quote{
+						width: 120px;
+						padding-right: 0;
+						& img{
+							width: 100%;
+						}
+					}
+					& .info{
+						& h4{
+							font-size: 22px;
+						}
+						& p{
+							font-size: 16px;
+							font-weight: 300;
+							line-height: 1.5rem;
+							display: -webkit-box;
+							-webkit-line-clamp: 3;
+							-webkit-box-orient: vertical; 
+							overflow: hidden;
+							margin-bottom: 0;
+						}
+					}
+				}
+			}
+		}
+		& .lSPager{
+			& a{
+				background: $primary;
+			}
+			& li{
+				&.active{
+					& a{
+						width: 16px;
+					}
+				}
+			}
+		}
+	}
+	& .panel-right{
+		& .digital-clock{
+			& .display{
+				border:$primary solid 1px;
+				background: $white;
+				border-radius: 5px;
+				padding: 15px 15px 20px 15px;
+				& .weekdays{
+					display: flex;
+					flex-wrap: wrap;
+					font-family: 'Arial', sans-serif;
+					& span{
+						flex-basis: 0;
+						flex-grow: 1;
+						max-width: 100%;
+						text-transform: uppercase;
+						text-align: center;
+						color: $grey;
+						font-size: 12px;
+						&.active{
+							color: $primary;
+							font-weight: 700;
+						}
+					}
+				}
+				& .digits{
+					text-align: center;
+					margin-top: 15px;
+					color: $primary;
+					& span.time{
+						font-family: 'digital-7regular';
+						position: relative;
+						font-size: 56px;
+						line-height: 56px;
+						font-weight: 700;
+						& span{
+							position: absolute;
+							font-family: 'Arial', sans-serif;
+							font-size: 13px;
+							text-transform: uppercase;
+							bottom: 0;
+							right: -30px;
+							line-height: 30px;
+							font-weight: 300;
+						}
+					}
+				}
+				& .date{
+					text-align: center;
+					text-transform: uppercase;
+					font-family: 'Arial', sans-serif;
+					margin-top: 10px;
+					color: rgba(0, 123, 255, 0.7);
+					font-size: 14px;
+					font-weight: 300;
+				}
+			}
+		}
+		& h5{
+			font-weight: 400;
+		}
+		& .card-time{
+			margin-top: 20px;
+			margin-bottom: 20px;
+			& .btn{
+				@extend .uppercase;
+				padding-top: 12px;
+				padding-bottom: 12px;
+				font-size: 14px;
+				font-weight: 500;
+			}
+		}
+	}
+	& .notification{
+		height: 557px;
+		//overflow: scroll;
+		//overflow-x: hidden;
+		& ul{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			& li{
+				& a{
+					display: table;
+					width: 100%;
+					color: $grey-darken-3;
+					&:hover{
+						text-decoration: none;
+						background: rgba(0,123,255,0.1);
+					}
+					& .avatar,
+					& .content{
+						display: table-cell;
+						border: 0;
+						vertical-align: top;
+						padding-top: 0.75rem;
+						padding-bottom: 0.75rem;
+					}
+					& .avatar{
+						width: 75px;
+						padding-left: 15px;
+						padding-right: 10px;
+						& span{
+							display: inline-block;
+							width: 50px;
+							height: 50px;
+							overflow: hidden;
+							border-radius: 50%;
+							& img{
+								width: 100%;
+								height: 100%;
+								object-fit: contain;
+							}
+						}
+					}
+					& .content{
+						padding-left: 10px;
+						padding-right: 15px;
+						& p{
+							margin-bottom: 0;
+						}
+					}
+				}
+			}
+		}
+		
+	}
+}
+ul.legend{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: table;
+	width: 100%;
+	& li{
+		display: table-cell;
+		& span{
+			display: inline-block;
+			height: 15px;
+			width: 15px;
+			
+			border-radius: 50%;
+			margin-right: 15px;
+		}
+		&.event{
+			color: $primary;
+			& span{
+				background: $primary;	
+				border: $primary solid 1px;
+			}
+			
+		}
+		&.leave{
+			color: $success;
+			& span{
+				background: $success;
+				border: $success solid 1px;	
+			}
+			
+		}
+		&.holiday{
+			color: $info;
+			& span{
+				background: $info;	
+				border: $info solid 1px;
+			}
+			
+		}
+	}
+}

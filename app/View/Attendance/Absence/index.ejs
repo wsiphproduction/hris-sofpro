@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Holiday</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-summary inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item">Attendance</li>
+						<li class="breadcrumb-item"><span class="active">Holiday</span></li>
+						<li class="search">
+							<div class="search-container">
+								<div class="input-group">
+									<input type="search" class="form-control form-control-sm" v-on:keyup="find()" v-model="keyword" placeholder="Search employees">
+								</div>
+							</div>
+							<div class="search-result" v-if="showResult">
+								<ul>
+									<li class="blank" v-if="!searchResult.length">
+										<i class="mdi mdi-information-outline"></i>
+										<div>No record found!</div>
+									</li>
+									<li class="tbl" v-for="result in searchResult">
+										<a v-bind:href="'./employee/general/'+ result.shortid">
+											<div class="image">
+												<span>
+													<img v-if="result.avatar" v-bind:src="'./uploads/avatar/'+ result.avatar">
+													<img v-else="result.avatar" v-bind:src="'./uploads/avatar/'+result.gender+'.png'">
+												</span>
+											</div>
+											<div class="content">
+												<div v-text="result.first_name +' '+ result.last_name"></div>
+												<small v-text="result.email"></small>
+											</div>
+										</a>
+									</li>
+									<!-- <li class="default"><a href="">The best part is you can do this with any button variant, too:</a></li> -->
+								</ul>
+							</div>
+						</li>
+					</ol>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="row">
+								<div class="col-sm-11">
+									<form class="form-inline">
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.company" style="max-width: 200px">
+											<option value="">Company</option>
+											<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.division" style="max-width: 200px">
+											<option value="">Division</option>
+											<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.department" style="max-width: 200px">
+											<option value="">Department</option>
+											<option v-for="department in departments" v-bind:style="param.division == department.division_id ? '': 'display: none;'" v-bind:value="department.id" v-text="department.department_name"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2  form-control-sm" v-model="param.section" style="max-width: 200px">
+											<option value="">Section</option>
+											<option v-for="section in sections" v-bind:style="param.department == section.department_id ? '': 'display: none;'" v-bind:value="section.id" v-text="section.section_name"></option>
+										</select>
+										<!-- <select class="form-control mb-2 mr-sm-2" v-model="param.absenteeism">
+											<option value="">Select</option>
+											<option value="1">Late</option>
+											<option value="2">No logout Twice</option>
+											<option value="3">No login Twice</option>
+										</select> -->
+										<datetime type="date" input-class="form-control mb-2 mr-sm-2" placeholder="Start Date" v-model="param.start"></datetime>
+										<datetime type="date" input-class="form-control mb-2 mr-sm-2" placeholder="End Date" v-model="param.end" :min-datetime="minDate"></datetime>
+										<label class="mb-2 mr-sm-2">Limit</label>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+											<option value="25">25</option>
+											<option value="50">50</option>
+											<option value="75">75</option>
+											<option value="100">100</option>
+										</select>
+										<button type="reset" class="btn btn-light mb-2" v-on:click="reset">Reset</button>
+									</form>
+								</div>
+								<div class="col-sm-1">
+									<!-- <a v-bind:href="'<%= baseUrl %>/attendance/summary/download?year='+ param.year +'&month='+ param.month +'&period='+ param.period +'&company='+ param.company +'&department='+ param.department +'&designation='+ param.job_title" class="btn btn-outline-primary float-right"><i class="mdi mdi-download"></i> Download</a> -->
+									
+									<!-- <div class="btn-group float-right">
+										<button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<i class="mdi mdi-download"></i> Download
+										</button>
+										<div class="dropdown-menu dropdown-menu-right">
+											<a class="dropdown-item" v-bind:href="'<%= baseUrl %>/attendance/dtr-management/download?format=excel&year='+ param.year +'&month='+ param.month +'&period='+ param.period +'&company='+ param.company +'&department='+ param.department +'&designation='+ param.job_title">
+												<i class="mdi mdi-file-excel"></i> Excel
+											</a>
+											<a class="dropdown-item" v-bind:href="'<%= baseUrl %>/attendance/dtr-management/download?format=pdf&year='+ param.year +'&month='+ param.month +'&period='+ param.period +'&company='+ param.company +'&department='+ param.department +'&designation='+ param.job_title">
+												<i class="mdi mdi-file-pdf"></i> Pdf
+											</a>
+										</div>
+									</div> -->
+								</div><!---->
+							</div>
+							<div class="row">
+								<div v-if="!fetching && records.length" class="col-sm-12 time_keeping">
+									<div class="tbl" v-for="record in records">
+										<div class="info">
+											<table class="table table-bordered">
+												<thead class="bg-light">
+													<tr>
+														<td rowspan="2">Employee</td>
+														<td rowspan="2">Employee ID</td>
+														<td class="text-center" colspan="2">Period</td>
+														<td class="text-center" colspan="2">Shift Schedule</td>
+														<td class="text-center" colspan="2">Daily Time Record</td>
+														<th rowspan="2" class="align-middle text-center">Regular Holiday Work Hours</td>
+														<th rowspan="2" class="align-middle text-center">Regular Holiday on Rest Day Work Hours</td>
+														<th rowspan="2" class="align-middle text-center">Regular Holiday and Special Holiday Work</td>
+														<th rowspan="2" class="align-middle text-center">Double Regular Holiday</td>
+														<th rowspan="2" class="align-middle text-center">Special Days as Declared by the President or Congress</td>
+														<th rowspan="2" class="align-middle text-center">Special Day Falling on Rest Day</td>
+														<!-- <th rowspan="2" class="align-middle text-center">LATE / UNDERTIME (mins)</td>
+														<th rowspan="2" class="align-middle text-center">NO LOGIN / LOGOUT</td>
+														<th rowspan="2" class="align-middle text-center">ACTUAL WORK HOURS</td>
+														<th rowspan="2" class="align-middle text-center">AWOL</td> -->
+													</tr>
+													<tr>
+														<td width="120" class="text-center">Date</td>
+														<td width="120" class="text-center">Day</td>
+														<td width="120" class="text-center">Start</td>
+														<td width="120" class="text-center">End</td>
+														<td width="120" class="text-center">Time-in</td>
+														<td width="120" class="text-center">Time-out</td>
+													</tr>
+												</thead>
+												<tbody>
+													<tr v-for="shift in record.shifts">
+														<td v-text="record.first_name +' '+ record.last_name"></td>
+														<td v-text="record.employee_number"></td>
+														<td class="text-center" v-text="moment(shift.date).format('MM/DD/YYYY')"></td>
+														<td class="text-center" v-text="moment(shift.date).format('dddd')"></td>
+														<td class="text-center" v-text="shift.check_in ? moment(shift.check_in).utc().format('hh:mmA') : '--'"></td>
+														<td class="text-center" v-text="shift.check_out ? moment(shift.check_out).utc().format('hh:mmA') : '--'"></td>
+														<td class="text-center" v-text="shift.actual_check_in ? moment(shift.actual_check_in).utc().format('hh:mmA') : '--'"></td>
+														<td class="text-center" v-text="shift.actual_check_out ? moment(shift.actual_check_out).utc().format('hh:mmA') : '--'"></td>
+														<td class="align-middle text-center" v-text="shift.reg_holiday_work_hrs ? shift.reg_holiday_work_hrs : 0"></td>
+														<td class="align-middle text-center" v-text="shift.reg_holiday_rest_day_work_hrs ? shift.reg_holiday_rest_day_work_hrs : 0"></td>
+														<td class="align-middle text-center" v-text="shift.reg_special_holiday_restday_work_hrs ? shift.reg_special_holiday_restday_work_hrs : 0"></td>
+														<td class="align-middle text-center" v-text="shift.double_reg_holiday ? shift.double_reg_holiday : 0"></td>
+														<td class="align-middle text-center" v-text="shift.special_holiday ? shift.special_holiday : 0"></td>
+														<td class="align-middle text-center" v-text="shift.special_holiday_restday ? shift.special_holiday_restday : 0"></td>
+														<!-- <td class="align-middle text-center">0</td>
+														<td class="align-middle text-center">0</td>
+														<td class="align-middle text-center">0</td>
+														<td class="align-middle text-center">No</td> -->
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+
+								</div>
+								<div class="col-sm-12">
+									<div class="loading" v-if="fetching">
+										<img src="<%= baseUrl + '/img/loading.gif' %>">
+										<p>Loading.....</p>
+									</div>
+									<div class="norecord" v-if="!fetching && !records.length">
+										<img src="<%= baseUrl + '/img/info.png' %>">
+										<p>Sorry, we couldn't find any matches.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<% include ../../Include/alert %>
+				</div>
+				
+			</div>
+		</attendance-summary>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

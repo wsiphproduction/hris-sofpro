@@ -1,0 +1,219 @@
+const formidable = require('formidable');
+const uuidv4 = require('uuid/v4');
+const fs = require('fs');
+const UserRole = require('../Helper/UserRole');
+const { 
+	UsersModel,
+	DocumentModel
+} = require('../../config/Sequelize');
+
+
+exports.index = function(req, res){
+	let user = res.locals.user;
+	let id 		= req.params.id;
+	let path    = req.path.split('/');
+	let segment = path[2];
+
+	UserRole.allRead(user).then(function(data){
+		usrRole = data;
+		return UsersModel.findOne({
+			where: {
+				shortid: id
+			}
+		})
+	}).then(function(data){
+		employee = data;
+		if(!employee){
+			res.render('Errors/404');
+		}else{
+			UserRole.get_role(user, 'employee-document').then(function(data){
+				user_role = data;
+				if(!user_role.read) {
+					res.render('Errors/403');
+				}else{
+					res.render('Employee/Document/index',{
+						employee: employee,
+						segment: segment,
+						user_role: user_role,
+						usrRole: usrRole,
+						route: 'employee'
+					});
+				}
+			});
+		}
+	});
+}
+
+exports.store = function(req, res){
+	
+	let id 		= req.params.id;
+	let path    = req.path.split('/');
+	let segment = path[2];
+
+	let uploadPath = './assets/uploads/documents/';
+
+	UsersModel.findOne({
+		where: {
+			shortid: id
+		}
+	}).then(function(data){
+		employee = data;
+		let form = new formidable.IncomingForm();
+		form.parse(req, function (err, fields, files) {
+			let attachment 	= files.document;
+			let size = attachment?.size;
+			req.body = fields;
+			req.body.document = size > 0 ? size : '';
+			
+			//req.checkBody('document').notEmpty().withMessage('The document field is required.');
+			req.checkBody('label').notEmpty().withMessage('The label field is required.');
+			let errors = req.validationErrors();
+			if(errors){
+				res.status(422).json({
+					success: false,
+		            errors
+				});
+			}else{
+				let hashName = null;
+				let original_name = null;
+				if(attachment && attachment.size > 0){
+					let path = attachment.path;
+					let origFileName = attachment.name;
+					let ext = origFileName.split(".");
+						ext = ext.pop()
+					hashName = uuidv4(origFileName) + '.'+ ext;
+					original_name = origFileName;
+					fs.readFile(path, function(err, data){
+						fs.writeFile(uploadPath + hashName, data, function(err){
+							if (err) console.log(err);
+							fs.unlink(path, function(err){
+		  						
+							});
+						});
+					});
+				}
+
+				let reqBody = {
+					user_id: employee.id,
+					label: req.body.label,
+					hash: hashName,
+					original_name: original_name,
+					description: req.body.description
+				}
+
+				DocumentModel.create(reqBody).then(function(data){
+					res.status(200).json({
+						success: true,
+						action: 'fetch',
+						msg: 'Document has been uploaded.'
+					});
+				});
+			}
+		});
+	});
+}
+
+exports.update = function(req, res){
+	let id 		= req.params.id;
+	let path    = req.path.split('/');
+	let segment = path[2];
+
+	let uploadPath = './assets/uploads/documents/';
+
+	UsersModel.findOne({
+		where: {
+			shortid: id
+		}
+	}).then(function(data){
+		employee = data;
+		let form = new formidable.IncomingForm();
+		form.parse(req, function (err, fields, files) {
+			let attachment 	= files.document;
+			let size = attachment?.size;
+			req.body = fields;
+			
+			req.checkBody('label').notEmpty().withMessage('The label field is required.');
+			let errors = req.validationErrors();
+			if(errors){
+				res.status(422).json({
+					success: false,
+		            errors
+				});
+			}else{
+
+				let id = req.body.id;
+				let hashName = null;
+				let original_name = null;
+				if(attachment && attachment.size > 0){
+					//Delete Old File
+					try {
+						if (fs.existsSync(uploadPath + req.body.filename)) {
+							fs.unlinkSync(uploadPath + req.body.filename);
+						}
+					} catch(err) {
+						console.log('Cant find.')
+					}
+					
+					let path = attachment.path;
+					let origFileName = attachment.name;
+					let ext = origFileName.split(".");
+						ext = ext.pop()
+					hashName = uuidv4(origFileName) + '.'+ ext;
+					original_name = origFileName;
+					fs.readFile(path, function(err, data){
+						fs.writeFile(uploadPath + hashName, data, function(err){
+							if (err) console.log(err);
+							fs.unlink(path, function(err){
+		  						
+							});
+						});
+					});
+				}
+
+				let reqBody = {
+					label: req.body.label,
+					description: req.body.description
+				}
+
+				if(hashName){
+					reqBody.hash = hashName;
+					reqBody.original_name = original_name;
+				}
+
+				DocumentModel.update(reqBody, {
+					where: {
+						id: id
+					}
+				}).then(function(data){
+					res.status(200).json({
+						success: true,
+						action: 'fetch',
+						msg: 'Document has been uploaded.'
+					});
+				});
+			}
+		});
+	});
+}
+
+exports.fetch = function(req, res){
+	let shortid = req.body.shortid;
+	UsersModel.findOne({
+		where: {
+			shortid: shortid
+		}
+	}).then(function(data){
+		employee = data;
+		return DocumentModel.findAll({
+			where: {
+				user_id: employee.id
+			}
+		});
+	}).then(function(data){
+		records = data;
+		res.status(200).json({
+			success: true,
+			records: records
+		});
+	});
+}

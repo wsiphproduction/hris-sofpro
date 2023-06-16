@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Reset Password</title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<div id="overlay">
+		<div class="lds-ripple"><div></div><div></div></div>
+		<div class="loading">Loading, please wait...</div>
+	</div>
+	<div class="container" id="app">
+		<div class="row">
+			<div class="col col-sm-4 offset-sm-4">
+				<password-reset inline-template>
+
+					<div class="form-default">
+						
+						<div class="header">
+							<img src="<%= baseUrl %>/img/logo.png" alt="">
+							<h1 v-if="successMessage =='' && user">Reset Password</h1>
+							<h1 v-if="successMessage =='' && !user">Error!</h1>
+							<h1 v-if="successMessage != ''">Success!</h1>
+							<div class="error" v-if="!! errors.server" v-text="errors.server"></div>
+						</div>
+						<div class="content">
+							<form v-if="successMessage == '' && user" action="<%= baseUrl +'/password/reset' %>" method="post" @submit.prevent="onSubmit">
+								<div class="form-group">
+									<label for="password">New Password</label>
+									<input type="password" class="form-control" id="password" v-model="form.password">
+									<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+								</div>
+								<div class="form-group">
+									<label for="confirm">Confirm New Password</label>
+									<input type="password" class="form-control" id="confirm" v-model="form.confirm">
+									<div class="form-text form-error" v-if="!! errors.confirm" v-text="errors.confirm"></div>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary btn-block">
+										<span v-if="!loading">Submit</span>
+										<span v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Loading...</span>
+									</button>
+									<a href="<%= baseUrl +'/login' %>" class="btn btn-link btn-block">Back to login</a>
+								</div>
+							</form>
+							<div v-if="successMessage == '' && !fetching && !user">
+								<p class="text-danger text-center">Sorry you cannot reset your password. Reset password token is invalid.</p>
+								<div class="text-center">
+									<a href="<%= baseUrl +'/login' %>" class="btn btn-link">Back to login</a>
+									<a href="<%= baseUrl +'/password/forgot' %>" class="btn btn-link">Forgot Password</a>
+								</div>
+							</div>
+							<div v-if="successMessage != ''">
+								<p class="text-success text-center" v-text="successMessage"></p>
+								<div class="text-center">
+									<a href="<%= baseUrl +'/login' %>" class="btn btn-primary">Login</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</password-reset>
+			</div>
+		</div>
+
+	</div>
+	
+	<% include ../Include/javascript %>
+	
+</body>
+</html>

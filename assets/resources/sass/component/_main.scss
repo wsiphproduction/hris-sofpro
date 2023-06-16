@@ -1,0 +1,150 @@
+main{
+	height: auto;
+	height: 50px;
+	margin-top: 55px;
+	margin-left: 200px;
+	min-width: 760px;
+	&.full-width{
+		margin-left: 0 !important;
+	}
+
+	& .bread-crumb{
+		clear: both;
+		background: $white;
+		height: 46px;
+		border-bottom: $grey-lighten-1 solid 1px;
+		& ol{
+			display: table;
+			padding: 0 20px;
+			list-style: none;
+			float: left;
+			& li{
+				display: table-cell;
+				&.breadcrumb-item{
+					line-height: 46px;
+				}				
+				&.search{
+					line-height: 0;
+					position: relative;
+					& .search-container{
+						margin-left: 20px;
+						min-width: 400px;
+					}
+					& .search-result{
+						position: absolute;
+						left: 20px;
+						right: 0;
+						top: 48px;
+						border: $grey-lighten-1 solid 1px;
+						z-index: 1000;
+						border-radius: 3px;
+						background: $white;
+						& ul{
+							float: none;
+							width: 100%;
+							margin: 0;
+							padding: 0;
+							list-style: none;
+							& li{
+								width: 100%;
+								display: block;
+								line-height: 1.5em;
+								&.blank{
+									text-align: center;
+									padding: 15px 0;
+									& i.mdi{
+										font-size: 24px;
+
+									}
+								}
+								&.default{
+									& a{
+										display: block;
+										color: $grey-darken-2;
+										padding: 15px 0;
+										margin: 0 15px;
+										border-bottom: $grey-lighten-3 solid 1px;
+										&:hover{
+											text-decoration: none;
+											color: $primary;
+										}
+									}
+									&:last-child a{
+										border-bottom: 0;
+									}
+								}
+								&.tbl{
+									padding:0 15px;
+									& a{
+										width: 100%;
+										color: $grey-darken-2;
+										display: table;
+										margin: 0 0;
+										border-bottom: $grey-lighten-3 solid 1px;
+										&:hover{
+											text-decoration: none;
+											color: $primary;
+										}
+										& .image,
+										& .content{
+											display: table-cell;
+											vertical-align: top;
+											padding: 15px 0;
+										}
+										& .image{
+											width: 55px;
+											& span{
+												display: inline-block;
+												width: 40px;
+												height: 40px;
+												border-radius: 50%;
+												overflow: hidden;
+												& img{
+													width: 100%;
+													height: 100%;
+													object-fit: cover;
+												}
+											}
+										}
+										& .content{
+											padding-left: 10px;
+											line-height: 1.5em;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		& .buttons{
+			float: right;
+			line-height: 36px;
+			height: 46px;
+			margin-right: 15px;
+			& .btn{
+				margin: 0;
+				float: none;
+			}
+		}
+		& .btn{
+			float: right;
+			margin: 5px 15px 0 0;
+		}
+		&:after{
+			content: '';
+			display: table;
+			width: 100%;
+			clear: both;
+		}
+	}
+	& .app-container{
+		margin: 15px 20px;
+		clear: both;
+	}
+}
+
+@media (max-width: 768px) {
+	
+}

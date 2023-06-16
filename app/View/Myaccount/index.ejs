@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= account.first_name +' '+ account.last_name %></title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../Include/header %>
+	
+	<% include ../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<div class="bread-crumb">
+			<ol>
+				<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+				<li class="breadcrumb-item"><span class="active"><%= account.first_name +' '+ account.last_name %></span></li>
+			</ol>
+		</div>
+		<myaccount inline-template>
+		<div class="app-container myaccount">
+			<div class="row">
+				<div class="col-sm-12 col-md-9">
+					<nav>
+								<div class="nav nav-tabs" id="nav-tab" role="tablist">
+									<a href="javascript:void(0);" class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" data-target="#personal_info">Personal Information</a>
+									<a href="javascript:void(0);" class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" data-target="#attendance">Attendance</a>
+									<a href="javascript:void(0);" class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" data-target="#salary">Salary/Incentive</a>
+									<a href="javascript:void(0);" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" data-target="#loan">Loans</a>
+									<a href="javascript:void(0);" class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" data-target="#Payslip">Payslip</a>
+								</div>
+							</nav>
+
+							<div class="tab-content" id="nav-tabContent">
+								<div class="tab-pane fade show active" id="personal_info" role="tabpanel">
+									<div class="account-body">
+										<div class="card">
+
+											<div class="card-body">
+												<h6>Personal Information</h6>
+												<hr>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Employee #</label>
+														<div class="uppercase"><strong><%= account.employee_number %></strong></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>First Name</label>
+														<div class="uppercase"><%= account.first_name %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Last Name</label>
+														<div class="uppercase"><%= account.last_name %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Gender</label>
+														<div class="uppercase"><%= account.gender %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Birthday</label>
+														<div class="uppercase"><%= account.birthdate ? moment(account.birthdate).format('MMMM DD, YYYY') : '' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Marital Status</label>
+														<div class="uppercase"><%= account.marital_status %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Email</label>
+														<div class="uppercase"><%= account.email %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Contact Number</label>
+														<div class="uppercase"><%= account.contact_number %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Nationality</label>
+														<div class="uppercase"><%= nationality.name %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>SSS Number</label>
+														<div class="uppercase"><%= account.sss_number %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Pagibig Number</label>
+														<div class="uppercase"><%= account.pagibig_number %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>TIN Number</label>
+														<div class="uppercase"><%= account.tin_number %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>PhilHealth Number</label>
+														<div class="uppercase"><%= account.philhealth_number %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-12">
+														<label>Current Address</label>
+														<div class="uppercase"><%= account.present_address != null ? account.present_address : '---' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-12">
+														<label>Permanent Address</label>
+														<div class="uppercase"><%= account.permanent_address != null ? account.permanent_address : '---' %></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="attendance">
+									<form class="form-inline">
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="filter_attendance.year">
+											<option value="">Year</option>
+											<option v-for="yr in year" v-bind:value="yr" v-text="yr"></option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="filter_attendance.month">
+											<option value="">Month</option>
+											<option value="1">January</option>
+											<option value="2">February</option>
+											<option value="3">March</option>
+											<option value="4">April</option>
+											<option value="5">May</option>
+											<option value="6">June</option>
+											<option value="7">July</option>
+											<option value="8">August</option>
+											<option value="9">September</option>
+											<option value="10">October</option>
+											<option value="11">November</option>
+											<option value="12">December</option>
+										</select>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="filter_attendance.period">
+											<option value="A">A</option>
+											<option value="B">B</option>
+										</select>
+									</form>
+									<div class="norecord" v-if="!attendance.length"><img src="<%= baseUrl %>/img/info.png"><p>Sorry, we couldn't find any matches.</p></div>
+									<table class="table table-bordered" v-if="attendance.length">
+										<thead>
+											<tr class="bg-light">
+												<th class="text-center" width="25%">Date</th>
+												<th class="text-center" width="25%">Shift</th>
+												<th class="text-center" width="16%">Time In</th>
+												<th class="text-center" width="16%">Time Out</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="att in attendance">
+												<td v-text="moment(att.date).format('MM/DD/YYYY')"></td>
+												<td>
+													<span v-if="att.type == '1'" v-text="moment(att.date +' '+ att.check_in).format('h:mmA') +'—'+ moment(att.date +' '+ att.check_out).format('h:mmA')"></span>
+													<span v-if="att.type == '2'">Flexible</span>
+													<span v-if="att.type == '3'" v-text="moment(att.date +' '+ att.between_start).format('h:mmA') +'—'+ moment(att.date +' '+ att.between_end).format('h:mmA')"></span>
+												</td>
+												<td v-bind:class="$Attendance.actualTime(att.date, att.actual_check_in, 'out') == '??' ? 'bg-tardy':''" v-text="$Attendance.actualTime(att.date, att.actual_check_in, 'in')"></td>
+												<td v-bind:class="$Attendance.actualTime(att.date, att.actual_check_out, 'out') == '??' ? 'bg-tardy':''" v-text="$Attendance.actualTime(att.date, att.actual_check_out, 'out')"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="tab-pane fade" id="salary" role="tabpanel">
+									<table class="table table-bordered" v-if="!(!incentive.length && !salary)">
+										<thead>
+											<tr class="bg-light">
+												<th class="text-center">Label</th>
+												<th class="text-center" width="100">Amount</th>
+												<th class="text-center" width="150">Mode</th>
+												<th class="text-center" width="80">Status</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Basic Salary</td>
+												<td v-text="salary.amount ? $Global.currencyFormat(salary.amount) : '0.00'"></td>
+												<td>
+													<span v-if="salary.mode == '0'">Per Month</span>
+													<span v-if="salary.mode == '1'">Per Week</span>
+													<span v-if="salary.mode == '2'">Per Day</span>
+													<span v-if="salary.mode == '3'">Per Hour</span>
+												</td>
+												<td>Active</td>
+											</tr>
+											<tr v-for="res in incentive">
+												<td v-text="res.label"></td>
+												<td v-text="res.amount ? $Global.currencyFormat(res.amount) : '0.00'"></td>
+												<td>
+													<span v-if="res.mode==0">Cash</span>
+													<span v-if="res.mode==1">Check</span>
+													<span v-if="res.mode==2">Salary Addition</span>
+												</td>
+												<td v-text="res.status == 1 ? 'Active':'Inactive'"></td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="norecord" v-if="!incentive.length && !salary"><img src="<%= baseUrl %>/img/info.png"><p>Sorry, we couldn't find any matches.</p></div>
+								</div>
+								<div class="tab-pane fade" id="loan" role="tabpanel">
+									<div class="norecord" v-if="!loans.length"><img src="<%= baseUrl %>/img/info.png"><p>Sorry, we couldn't find any matches.</p></div>
+									<table class="table table-bordered" v-if="loans.length">
+										<thead>
+											<tr class="bg-light">
+												<th class="text-center">Label</th>
+												<th class="text-center" width="80">Amount</th>
+												<th class="text-center" width="130">Mode of Payment</th>
+												<th class="text-center" width="80">Balance</th>
+												<th class="text-center" width="80">Status</th>
+												<th class="text-center" width="50">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(loan, index) in loans">
+												<td v-text="loan.label"></td>
+												<td v-text="loan.amount ? $Global.currencyFormat(loan.amount) : '0.00'"></td>
+												<td v-text="loan.mode_of_payment == '0' ? 'Cash':'Salary Deduction'"></td>
+												<td v-text="computeBalance(loan.loan_payments, loan.amount)"></td>
+												<td v-text="loan.status == '0' ? 'Processing': (loan.status == '1' ? 'Approved':'Complete') "></td>
+												<td>
+													<button class="btn btn-sm btn-outline-primary" v-on:click="info(index)"><i class="mdi mdi-information-outline"></i></button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="tab-pane fade" id="Payslip" role="tabpanel">
+									<form class="form-inline">
+										<label class="mb-2 mr-sm-2">Payroll Period</label>
+										<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="payslip_form.period">
+											<option value="">Select Period</option>
+											<option v-for="payroll in payrolls" v-bind:value="payroll.id" v-text="payroll.period"></option>
+										</select>
+									</form>
+									<div class="norecord" v-if="!payslip"><img src="<%= baseUrl %>/img/info.png"><p>Sorry, we couldn't find any matches.</p></div>
+									<div class="payment_salary" v-if="payslip">
+										<div class="cards">
+											<div><strong>JAVIER PROJECT MANAGERS, INC.</strong></div>
+											<div>Pay Period Ending, April 1-15, 2021</div>
+											<div>Payslip</div>
+											<p></p>
+											<table class="table table-borderless">
+												<tbody>
+													<tr>
+														<td width="15%"></td>
+														<td width="15%"></td>
+														<th class="text-center">Deductions:</th>
+														<td width="5%"></td>
+														<td width="15%"></td>
+														<th class="text-center" width="13%">Overtime:</th>
+														<th class="text-center" width="8%">Hrs:</th>
+														<th class="text-center" width="8%">Amount:</th>
+													</tr>
+													<tr>
+														<td>MONTHLY RATE</td>
+														<td v-text="payslip.monthly_rate && payslip.monthly_rate > 0 ? payslip.monthly_rate:'-'"></td>
+														<td>Tax</td>
+														<td v-text="payslip.tax && payslip.tax > 0 ? payslip.tax:'-'"></td>
+														<td></td>
+														<td>Regular Overtime</td>
+														<td>-</td>
+														<td>-</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td>30th SSS</td>
+														<td v-text="payslip.sss30th && payslip.sss30th > 0 ? payslip.sss30th:'-'"></td>
+														<td></td>
+														<td>Day-Off</td>
+														<td>-</td>
+														<td>-</td>
+													</tr>
+													<tr>
+														<td>This Pay</td>
+														<td v-text="payslip.this_pay && payslip.this_pay > 0 ? payslip.this_pay:'-'"></td>
+														<td>30th PHIC</td>
+														<td v-text="payslip.phic30th && payslip.phic30th > 0 ? payslip.phic30th:'-'"></td>
+														<td></td>
+														<td>Day Off OT</td>
+														<td>-</td>
+														<td>-</td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td>30th Pag-IBIG</td>
+														<td v-text="payslip.pagibig30th && payslip.pagibig30th > 0 ? payslip.pagibig30th:'-'"></td>
+														<td></td>
+														<td>Regular Holiday</td>
+														<td>-</td>
+														<td>-</td>
+													</tr>
+													<tr>
+														<td>Overtime Hrs.</td>
+														<td v-text="payslip.overtime_hrs && payslip.overtime_hrs > 0 ? payslip.overtime_hrs:'-'"></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td>Regular Holiday</td>
+														<td>-</td>
+														<td>-</td>
+													</tr>
+													<tr>
+														<td>Overtime Amount</td>
+														<td v-text="payslip.amount && payslip.amount > 0 ? payslip.amount:'-'"></td>
+														<td>Other Deductions</td>
+														<td v-text="payslip.other_deductions && payslip.other_deductions > 0 ? payslip.other_deductions:'-'"></td>
+														<td></td>
+														<td>Regular Hol. > 8 hrs</td>
+														<td>-</td>
+														<td>-</td>
+													</tr>
+													<tr>
+														<td>Gross Pay</td>
+														<td v-text="payslip.gross_pay && payslip.gross_pay > 0 ? payslip.gross_pay:'-'"></td>
+														<td>15th SSS Loan</td>
+														<td v-text="payslip.sss_loan15th && payslip.sss_loan15th > 0 ? payslip.sss_loan15th:'-'"></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>DeMinimis</td>
+														<td ></td>
+														<td>15th Pagibig Loan</td>
+														<td v-text="payslip.pagibig_loan15th && payslip.pagibig_loan15th > 0 ? payslip.pagibig_loan15th:'-'"></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<th>Reimburseable Allowance/De Minimis</th>
+														<th v-text="payslip.reimburseable_allowance && payslip.reimburseable_allowance > 0 ? payslip.reimburseable_allowance:'-'"></th>
+														<td>Employee Charges</td>
+														<td v-text="payslip.employee_charges && payslip.employee_charges > 0 ? payslip.employee_charges:'-'"></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Add:</td>
+														<td></td>
+														<td>Intellicare</td>
+														<td v-text="payslip.intellicare && payslip.intellicare > 0 ? payslip.intellicare:'-'"></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td>Other Fees & Allowances</td>
+														<td v-text="payslip.other_fees_allowances && payslip.other_fees_allowances > 0 ? payslip.other_fees_allowances:'-'"></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<th>Total Pay</th>
+														<th v-text="payslip.total_pay && payslip.total_pay > 0 ? payslip.total_pay:'-'"></th>
+														<th>Total Deductions</th>
+														<th></th>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<th>NET PAY</th>
+														<th v-text="payslip.net_pay && payslip.total_pay > 0 ? payslip.net_pay:'-'"></th>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+				</div>
+				<div class="col-sm-12 col-md-3">
+					<div class="row">
+						<div class="col-sm-6 col-md-12">
+							<div class="card">
+								<div class="card-header">LEAVE CREDIT</div>
+								<div v-if="policy.length">
+									<table class="table table-borderless">
+										<thead>
+											<tr>
+												<th>Leave Type</th>
+												<th class="text-center" width="50">Balance</th>
+												<th class="text-center" width="50">Utilized</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="res in policy">
+												<td v-text="res.name"></td>
+												<td class="text-center" v-text="res.leave_credit_policy ? (res.leave_credit_policy.balance ? res.leave_credit_policy.balance : '0') : '0'"></td>
+												<td class="text-center" v-text="res.leave_credit_policy ? (res.leave_credit_policy.utilized ? res.leave_credit_policy.utilized : '0') : '0'"></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-12">
+							<div class="accordion" id="account">
+								<!-- <div class="card">
+									<div class="card-header" id="headingOne">
+										<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+											<i class="mdi mdi-two-factor-authentication"></i> Two-Factor Authentication
+										</button>
+									</div>
+									
+									<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#account">
+										<div class="card-body">
+											<p>Enabling two-factor authentication adds an extra layer security when accessing your account by requiring you to enter one time passcode sent to your email.</p>
+											<% if(account.email){ %>
+											<form action="<%= baseUrl %>/myaccount/two-factor-authentication" method="post" @submit.prevent="onSubmit">
+												<div class="form-group">
+													<div class="custom-control custom-switch">
+														<input type="checkbox" class="custom-control-input" id="twoFactor" v-model="form.twoFactor">
+														<label class="custom-control-label" for="twoFactor">{{ form.twoFactor ? 'Enabled':'Disabled' }}</label>
+													</div>
+												</div>
+												<div class="form-group">
+													<label for="password">Enter your current password.</label>
+													<input type="password" class="form-control" id="password" v-model="form.password">
+													<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+												</div>
+												<button type="submit" class="btn btn-primary">Submit</button>
+											</form>
+											<% }else{ %>
+											<div class="dotted text-center">You dont have an email. Please contact administrator.</div>
+											<% } %>
+										</div>
+									</div>
+								</div> -->
+
+								<div class="card">
+									<div class="card-header" id="headingTwo">
+										<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+											<i class="mdi mdi-security-lock"></i> Change Password
+										</button>
+									</div>
+
+									<div id="collapseTwo" class="collapse" aria-labelledby="headingThree" data-parent="#account">
+										<div class="card-body">
+											<div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+												<span v-text="successMessage"></span>
+												<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<form action="<%= baseUrl %>/myaccount/change-password" method="post" @submit.prevent="onSubmit">
+												<div class="form-group">
+													<label for="current">Current Password</label>
+													<input type="password" class="form-control" id="current" v-model="form.current">
+													<div class="form-text form-error" v-if="!! errors.current" v-text="errors.current"></div>
+												</div>
+												<div class="form-group">
+													<label for="new">New Password</label>
+													<input type="password" class="form-control" id="new" v-model="form.new">
+													<div class="form-text form-error" v-if="!! errors.new" v-text="errors.new"></div>
+												</div>
+												<div class="form-group">
+													<label for="confirm">Confirm Password</label>
+													<input type="password" class="form-control" id="confirm" v-model="form.confirm">
+													<div class="form-text form-error" v-if="!! errors.confirm" v-text="errors.confirm"></div>
+												</div>
+												<button type="submit" class="btn btn-primary">Submit</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Accordion -->
+						</div>
+					</div>
+				</div>
+				<% include ./form %>
+				<% include ./info %>
+			</div>
+			<% include ../Include/alert %>
+		</div>
+		</myaccount>
+	</main>
+	</div>
+	
+	<% include ../Include/javascript %>
+
+</body>
+</html>

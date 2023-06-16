@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Configuration</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-config inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Configuration</span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<form action="<%= baseUrl %>/settings/configuration" method="post" @submit.prevent="onSubmit">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Configuration</h5>
+							<div class="alert alert-danger uppercase" role="alert">
+								<i class="mdi mdi-alert"></i> <strong>Important!</strong> Please make sure that all the information are correct. It may affect the whole process of the system or some process may not work properly.
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-6 col-lg-4">
+							<div class="card">
+								<div class="card-header">
+									Policy
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="policy_nolog">No Time in/ Time out policy</label>
+											<select id="policy_nolog" class="form-control" v-model="form.policy_nolog">
+												<option value="1">Half day</option>
+												<option value="0">Absent</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.policy_nolog" v-text="errors.policy_nolog"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">
+									Shifts
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="grace_period">Grace Period <span class="text-danger">(In minutes)</span></label>
+											<input type="text" class="form-control" id="grace_period" v-model="form.grace_period" min="0">
+											<div class="form-text form-error" v-if="!! errors.grace_period" v-text="errors.grace_period"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card" hidden>
+								<div class="card-header">
+									Server (Testing....)
+								</div>
+								<div class="card-body">
+									<div class="form-group">
+										<label for="timezone">Timezone (Ex: +08:00)</label>
+										<select class="form-control" id="timezone" v-model="form.timezone" disabled>
+											<option value="−12:00">−12:00</option>
+											<option value="−11:00">−11:00</option>
+											<option value="−10:00">−10:00</option>
+											<option value="−09:30">−09:30</option>
+											<option value="−09:00">−09:00</option>
+											<option value="−08:00">−08:00</option>
+											<option value="−07:00">−07:00</option>
+											<option value="−06:00">−06:00</option>
+											<option value="−05:00">−05:00</option>
+											<option value="−04:00">−04:00</option>
+											<option value="−03:30">−03:30</option>
+											<option value="−03:00">−03:00</option>
+											<option value="−02:00">−02:00</option>
+											<option value="−01:00">−01:00</option>
+											<option value="±00:00">±00:00</option>
+											<option value="+01:00">+01:00</option>
+											<option value="+02:00">+02:00</option>
+											<option value="+03:00">+03:00</option>
+											<option value="+03:30">+03:30</option>
+											<option value="+04:00">+04:00</option>
+											<option value="+04:30">+04:30</option>
+											<option value="+05:00">+05:00</option>
+											<option value="+05:30">+05:30</option>
+											<option value="+05:45">+05:45</option>
+											<option value="+06:00">+06:00</option>
+											<option value="+06:30">+06:30</option>
+											<option value="+07:00">+07:00</option>
+											<option value="+08:00">+08:00</option>
+											<option value="+08:45">+08:45</option>
+											<option value="+09:00">+09:00</option>
+											<option value="+09:30">+09:30</option>
+											<option value="+10:00">+10:00</option>
+											<option value="+10:30">+10:30</option>
+											<option value="+11:00">+11:00</option>
+											<option value="+12:00">+12:00</option>
+											<option value="+12:45">+12:45</option>
+											<option value="+13:00">+13:00</option>
+											<option value="+14:00">+14:00</option>
+										</select>
+										<div class="form-text form-error" v-if="!! errors.timezone" v-text="errors.timezone"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="card" hidden> 
+								<div class="card-header">
+									SMTP (Testing....)
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="host">Host</label>
+											<input type="text" class="form-control" id="host" v-model="form.smtp_host">
+											<div class="form-text form-error" v-if="!! errors.smtp_host" v-text="errors.smtp_host"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="port">Port</label>
+											<input type="text" class="form-control" id="port" v-model="form.smtp_port">
+											<div class="form-text form-error" v-if="!! errors.smtp_port" v-text="errors.smtp_port"></div>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="username">Username</label>
+											<input type="text" class="form-control" id="username" v-model="form.smtp_username">
+											<div class="form-text form-error" v-if="!! errors.smtp_username" v-text="errors.smtp_username"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="password">Password</label>
+											<input type="password" class="form-control" id="password" v-model="form.smtp_password">
+											<div class="form-text form-error" v-if="!! errors.smtp_password" v-text="errors.smtp_password"></div>
+										</div>
+									</div>
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="service">Service</label>
+											<input type="text" class="form-control" id="service" v-model="form.smtp_service">
+											<div class="form-text form-error" v-if="!! errors.smtp_service" v-text="errors.smtp_service"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-6 col-lg-4">
+							
+							<div class="card">
+								<div class="card-header">
+									Cutoff Period
+								</div>
+								<table class="table">
+									<tr>
+										<td class="text-center bg-light">Period</td>
+										<td class="text-center bg-light">From (Day)</td>
+										<td class="text-center bg-light">To (Day)</td>
+										<td class="text-center bg-light">Pay Day</td>
+									</tr>
+									<tr>
+										<td class="text-center">A</td>
+										<td>
+											<input type="number" class="form-control" v-model="form.cutoff_a_from" min="1" max="31">
+											<div class="form-text form-error" v-if="!! errors.cutoff_a_from" v-text="errors.cutoff_a_from"></div>
+										</td>
+										<td>
+											<input type="number" class="form-control" v-model="form.cutoff_a_to" min="1" max="31">
+											<div class="form-text form-error" v-if="!! errors.cutoff_a_to" v-text="errors.cutoff_a_to"></div>
+										</td>
+										<td>
+											<input type="number" class="form-control" v-model="form.cutoff_a_day" min="1" max="31">
+											<div class="form-text form-error" v-if="!! errors.cutoff_a_day" v-text="errors.cutoff_a_day"></div>
+										</td>
+									</tr>
+									<tr>
+										<td class="text-center">B</td>
+										<td>
+											<input type="number" class="form-control" v-model="form.cutoff_b_from" min="1" max="31">
+											<div class="form-text form-error" v-if="!! errors.cutoff_b_from" v-text="errors.cutoff_b_from"></div>
+										</td>
+										<td>
+											<input type="number" class="form-control" v-model="form.cutoff_b_to" min="1" max="31">
+											<div class="form-text form-error" v-if="!! errors.cutoff_b_to" v-text="errors.cutoff_b_to"></div>
+										</td>
+										<td>
+											<input type="number" class="form-control" v-model="form.cutoff_b_day" min="1" max="31">
+											<div class="form-text form-error" v-if="!! errors.cutoff_b_day" v-text="errors.cutoff_b_day"></div>
+										</td>
+									</tr>
+								</table>
+							</div>
+							<div class="card">
+								<div class="card-header">
+									Contribution Deduction
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="contribution_sss">SSS Contribution</label>
+											<select class="form-control" id="contribution_sss" v-model="form.contribution_sss">
+												<option value="A">Cutoff A</option>
+												<option value="B">Cutoff B</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.contribution_sss" v-text="errors.contribution_sss"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="contribution_philhealth">Philhealth Contribution</label>
+											<select class="form-control" id="contribution_philhealth" v-model="form.contribution_philhealth">
+												<option value="A">Cutoff A</option>
+												<option value="B">Cutoff B</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.contribution_philhealth" v-text="errors.contribution_philhealth"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="contribution_pagibig">Pagibig Contribution</label>
+											<select class="form-control" id="contribution_pagibig" v-model="form.contribution_pagibig">
+												<option value="A">Cutoff A</option>
+												<option value="B">Cutoff B</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.contribution_pagibig" v-text="errors.contribution_pagibig"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 col-md-6 col-lg-4">
+							<div class="card" hidden>
+								<div class="card-header">
+									Overtime Rate (Testing....)
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="overtime_regular">Regular Overtime (%)</label>
+											<input type="text" class="form-control" id="overtime_regular" v-model="form.overtime_regular" min="0">
+											<div class="form-text form-error" v-if="!! errors.overtime_regular" v-text="errors.overtime_regular"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="overtime_restday">Restday or Special Holiday (%)</label>
+											<input type="text" class="form-control" id="overtime_restday" v-model="form.overtime_restday" min="0">
+											<div class="form-text form-error" v-if="!! errors.overtime_restday" v-text="errors.overtime_restday"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="overtime_regular_holiday">Regular Holiday (%)</label>
+											<input type="text" class="form-control" id="overtime_regular_holiday" v-model="form.overtime_regular_holiday" min="0">
+											<div class="form-text form-error" v-if="!! errors.overtime_regular_holiday" v-text="errors.overtime_regular_holiday"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="overtime_restday_special_holiday">Restday and Special Holiday (%)</label>
+											<input type="text" class="form-control" id="overtime_restday_special_holiday" v-model="form.overtime_restday_special_holiday" min="0">
+											<div class="form-text form-error" v-if="!! errors.overtime_restday_special_holiday" v-text="errors.overtime_restday_special_holiday"></div>
+										</div>
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="overtime_restday_regular_holiday">Restday and Regular Holiday (%)</label>
+											<input type="text" class="form-control" id="overtime_restday_regular_holiday" v-model="form.overtime_restday_regular_holiday" min="0">
+											<div class="form-text form-error" v-if="!! errors.overtime_restday_regular_holiday" v-text="errors.overtime_restday_regular_holiday"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-header">
+									Attendance
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-sm-12 col-md-12 col-lg-6">
+											<label for="manual_log">Enable manual timein/timeout</label>
+											<select id="manual_log" class="form-control" v-model="form.manual_log">
+												<option value="no">No</option>
+												<option value="yes">Yes</option>
+											</select>
+											<div class="form-text form-error" v-if="!! errors.manual_log" v-text="errors.manual_log"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+					<hr>
+					<% if(user_role.modify){ %>
+					<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+					<button type="submit" class="btn btn-primary" v-else="loading">Save Changes</button>
+					<a href="" class="btn btn-light">Cancel</a>
+					<% } %>
+					</form>
+				</div><!-- App Container -->
+				<% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+
+		</setting-config> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

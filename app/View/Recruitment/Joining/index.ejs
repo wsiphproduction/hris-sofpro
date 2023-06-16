@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Recruitment</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<recruitment-joining inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Recruitment</span></li>
+						<li class="breadcrumb-item"><span class="active">Joining</span></li>
+						
+					</ol>
+					
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col-sm-12">
+							<h5>Candidates</h5>
+							<div v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead class="bg-light">
+											<tr>
+												<th class="text-center" width="200">Applicant</th>
+												<th class="text-center" width="200">Position</th>
+												<th class="text-center" width="200">Email</th>
+												<th class="text-center" width="150">Phone</th>
+												<th class="text-center">Address</th>
+												<th class="text-center" width="120">Status</th>
+												<th class="text-center" width="100">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="record in records">
+												<td>
+													<a v-if="record.status == '5'" v-bind:href="'<%= baseUrl + '/employee/general/' %>'+ record.shortid" v-text="record.first_name +' '+ record.last_name"></a>
+													<span v-if="record.status != '5'" v-text="record.first_name +' '+ record.last_name"></span>
+												</td>
+												<td v-text="record.position_applying_for"></td>
+												<td v-text="record.email"></td>
+												<td v-text="record.phone_number"></td>
+												<td v-text="record.current_address"></td>
+												<td>
+													<div v-if="record.status == '5'"><span class="status success"></span> Complete</div>
+													<div v-if="record.status == '4'"><span class="status primary"></span> Ongoing</div>
+												</td>
+												<td class="action text-center">
+													<% if(user_role.modify){ %>
+														<button title="edit" class="btn btn-outline-success btn-sm" :disabled="record.status == '5'" v-on:click="edit(record.id)">
+															<i class="mdi mdi-lead-pencil"></i>
+														</button>
+													<% }else{ %>
+													<button title="edit" class="btn btn-outline-success btn-sm" disabled><i class="mdi mdi-lead-pencil"></i></button>
+													<% } %>
+													
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./components/form %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</recruitment-joining> <!-- Inline Template -->
+		
+	</main>
+	</div>
+	
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

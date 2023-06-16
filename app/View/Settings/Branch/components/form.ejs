@@ -1,0 +1,72 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%- baseUrl %>/settings/branch" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="company" class="isRequired">Company</label>
+						<select id="company" class="form-control" v-model="form.company" name="company">
+							<option value="">--Select--</option>
+							<option v-for="company in companies" v-bind:value="company.value" v-text="company.text"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.company" v-text="errors.company"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="address" class="isRequired">Complete Address</label>
+						<input type="text" class="form-control" id="address" v-model="form.address" name="address">
+						<div class="form-text form-error" v-if="!! errors.address" v-text="errors.address"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="location" class="isRequired">Location</label>
+						<select id="location" class="form-control" v-model="form.location" name="location">
+							<option value="">--Select--</option>
+							<option v-for="location in locations" v-bind:value="location.id" v-text="location.location"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.location" v-text="errors.location"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="country" class="isRequired">Country</label>
+						<select id="country" class="form-control" v-model="form.country" name="country">
+							<option value="">--Select--</option>
+							<option v-for="country in countries" v-bind:value="country.value" v-text="country.text"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.country" v-text="errors.country"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="description">Description</label>
+						<textarea name="description" id="description" class="form-control" rows="5" v-model="form.description"></textarea>
+
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="status" class="isRequired">Status</label>
+						<select name="status" name="status" id="status" class="form-control" v-model="form.status">
+							<option value="">--Select--</option>
+							<option v-for="stats in status" v-bind:value="stats.value" v-text="stats.text"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<input type="hidden" name="id" v-model="form.id">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

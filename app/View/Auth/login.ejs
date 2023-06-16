@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Log In</title>
+	<% include ../Include/head %>
+
+</head>
+<body>
+	<div id="overlay">
+		<div class="lds-ripple"><div></div><div></div></div>
+		<div class="loading">Loading, please wait...</div>
+	</div>
+	<div class="container" id="app">
+		<div class="row">
+			<div class="col-sm-8 offset-sm-2 col-md-4 offset-md-4 col-lg-4 offset-lg-4">
+				<auth-login inline-template>
+					
+					<div class="form-default">	
+						<div class="header">
+							<img src="<%= baseUrl +'/uploads/'+ APP_LOGO %>" alt="">
+							<h1>Log In</h1>
+							<div class="error" v-if="!! errors.server" v-text="errors.server"></div>
+						</div>
+						<div class="content">
+							<div v-if="!errors.twoFactor">
+								<form action="<%=baseUrl + '/login' %>" method="post" @submit.prevent="onSubmit" >
+									<div class="form-group">
+										<label for="email">Email</label>
+										<input type="email" class="form-control" id="email" name="email" v-model="form.email">
+										<div class="form-text form-error" v-if="!! errors.email" v-text="errors.email"></div>
+									</div>
+
+									<div class="form-group">
+										<label for="password">Password</label>
+										<input type="password" class="form-control" id="password" name="password" v-model="form.password">
+										<div class="form-text form-error" v-if="!! errors.password" v-text="errors.password"></div>
+									</div>
+
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary btn-block">Submit</button>
+										<a href="<%= baseUrl +'/password/forgot' %>" class="btn btn-link btn-block">Forgot password.</a>
+									</div>
+
+								</form>
+							</div>
+							<div v-if="errors.twoFactor">
+								<div class="text-center">
+									<p>Because you've turned on two-factor authentication, we need to verify your identity. Enter the verification code that we'll send to your email.</p>
+								</div>
+								<form action="<%=baseUrl + '/login/verify' %>" method="post" @submit.prevent="onSubmit" >
+									<div class="form-group">
+										<label for="code">Enter Code</label>
+										<input type="text" class="form-control" id="code" name="code" v-model="form.code">
+										<div class="form-text form-error" v-if="!! errors.code" v-text="errors.code"></div>
+									</div>
+
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary btn-block">Submit</button>
+										<a href="<%= baseUrl +'/login' %>" class="btn btn-link btn-block">Cancel</a>
+									</div>
+								</form>
+							</div>
+							
+						</div>
+					</div>
+				</auth-login>
+			</div>
+		</div>
+
+	</div>
+	
+	<% include ../Include/javascript %>
+	
+</body>
+</html>

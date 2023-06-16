@@ -1,0 +1,1 @@
+Vue.component('custom-leave', require('./custom_leave/Index.vue'));

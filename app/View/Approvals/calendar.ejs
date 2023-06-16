@@ -1,0 +1,11 @@
+<div class="widget search-modal" v-if="isCalendar">
+	<div class="modal-container lg">
+		<div class="heading">
+			<h4 v-text="currentName"></h4>
+			<button class="close-modal" v-on:click="closeCalendar"><i class="mdi mdi-close"></i></button>
+		</div>
+		<div class="body">
+			<calendar :events="events" class="smallcalendar"></calendar>
+		</div>
+	</div>
+</div>

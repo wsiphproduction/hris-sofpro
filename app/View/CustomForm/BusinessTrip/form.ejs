@@ -1,0 +1,70 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+			<form action="<%- baseUrl %>/custom/businesstrip" method="post" @submit.prevent="onSubmit" enctype="multipart/form-data">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-12" v-if="!form.approver_name" v-if="method=='post'">
+						<div class="alert alert-warning alert-dismissible fade show" role="alert">
+							<span>Business trip required approver. Please contact administrator.</span>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					</div>
+					<div class="form-group col-md-6" v-if="method=='post'">
+						<label for="head">Approver</label>
+						<input type="text" class="form-control" v-model="form.approver_name" disabled>
+						<div class="form-text form-error" v-if="!! errors.approver_id" v-text="errors.approver_id"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="employee" class="isRequired">Employee</label>
+						<select class="form-control" v-model="form.employee" @change="onChangeEmployee($event)" v-bind:disabled="method=='put'">
+							<option value="">Select Employee</option>
+							<option v-for="user in users" v-bind:value="user.id" v-text="user.last_name+', '+user.first_name +' : ' + user.employee_number"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.employee" v-text="errors.employee"></div>
+					</div>
+				</div>
+				
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="start_date" class="isRequired">Start Date</label>
+						<datetime type="date" input-class="form-control " input-id="start_date" v-model="form.start_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="end_date" class="isRequired">End Date</label>
+						<datetime type="date" input-class="form-control " input-id="end_date" v-model="form.end_date" :min-datetime="minDate"></datetime>
+						<div class="form-text form-error" v-if="!! errors.end_date" v-text="errors.end_date"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-12">
+						<label for="note">Note</label>
+						<textarea id="note" class="form-control" rows="5" v-model="form.note"></textarea>
+						<div class="form-text form-error" v-if="!! errors.note" v-text="errors.note"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="attachment">Attachment</label>
+						<input type="file" id="attachment" class="form-control-file" accept="image/*, application/pdf" v-on:change="onAttachmentChange($event)" name="attachment">
+						<div class="form-text form-error" v-if="!! errors.attachment" v-text="errors.attachment"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<input type="hidden" name="id" v-model="form.id">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+			</form>
+		
+	</div>
+</div>

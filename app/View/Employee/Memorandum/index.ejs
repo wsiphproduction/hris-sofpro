@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-memo inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<button class="btn btn-primary btn-sm" v-on:click=""><i class="mdi mdi-download"></i> Export </button>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col col-sm">
+										<div class="card">
+											<div class="card-header">
+												Memorandum
+												<% if(user_role.modify){ %>
+													<button class="btn btn-primary" v-on:click="addMemo('<%= employee.id %>')">Add New</button>
+												<% } %>
+											</div>
+											<div class="table-resposive">
+												<table class="table table-bordered noBorderLeftRight">
+													<tbody>
+														<tr>
+															<td class="text-center">Memo</td>
+															<td class="text-center">Memo subject</td>
+															<td class="text-center">Memo Description</td>
+															<td class="text-center">Memorandum Date</td>
+															<td class="text-center">Issued By</td>
+															<td class="text-center">Issued To</td>
+															<td class="text-center">Memorandum Effectivity Date</td>
+															<% if(user_role.modify){ %>
+																<td class="action text-center nowrap">Action</td>
+															<% } %>
+														</tr>
+														<tr v-for="(memo, index) in memos">
+															<td>{{memo.memo}}<!--<i class="mdi mdi-attachment mdi-18px btn-outline-primary"></i>--></td>
+															<td>{{memo.subject}}</td>
+															<td>{{memo.description}}</td>
+															<td>{{memo.date}}</td>
+															<td>{{memo.issued_by}}</td>
+															<td>{{memo.issued_to}}</td>
+															<td>{{memo.effectivity_date}}</td>
+															<% if(user_role.modify){ %>
+															<td>
+																<button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="editMemo(index)">
+																	<i class="mdi mdi-lead-pencil"></i>
+																</button>
+																<button class="btn btn-sm btn-outline-primary" title="Archive" v-on:click="archive(memo.id, 'employee/memorandum/archive')">
+																<i class="uil uil-trash-alt"></i>
+																</button>
+															</td>
+															<% } %>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% include ./form %>
+					<% include ../../Include/alert %>
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-memo>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

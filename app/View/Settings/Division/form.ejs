@@ -1,0 +1,115 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form v-bind:action="form_action" method="post" @submit.prevent="onSubmit" v-bind="form_attrs">
+			<div class="body">
+				<div v-if="isImport">
+					<div class="alert alert-primary">
+						The file must be in <strong>CSV format and comma separated values</strong>.<br> 
+						Insert format: <strong><a href="<%= baseUrl %>/csv/divisions.csv">click here</a></strong>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="operation" class="isRequired">Operation</label>
+							<select class="form-control" id="operation" v-model="form.operation">
+								<option value="">Select Operation</option>
+								<option value="create">Create</option>
+								<option value="update">Update</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.operation" v-text="errors.operation"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="csv">Select CSV</label>
+	                        <input type="file" id="csv" v-on:change="fileUpload($event, 'csv')" accept=".csv" class="form-control-file">
+	                        <div class="form-text form-error" v-if="!! errors.file" v-text="errors.file"></div>
+						</div>
+					</div>
+				</div>
+				<div v-else>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="company" class="isRequired">Company</label>
+							<select class="form-control" id="company" v-model="form.company">
+								<option value="">Select Company</option>
+								<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.company" v-text="errors.company"></div>
+						</div>
+						
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="division_name" class="isRequired">Division Name</label>
+							<input type="text" id="division_name" class="form-control" @keyup="generateCode" v-model="form.division_name">
+							<div class="form-text form-error" v-if="!! errors.division_name" v-text="errors.division_name"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="division_code" class="isRequired">Division Code</label>
+							<input type="text" id="division_code" class="form-control" v-model="form.division_code">
+							<div class="form-text form-error" v-if="!! errors.division_code" v-text="errors.division_code"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="manager" class="isRequired">Main Approver</label>
+							<select class="form-control" id="manager" v-model="form.manager">
+								<option value="">Select Main Approver</option>
+								<option v-for="user in users" v-bind:value="user.id" v-text="user.first_name+' '+user.last_name"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.manager" v-text="errors.manager"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="assistant_manager">Alternate Approver</label>
+							<select class="form-control" id="assistant_manager" v-model="form.assistant_manager">
+								<option value="">Select Alternate Approver</option>
+								<option v-for="user in users" v-bind:value="user.id" v-text="user.first_name+' '+user.last_name"></option>
+							</select>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<label for="secretary" class="isRequired">Secretary</label>
+							<select class="form-control" id="secretary" v-model="form.secretary">
+								<option value="">Select Secretary</option>
+								<option v-for="user in users" v-bind:value="user.id" v-text="user.first_name+' '+user.last_name"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.secretary" v-text="errors.secretary"></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="alternate_secretary" >Alternate Secretary</label>
+							<select class="form-control" id="alternate_secretary" v-model="form.alternate_secretary">
+								<option value="">Select Secretary</option>
+								<option v-for="user in users" v-bind:value="user.id" v-text="user.first_name+' '+user.last_name"></option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.alternate_secretary" v-text="errors.alternate_secretary"></div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-12">
+							<label for="description">Description</label>
+							<textarea class="form-control" id="description" rows="5" v-model="form.description"></textarea>
+						</div>
+						<div class="form-group col-md-6">
+							<label for="status" class="isRequired">Status</label>
+							<select id="status" class="form-control" v-model="form.status">
+								<option value="">Select Status</option>
+								<option value="0">Inactive</option>
+								<option value="1">Active</option>
+							</select>
+							<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

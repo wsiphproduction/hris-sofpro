@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Leave Management</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<leave-management inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Attendance</span></li>
+						<li class="breadcrumb-item"><span class="active">Leave</span></li>
+						<li class="search">
+							<div class="search-container">
+								<div class="input-group">
+									<input type="search" class="form-control form-control-sm" v-on:keyup="find()"  v-on:click="clear()" v-model="keyword" placeholder="Search employees">
+								</div>
+							</div>
+						</li>
+					</ol>
+					<a v-bind:href="exportLink" class="btn btn-primary btn-sm" target="_blank"><i class="mdi mdi-download"></i> Export</a>
+					<% if(user_role.modify){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> Upload CSV</a>
+					<% } %>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Leave</h5>
+							<form class="form-inline">
+								<% if(user_role.read){ %>
+								<select :disabled='!isUserHRGeneralist()' class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.company" style="max-width: 200px">
+									<option value="">- Company -</option>
+									<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+								</select>
+								<select :disabled='!isUserHRGeneralist()' class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.division" style="max-width: 200px">
+									<option value="">- Division -</option>
+									<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+								</select>
+								<select :disabled='!isUserHRGeneralist()' class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.department" style="max-width: 200px">
+									<option value="">- Department -</option>
+									<option v-for="department in departments" v-bind:value="department.id" v-text="department.department_name"></option>
+								</select>
+								<select :disabled='!isUserHRGeneralist()' class="form-control mb-2 mr-sm-2  form-control-sm" v-model="param.section" style="max-width: 200px">
+									<option value="">- Section -</option>
+									<option v-for="section in sections" v-bind:value="section.id" v-text="section.section_name"></option>
+								</select>
+								<% } %>
+								<datetime type="date" input-class="form-control mb-2 mr-sm-2" placeholder="Start Date" v-model="param.start"></datetime>
+								<datetime type="date" input-class="form-control mb-2 mr-sm-2" placeholder="End Date" v-model="param.end" :min-datetime="minDate"></datetime>
+								<label class="mb-2 mr-sm-2">Limit</label>
+								<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+									<option value="25">25</option>
+									<option value="50">50</option>
+									<option value="75">75</option>
+									<option value="100">100</option>
+								</select>
+								<button type="reset" class="btn btn-light mb-2" v-on:click="reset">Reset</button>
+							</form>	
+							
+							<div v-if="!fetching && records.length">
+								<table class="table table-bordered">
+									<thead class="bg-light noPadding">
+										<tr>
+											<th width="150" class="align-middle text-center">Date Filed</th>
+											<th width="250" class="align-middle text-center">Employee No</th>
+											<th width="250" class="align-middle text-center">Employee</th>
+											<th width="200" class="align-middle text-center">Date</th>
+											<th width="150" class="align-middle text-center">No. of Days</th>
+											<th width="150" class="align-middle text-center">Leave Type</th>
+											<th width="150" class="align-middle text-center">Credit</th>
+											<th class="align-middle text-center">Purpose</th>
+											<th width="200" class="align-middle text-center">Approved By</th>
+											<th width="120" class="align-middle text-center">Status</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="record in records">
+											<td v-text="$Carbon(record.created_at)"></td>
+											<td v-text="record.applicant.employee_number"></td>
+											<td v-text="record.applicant.last_name +', '+ record.applicant.first_name"></td>
+											<td class="text-center" v-text="moment(record.start_date).format('MM/DD/YYYY') +' — '+ moment(record.end_date).format('MM/DD/YYYY')"></td>
+											<td class="text-center" v-text="record.no_of_days +' day(s)'"></td>
+											<td class="text-center" v-text="record.leave_policy.name"></td>
+											<td class="text-center" v-text="record.credit==1 ?'With Pay':'Without Pay'"></td>
+											<td>
+												<span v-text="record.reason"></span>
+												<span v-if="record.attachment"><a v-bind:href="'./uploads/attachments/' + record.attachment" target="_blank" title="Attachment"><i class="mdi mdi-attachment mdi-18px"></i></a></span>
+											</td>
+											<td v-text="record.primary ? record.primary.last_name +', '+ record.primary.first_name:'--'"></td>
+											<td>
+												<div v-if="record.primary_status == '1'"><span class="status primary"></span> Pending</div>
+												<div v-if="record.primary_status == '2'"><span class="status success"></span> Approved</div>
+												<div v-if="record.primary_status == '3'"><span class="status warning"></span> Declined</div>
+												<div v-if="record.primary_status == '4'"><span class="status secondary"></span> Closed</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<ul class="pagination" v-if="counts">
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+								</li>
+								<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+									<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+								</li>
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+								</li>
+							</ul>
+
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+					<% include ./components/form %>
+				</div>
+				<% include ../../Include/alert %>
+			</div>
+		</leave-management>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

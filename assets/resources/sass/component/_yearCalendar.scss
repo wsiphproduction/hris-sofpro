@@ -1,0 +1,88 @@
+.yearcalendar{
+	& .calendar-header{
+		border: 0 !important;
+		text-align: left;
+		& table{
+			width: 550px !important;
+			margin: 0 !important;
+			& th{
+				padding: 5px 0 !important;
+				font-size: 36px !important;
+				line-height: 40px;
+				vertical-align: bottom;
+				&.prev,
+				&.next{
+					vertical-align: top;
+					& span{
+						line-height: 20px !important;
+						padding: 0 !important;
+					}
+				}
+				&.year-title{
+					width: 100px;
+					font-weight: 500 !important;
+					&.year-neighbor{
+						font-weight: 400 !important;
+						font-size: 30px !important;
+					}
+					&.year-neighbor2{
+						font-size: 20px !important;
+						font-weight: 400 !important;
+					}
+				}
+			}
+		}
+	}
+	& .month-container{
+		height: 270px !important;
+		margin-bottom: 25px;
+		& table{
+			height: 270px;
+			&.month{
+				//border: $grey-lighten-3 solid 1px;
+				box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important;
+				& thead{
+					& th{
+						border: 0 !important;
+						&.day-header{
+							padding: 3px 0;
+						}
+					}
+				}
+				& th,
+				& td{
+					width: 35px;
+					height: 20px;
+				}
+				& .month-title{
+					background-color: $grey-lighten-2;
+					padding: 10px 0;
+				}
+				& td.day{
+					&.shift{
+						position: relative;
+						&:before{
+							content: '';
+							display: inline-block;
+							position: absolute;
+							border-radius: 3px;
+							height: 29px;
+							top: 50%;
+							left: 1px;
+							right: 1px;
+							margin-top: -15px;
+							background: #69f0ae;
+							z-index: -1;
+						}
+					}
+					& .day-content{
+						border-radius: 3px;
+						margin-left: 1px;
+						margin-right: 1px;
+					}
+				}
+			}
+		}
+	}
+	
+}

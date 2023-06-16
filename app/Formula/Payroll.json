@@ -1,0 +1,14 @@
+{
+	"NightDifferential": 0.10,
+	"RestDay":	1.3,
+	"SpecialNonWorkingDay":	1.3,
+	"SpecialNonWorkingDayAndRestDay": 1.5,
+	"RegularHoliday": 2,
+	"RegularHolidayAndRestDay":	2.6,
+	"OvertimeNormalDay": 1.25,
+	"OvertimeRestDay":	1.69,
+	"OvertimeSpecialNonWorkingDay":	1.69,
+	"OvertimeSpecialNonWorkingDayAndRestDay": 1.95,
+	"OvertimeRegularHoliday": 2.6,
+	"OvertimeRegularHolidayAndRestDay":	3.39,
+}

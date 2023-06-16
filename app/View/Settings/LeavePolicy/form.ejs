@@ -1,0 +1,110 @@
+<div class="widget custom-modal" v-if="modal">
+	<div class="modal-container">
+		<div class="heading">
+			<h4>Policy Detail.</h4>
+			<button class="close-modal" v-on:click="closeModal"><i class="mdi mdi-close"></i></button>
+		</div>
+		
+		<form action="<%= baseUrl %>/settings/leave-policy" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="name">Leave name. <small>(Ex: Vacation Leave)</small></label>
+						<input type="text" class="form-control" id="name" v-model="form.name">
+						<div class="form-text form-error" v-if="!! errors.name" v-text="errors.name"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="code">Code</label>
+						<input type="text" class="form-control" id="code" v-model="form.code">
+						<div class="form-text form-error" v-if="!! errors.code" v-text="errors.code"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="total">Total number of leave per year. <small>(number of day(s))</small></label>
+						<input type="text" class="form-control" id="total" v-model="form.total">
+						<div class="form-text form-error" v-if="!! errors.total" v-text="errors.total"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="gender">Specific gender <small>(if any)</small></label>
+						<select id="gender" class="form-control" v-model="form.gender">
+							<option value="">For all</option>
+							<option value="Male">Male</option>
+							<option value="Female">Female</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.gender" v-text="errors.gender"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="probation_validity">Probation period before validity. <small>(in months from the date of hiring)</small></label>
+						<input type="text" class="form-control" id="probation_validity" v-model="form.probation_validity">
+						<div class="form-text form-error" v-if="!! errors.probation_validity" v-text="errors.probation_validity"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="initial">Initial leave credit after probation period validity.</label>
+						<input type="text" class="form-control" id="initial" v-model="form.initial">
+						<div class="form-text form-error" v-if="!! errors.initial" v-text="errors.initial"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="company">Company <small>(if any)</small></label>
+						<select id="company" class="form-control" v-model="form.company">
+							<option value="">For All</option>
+							<% if(company.length){ %>
+							<% for(let key in company){ %>
+							<option value="<%= company[key]['id'] %>"><%= company[key]['company']['name'] +' - '+ company[key]['address'] %></option>
+							<% } %>
+							<% } %>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.company" v-text="errors.company"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="department">Department <small>(if any)</small></label>
+						<select id="department" class="form-control" v-model="form.department">
+							<option value="">For All</option>
+							<% if(department.length){ %>
+							<% for(let key in department){ %>
+							<option value="<%= department[key]['id'] %>"><%= department[key]['title'] %></option>
+							<% } %>
+							<% } %>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.department" v-text="errors.department"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="cycle">Cycle</label>
+						<select id="cycle" class="form-control" v-model="form.cycle">
+							<option value="">Select Cycle</option>
+							<option value="12">Every Year</option>
+							<option value="6">Six months</option>
+							<option value="0">Anniversary</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.cycle" v-text="errors.cycle"></div>
+					</div>
+					<div class="form-group col-md-12">
+						<label for="description">Description <small>(if any)</small></label>
+						<textarea id="description" class="form-control" rows="5" v-model="form.description"></textarea>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="status" class="isRequired">Status</label>
+						<select name="status" id="status" class="form-control" v-model="form.status">
+							<option value="">Select Status</option>
+							<option value="1">Active</option>
+							<option value="0">Inactive</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="carry_over" class="isRequired">Carry over unused leave</label>
+						<select name="carry_over" id="carry_over" class="form-control" v-model="form.carry_over">
+							<option value="">Select Status</option>
+							<option value="0">No</option>
+							<option value="1">Yes</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.carry_over" v-text="errors.carry_over"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeModal">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

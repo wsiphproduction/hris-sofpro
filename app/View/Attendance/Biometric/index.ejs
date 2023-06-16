@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Biometric</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<attendance-biometric inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Attendance</span></li>
+						<li class="breadcrumb-item"><span class="active">Biometric</span></li>
+					</ol>
+					<% if(user_role.modify){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> Upload CSV</a>
+					<% } %>
+				</div>
+
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Biometric</h5>							
+							<div v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead class="bg-light">
+											<tr>
+												<th class="align-middle">File</th>
+												<th class="text-center">Device</th>
+												<th class="text-center">Date Created</th>
+												<th width="150" class="text-center align-middle">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="record in records">
+												<td>
+													<a v-bind:href="'<%= 'uploads/biometric/' %>'+ record.filename" v-text="record.filename"></a>
+												</td>
+												<td v-text="record.biometric.label"></td>
+												<td class="text-center" v-text="moment(record.date).format('MMMM DD, YYYY')"></td>
+												<td class="text-center">
+													<a v-bind:href="'<%= 'uploads/biometric/' %>'+ record.filename" class="btn btn-sm btn-outline-primary"><i class="mdi mdi-download"></i> Download</a>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+					
+					<% include ./form %>
+
+				</div>
+				
+				<% include ../../Include/alert %>
+
+			</div>
+		</attendance-biometric>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

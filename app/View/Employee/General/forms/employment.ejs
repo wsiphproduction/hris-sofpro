@@ -1,0 +1,210 @@
+<div class="widget custom-modal" v-if="employment">
+	<div class="modal-container">
+		<div class="heading">
+			<h4 v-text="modalText"></h4>
+			<button class="close-modal" v-on:click="closeEmployment"><i class="mdi mdi-close"></i></button>
+		</div>
+		<form action="<%= baseUrl +'/employee/general/employment/create_update' %>" method="post" @submit.prevent="onSubmit">
+			<div class="body">
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="employee_number" class="isRequired">Employee Number</label>
+						<input type="text" class="form-control" id="employee_number" v-model="form.employee_number" readonly>
+						<div class="form-text form-error" v-if="!! errors.employee_number" v-text="errors.employee_number"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="cost_center">Cost Center</label>
+						<input type="text" class="form-control" id="cost_center" v-model="form.cost_center">
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="company" class="isRequired">Company</label>
+						<select id="company" class="form-control" v-model="form.company">
+							<option value="">--Select--</option>
+							<option v-for="company in companies" v-bind:value="company.id" v-text="company.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.company" v-text="errors.company"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="division" class="isRequired">Division</label>
+						<select id="division" class="form-control" v-model="form.division">
+							<option value="">--Select--</option>
+							<option v-for="division in divisions" v-bind:value="division.id" v-text="division.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.division" v-text="errors.division"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="department" class="isRequired">Department</label>
+						<select id="department" class="form-control" v-model="form.department">
+							<option value="">--Select--</option>
+							<option v-for="department in departments" v-bind:value="department.id" v-text="department.department_name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.department" v-text="errors.department"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="section">Section</label>
+						<select id="section" class="form-control" v-model="form.section">
+							<option value="">--Select--</option>
+							<option v-for="section in sections" v-bind:value="section.id" v-text="section.section_name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.section" v-text="errors.section"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="position" class="isRequired">Position</label>
+						<select id="position" class="form-control" v-model="form.position">
+							<option value="">--Select--</option>
+							<option v-for="position in positions" v-bind:value="position.id" v-text="position.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.position" v-text="errors.position"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="position_classification" class="isRequired">Position Classification</label>
+						<select id="position_classification" class="form-control" v-model="form.position_classification">
+							<option value="">--Select--</option>
+							<option v-for="position_classification in position_classifications" v-bind:value="position_classification.id" v-text="position_classification.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.position_classification" v-text="errors.position_classification"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="position_category" class="isRequired">Position Category</label>
+						<select id="position_category" class="form-control" v-model="form.position_category">
+							<option value="">--Select--</option>
+							<option v-for="position_category in position_categories" v-bind:value="position_category.id" v-text="position_category.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.position_category" v-text="errors.position_category"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="location" class="isRequired">Location</label>
+						<select id="location" class="form-control" v-model="form.location">
+							<option value="">--Select--</option>
+							<option v-for="location in locations" v-bind:value="location.id" v-text="location.location"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.location" v-text="errors.location"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="work_area" class="isRequired">Work Area</label>
+						<select id="work_area" class="form-control" v-model="form.work_area">
+							<option value="">--Select--</option>
+							<option v-for="work_area in work_areas" v-bind:value="work_area.id" v-text="work_area.name"></option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.work_area" v-text="errors.work_area"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="approving_organization" class="isRequired">Approving Organization</label>
+						<select id="approving_organization" class="form-control" v-model="form.approving_organization">
+							<option value="">--Select--</option>
+							<option value="division">Division</option>
+							<option value="department">Department</option>
+							<option value="section">Section</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.approving_organization" v-text="errors.approving_organization"></div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="approving_manager" class="isRequired">Approving Manager</label>
+						<input type="text" id="approving_manager" class="form-control" v-model="form.approving_manager" readonly>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="effective_date" class="isRequired">Effective Date</label>
+						<datetime type="date" input-class="form-control" input-id="start_date" v-model="form.start_date"></datetime>
+						<div class="form-text form-error" v-if="!! errors.start_date" v-text="errors.start_date"></div>
+					</div>
+					<!-- <div class="form-group col-md-4">
+						<label for="status">Status</label>
+						<select id="status" class="form-control" v-model="form.status">
+							<option value="">--Select--</option>
+							<option value="1">Active</option>
+							<option value="2">Inactive</option>
+						</select>
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div> -->
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="employee_type">Employee Type</label>
+						<select id="employee_type" class="form-control" v-model="form.employee_type">
+							<option value="" disabled>--Select--</option>
+							<option value="1">Regular</option>
+							<option value="2">Probationary</option>
+							<option value="3">Project Based</option>
+							<option value="4">Casual</option>
+						</select>					
+					</div>
+					<div class="form-group col-md-4">
+						<label for="employment_status" class="isRequired">Employment Status</label>
+						<select id="employment_status" class="form-control" v-model="form.status">
+							<option value="" disabled>--Select--</option>
+							<option value="1">Active</option>
+							<option value="2">Inactive</option>
+							<option value="3">Resigned</option>
+							<option value="4">Terminated</option>
+						</select>						
+						<div class="form-text form-error" v-if="!! errors.status" v-text="errors.status"></div>
+					</div>
+				</div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" id="defaultCheck1" v-model="form.union_member">
+					<label class="form-check-label" for="defaultCheck1">
+					  Union Member
+					</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input class="form-check-input" type="checkbox" id="defaultCheck2" v-model="form.insurance_entitlement">
+					<label class="form-check-label" for="defaultCheck2">
+					  Insurance Entitlement
+					</label>
+				</div><br>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="type_of_separation">Type of Separation</label>
+						<input type="text" id="type_of_separation" class="form-control" v-model="form.type_of_separation">						
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="statutory_number">Company Statutory Numbers</label>
+						<input type="text" id="statutory_number" class="form-control" v-model="form.statutory_number">						
+						<div class="form-text form-error" v-if="!! errors.statutory_number" v-text="errors.statutory_number"></div>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="medical_condition">Medical Condition</label>
+						<select id="medical_condition" class="form-control" v-model="form.medical_condition">
+							<option value="" disabled>--Select--</option>
+							<option value="1">Fit To Work</option>
+							<option value="2">Light Job</option>
+						</select>						
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="job_description">Job Description</label>
+						<input type="text" id="job_description" class="form-control" v-model="form.job_description">						
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="form-group col-md-4">
+						<label for="biometric_number">Employee Biometrics No.</label>
+						<input disabled type="text" id="biometric_number" class="form-control" v-model="form.biometric_number">						
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<button type="button" class="btn btn-primary" v-if="loading"><i class="mdi mdi-loading mdi-spin"></i> Processing...</button>
+				<button type="submit" class="btn btn-primary" v-else="loading">Submit</button>
+				<button type="button" class="btn btn-light" v-on:click="closeEmployment">Cancel</button>
+			</div>
+		</form>
+	</div>
+</div>

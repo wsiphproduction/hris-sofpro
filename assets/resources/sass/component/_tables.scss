@@ -1,0 +1,126 @@
+.table-scrollable{
+	overflow-x: auto;
+	position: relative;
+	& table{
+		& th{
+			white-space: nowrap;
+		}
+		th:first-child, td:first-child
+		{
+		  	position:sticky;
+		  	left:-1px;
+		  	background-color: $white;
+		  	border: 1px solid #dee2e6;
+		}
+		& tbody{
+			& tr:hover td{
+				background-color: #fff9c4;
+			}
+		}
+	}
+}
+
+table{
+	& thead{
+		&.noPadding{
+			& th{
+				padding-top: 3px;
+				padding-bottom: 3px;
+			}
+		}
+		& th{
+			border-bottom: 1px solid #dee2e6 !important;
+			&.noPaddLeftRight{
+				padding-left:0;
+				padding-right: 0; 
+			}
+		}
+		& td{
+			&.noPaddLeftRight{
+				padding-left:0;
+				padding-right: 0; 
+			}
+		}
+		& .tbl-credit-head{
+			border-top:#dee2e6 solid 1px;
+			width: 100%;
+			display: table;
+			margin-bottom: -0.75rem;
+			& .td{
+				display: table-cell;
+				padding: 0.25rem 0.75rem;
+				width: 50%;
+				&:last-child{
+					border-left:#dee2e6 solid 1px;
+				}
+			}
+		}
+	}
+	&.borderless{
+		& th,
+		& td{
+			border: none;
+		}
+	}
+	&.table-shift-allocation{
+		& thead{
+			& th{}
+		}
+		& tbody{
+			& td{
+				& small{
+					display: block;
+					line-height: 1.2em;
+					padding: 4px 0;
+					color: $white;
+					&.start{
+						background: $deep-orange-lighten-1;
+					}
+					&.end{
+						background: $blue;
+					}
+				}
+			}
+		}
+	}
+	& td{
+		&.nopadding{
+			padding: 0 !important;
+		}
+		& .btn-sm{
+			padding: 0.1rem .5rem;
+		}
+		& .calendar{
+			position: absolute;
+			right: 0;
+			top: 0;
+			& .datepicker-inline{
+				position: absolute;
+			}
+		}
+	}
+	& .policy-tbl{
+		display: table;
+		width: 100%;
+		white-space: nowrap;
+		& .td{
+			display: table-cell;
+			width: 50%;
+			padding: 0.60rem;
+			text-align: center;
+			&:last-child{
+				border-left:#dee2e6 solid 1px;
+			}
+		}
+	}
+	& tbody{
+		& tr:hover td{
+			background-color: #fff9c4;
+		}
+	}
+}
+
+.table-hover tbody tr:hover td, 
+.table-hover tbody tr:hover th {
+  	background-color: $light;
+}

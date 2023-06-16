@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Holidays</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<setting-holiday inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span>Settings</span></li>
+						<li class="breadcrumb-item"><span class="active">Holidays</span></li>
+					</ol>
+					<div class="buttons">
+						<% if(user_role.write){ %>
+						<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="open()"><i class="mdi mdi-plus"></i> New</a>
+						<% } %>
+					</div>
+				</div>
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Holiday Record</h5>
+							
+							<% if(record){ %>
+							<div>
+								<div class="table-responsive">
+									<table class="table table-bordered">
+										<thead class="bg-light">
+											<tr>
+												<th class="text-center" width="300">Date</th>
+												<th class="text-center" width="250">Location</th>
+												<th class="text-center">Holiday Name</th>
+												<th class="text-center" width="250">Type</th>
+												<th width="100" class="text-center">Status</th>
+												<th width="140" class="text-center">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<% for(let x in record){ %>
+											<tr>
+												<td><%= moment(record[x]['date']).format('ll') %></td>
+												<td><%= record[x]['location'] ? record[x]['location'] : '' %></td>
+												<td><%= record[x]['title'] %></td>
+												<td><%= record[x]['type'] == 1 ? 'Regular Holiday':'Special Non-working Holiday' %></td>
+												<td class="text-center">
+													<% if(record[x]['status'] == 1){ %>
+													<span class="status success"></span> Active
+													<% }else{ %>
+													<span class="status warning"></span> Inactive
+													<% } %>
+												</td>
+												<td class="text-center">
+													<button class="btn btn-sm btn-outline-success" <%- user_role.modify ? 'v-on:click="edit('+ record[x]['id'] +')"':'disabled' %> title="edit">
+														<i class="mdi mdi-pen"></i>
+													</button>
+													<button class="btn btn-sm btn-outline-warning" title="Archive" <%- user_role.destroy ? 'v-on:click="archive('+record[x]['id']+', \'settings/holidays/archive\')"':'disabled' %>>
+														<i class="mdi mdi-trash-can-outline"></i>
+													</button>
+												</td>
+											</tr>
+											<% } %>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<% if(paginate.length > 0){ %>
+							<ul class="pagination">
+								<% for(let i=0; i < paginate.length; i++){ %>
+								<li class="page-item <%= paginate[i].class %>"><a href="<%= paginate[i].link %>" class="page-link"><%= paginate[i].label %></a></li>
+								<% } %>
+							</ul>
+							<% } %>
+
+							<% }else{ %>
+							<div class="norecord">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							<% } %>
+						</div>
+					</div>
+					<% if(user_role.write || user_role.modify){ %>
+					<% include ./components/form %>
+					<% } %>
+				</div>
+				
+				<% include ../../Include/alert %>
+
+			</div>
+		</setting-holiday>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>

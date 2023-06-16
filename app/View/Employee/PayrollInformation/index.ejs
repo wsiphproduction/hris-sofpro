@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-payroll-information inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<button class="btn btn-primary btn-sm" v-on:click="add"><i class="mdi mdi-plus"></i> Add Payroll</button>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col-sm-5">
+										<h4>Payroll Information</h4>
+										<table class="table table-bordered" v-if="payrollInformation.length">
+											<thead class="bg-light">
+												<tr>
+													<th class="text-center">Rate Type</th>
+													<th class="text-center">Payment Type</th>
+                                                    <th class="text-center">Payee Location</th>
+													<th class="text-center">Currency ID</th>
+													<th class="text-center">Bank ID</th>
+                                                    <th class="text-center">Bank Name</th>
+                                                    <th class="text-center">Bank Account Number 1</th>
+                                                    <th class="text-center">Basic Monthly Rate</th>
+                                                    <th class="text-center">Basic Daily Rate</th>
+                                                    <th class="text-center">E-Cola (Daily)</th>
+                                                    <th class="text-center">Allowance</th>
+                                                    <th class="text-center">Allowance Effectivity Date</th>
+                                                    <th class="text-center">Incentive</th>
+                                                    <th class="text-center">Incentive Effectivity Date</th>
+                                                    <th class="text-center">Benefit</th>
+                                                    <th class="text-center">Benefit Effectivity Date</th>
+                                                    <% if(user_role.modify){ %>
+                                                        <td class="text-center">Action</td>
+                                                    <% } %>
+												</tr>
+											</thead>
+											<tbody>
+												<tr v-for="(payroll, index) in payrollInformation">
+													<td class="text-center" v-text="payroll.rate_type === '0' ? 'Daily' : 'Monthly'"> </td>
+													<td class="text-center" v-text="payroll.payment_type === '0' ? 'Cash' : 'ATM'"></td>
+                                                    <td class="text-center" v-text="payroll.payee_location"></td>
+													<td class="text-center" v-text="payroll.currency_id"></td>
+													<td class="text-center" v-text="payroll.bank_id"></td>
+                                                    <td class="text-center" v-text="payroll.bank_name"></td>
+                                                    <td class="text-center" v-text="payroll.bank_acct_number"></td>
+                                                    <td class="text-center" v-text="payroll.basic_monthly_rate"></td>
+                                                    <td class="text-center" v-text="payroll.basic_daily_rate"></td>
+                                                    <td class="text-center" v-text="payroll.e_cola_daily"></td>
+                                                    <td class="text-center" v-text="payroll.allowance"></td>
+                                                    <td class="text-center" v-text="payroll.allowance_effective_date ? moment(payroll.allowance_effective_date).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="payroll.incentive"></td>
+                                                    <td class="text-center" v-text="payroll.incentive_effective_date ? moment(payroll.incentive_effective_date).format('MM/DD/YYYY') : ''"></td>
+                                                    <td class="text-center" v-text="payroll.benefit"></td>
+                                                    <td class="text-center" v-text="payroll.benefit_effective_date ? moment(payroll.benefit_effective_date).format('MM/DD/YYYY') : ''"></td>
+                                                    <% if(user_role.modify){ %>
+                                                    <td class="text-center">
+                                                        <button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="edit(index)">
+                                                            <i class="mdi mdi-lead-pencil"></i>
+                                                        </button>
+                                                    </td>
+                                                    <% } %>
+												</tr>
+											</tbody>
+										</table>
+										<div class="norecord" v-if="!payrollInformation.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div><!-- App Container -->
+				
+				<% include ./form %>
+                <% include ../../Include/alert %>
+			</div> <!-- Wrapper -->
+		</employee-payroll-information>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

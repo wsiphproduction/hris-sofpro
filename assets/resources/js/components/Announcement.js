@@ -1,0 +1,1 @@
+Vue.component('announcement', require('./announcement/Index.vue'));

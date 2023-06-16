@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>
+		<% 
+			let middlename = employee.middle_name != null ? employee.middle_name.charAt(0) : '';
+			let suffix = employee.suffix != null && employee.suffix != '' ? ` ${employee.suffix}.` : '';
+			let nickName = employee.nick_name ? `"${employee.nick_name}"` : ''
+		%>
+		<%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.last_name + suffix + ', ' + employee.first_name + ', ' + middlename + ' ' + nickName %>
+	</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-general inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.last_name + suffix + ', ' + employee.first_name + ', ' + middlename + ' ' + nickName %></span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="exportUser(<%= employee.id %>)"><i class="mdi mdi-plus"></i> Export</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+							
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									<div class="col col-sm-12 col-md-12 col-lg-6">
+										<!-- Personal Detail -->
+										<div class="card">
+											<div class="card-header">
+											    Personal Information
+											    <% if(user_role.modify){ %>
+											    <a href="javascript:void(0);" class="edit" v-on:click="edit('<%= employee.shortid %>', 'personal')"><i class="mdi mdi-square-edit-outline"></i></a>
+											    <% } %>
+											</div>
+											<div class="card-body">
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Employee #</label>
+														<div class="uppercase"><strong><%= employee.employee_number ? employee.employee_number : employee.old_employee_number %></strong></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Company</label>
+														<div class="uppercase"><%= employment && employment[0] && employment[0].company ? employment[0].company.name : ''%></div>
+													</div>
+												</div>
+												
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>First Name</label>
+														<div class="uppercase"><%= employee.first_name %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Last Name</label>
+														<div class="uppercase"><%= employee.last_name %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Middle Name</label>
+														<div class="uppercase"><%= employee.middle_name != null && employee.middle_name != '' ? employee.middle_name : '-' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Nickname</label>
+														<div class="uppercase"><%= employee.nick_name != null && employee.nick_name != '' ? employee.nick_name : '-' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Suffix</label>
+														<div class="uppercase"><%= employee.suffix != null && employee.suffix != '' ? employee.suffix : '-' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Gender</label>
+														<div class="uppercase"><%= employee.gender %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Birth Date</label>
+														<div class="uppercase"><%= employee.birthdate ? moment(employee.birthdate).format('MMMM DD, YYYY') : '' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Civil Status</label>
+														<div class="uppercase"><%= employee.marital_status %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Nationality</label>
+														<div class="uppercase"><%= nationality.name %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Company Email Address</label>
+														<div class="uppercase"><%= employee.email != null && employee.email != '' ? employee.email : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Contact Number</label>
+														<div class="uppercase"><%= employee.contact_number != null && employee.contact_number != '' ? employee.contact_number : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>PhilHealth Number</label>
+														<div class="uppercase"><%= employee.philhealth_number != null && employee.philhealth_number != '' ? employee.philhealth_number : '-'  %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>SSS Number</label>
+														<div class="uppercase"><%= employee.sss_number != null  && employee.sss_number != '' ? employee.sss_number : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Pagibig Number</label>
+														<div class="uppercase"><%= employee.pagibig_number!= null  && employee.pagibig_number != '' ? employee.pagibig_number : '-'   %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>TIN Number</label>
+														<div class="uppercase"><%= employee.tin_number != null  && employee.tin_number != '' ? employee.tin_number : '-'  %></div>
+													</div>
+												</div>
+												
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4" hidden>
+														<label>Approving Organization</label>
+														<div class="uppercase"><%= employment.approving_organization != null && employment.approving_organization != '' ? employment.approving_organization : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Employee Type</label>
+														<div class="uppercase"><%= employee_type != null && employee_type.name != '' ? employee_type.name : '-' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Salary Type</label>
+														<div class="uppercase"><%= employee.salary_type != null ? (employee.salary_type == 1) ? "DAILY": (employee.salary_type == 2) ? "MONTHLY": '-' : '-' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Age</label>
+														<div class="uppercase">
+															<%
+																const dob = new Date(employee.birthdate);
+																const diffMs = Date.now() - dob.getTime();
+																
+																// Convert the time difference to years
+																const ageDate = new Date(diffMs);
+																const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+															%>
+															<%= employee.birthdate ? age : '-' %>
+														</div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4" hidden>
+														<label>Department Manager</label>
+														<div class="uppercase"><%= employment.approving_manager != null && employment.approving_manager != '' ? employment.approving_manager : '-' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Street</label>
+														<div class="uppercase"><%= employee.street != null  && employee.street != '' ? employee.street : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Barangay</label>
+														<div class="uppercase"><%= employee.barangay != null  && employee.barangay != '' ? employee.barangay : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>City</label>
+														<div class="uppercase"><%= employee.city != null  && employee.city != '' ? employee.city : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Province</label>
+														<div class="uppercase"><%= employee.province != null  && employee.province != '' ? employee.province : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Region</label>
+														<div class="uppercase"><%= employee.region != null  && employee.region != '' ? employee.region : '-'  %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Height</label>
+														<div class="uppercase"><%= employee.height != null  && employee.height != '' ? employee.height : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Weight</label>
+														<div class="uppercase"><%= employee.weight != null  && employee.weight != '' ? employee.weight : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Tribe</label>
+														<div class="uppercase"><%= employee.tribe != null  && employee.tribe != '' ? employee.tribe : '-'  %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Religion</label>
+														<div class="uppercase"><%= employee.religion != null  && employee.religion != '' ? employee.religion : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Blood Type</label>
+														<div class="uppercase"><%= employee.blood_type != null  && employee.blood_type != '' ? employee.blood_type : '-'  %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Citizenship</label>
+														<div class="uppercase"><%= employee.citizenship %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Solo Parent</label>
+														<div class="uppercase"><%= employee.is_solo_parent ? 'Yes' : 'No' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>With disability</label>
+														<div class="uppercase"><%= employee.is_with_disability ? 'Yes' : 'No' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-4">
+														<label>Type of Disability</label>
+														<div class="uppercase"><%= employee.type_of_disability != null && employee.type_of_disability != '' ? employee.type_of_disability : '-' %></div>
+													</div>
+												</div>
+												<div>
+													<div class="row">
+														<div class="col col-sm-12 col-md-12 col-lg-12">
+															<label>Place of Birth</label>	       
+															<div class="uppercase" v-if="birthplace">
+																{{ birthplace.unit_building_residence_number || '' }}
+																{{ birthplace.street || '' }}
+																{{ birthplace.brgy || '' }}
+																{{ birthplace.city || '' }}
+																{{ birthplace.state_or_province || '' }}
+																{{ birthplace.region || '' }}
+																{{ birthplace.country || '' }}
+																{{ birthplace.zip_code || '' }}
+															</div>
+															<div v-else>-</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col col-sm-12 col-md-12 col-lg-12">
+															<label>Permanent Address</label>	       
+															<div class="uppercase" v-if="permanentAddress">
+																{{ permanentAddress.unit_building_residence_number || '' }}
+																{{ permanentAddress.street || '' }}
+																{{ permanentAddress.brgy || '' }}
+																{{ permanentAddress.city || '' }}
+																{{ permanentAddress.state_or_province || '' }}
+																{{ permanentAddress.region || '' }}
+																{{ permanentAddress.country || '' }}
+																{{ permanentAddress.zip_code || '' }}
+															</div>
+															<div v-else>-</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col col-sm-12 col-md-12 col-lg-12">
+															<label>Temporary Address</label>
+															<div class="uppercase" v-if="temporaryAddress">
+																{{ temporaryAddress.unit_building_residence_number || '' }}
+																{{ temporaryAddress.street || '' }}
+																{{ temporaryAddress.brgy || '' }}
+																{{ temporaryAddress.city || '' }}
+																{{ temporaryAddress.state_or_province || '' }}
+																{{ temporaryAddress.region || '' }}
+																{{ temporaryAddress.country || '' }}
+																{{ temporaryAddress.zip_code || '' }}
+															</div>
+															<div v-else>-</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-12">
+														<label>Destination Entitlement</label>
+														<div class="uppercase"><%= employee.destination_entitlement != null ? employee.destination_entitlement : '---' %></div>
+													</div>
+												</div>
+											</div>
+										</div><!-- Personal Detail -->
+										<!-- Login Detail -->
+										<div class="card">
+											<div class="card-header">
+											    Login Detail
+											    <% if(user_role.modify){ %>
+											    <a href="javascript:void(0);" class="edit" v-on:click="edit('<%= employee.shortid %>', 'login')"><i class="mdi mdi-square-edit-outline"></i></a>
+											    <% } %>
+											</div>
+											<div class="card-body">
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Email</label>
+														<div class="uppercase"><%= employee.email ? employee.email : '—' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Password</label>
+														<div class="uppercase">**********</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Status</label>
+														<div class="uppercase">
+															<% if(employee.status == 1){ %>
+															Active
+															<% }else if(employee.status == 2){ %>
+															Inactive
+															<% }else if(employee.status == 3){ %>
+															Resigned
+															<% }else if(employee.status == 4){ %>
+															Terminated
+															<% } %>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div><!-- Login Detail -->
+
+										
+									</div>
+									<div class="col col-sm-12 col-md-12 col-lg-6">
+
+										<!-- Work -->
+										<div class="card">
+											<div class="card-header">
+											    Employment Information
+											    <% if(user_role.modify){ %>
+											    <button class="btn btn-primary" v-on:click="addEmployment('<%= employee.id %>')">Add New</button>
+											    <% } %>
+											</div>
+											<div class="table-responsive">
+											<table class="table table-bordered noBorderLeftRight">
+												<tbody>
+													<tr>
+														<td class="text-center">Employee ID No.</td>
+														<td class="text-center">Cost Center</td>
+														<td class="text-center">Company</td>
+														<td class="text-center">Division</td>
+														<td class="text-center">Department</td>
+														<td class="text-center">Section</td>
+														<td class="text-center">Position</td>
+														<td class="text-center">Position Classification</td>
+														<td class="text-center">Position Category</td>
+														<td class="text-center">Location</td>
+														<td class="text-center">Work Area</td>
+														<td class="text-center">Approving Organization</td>
+														<td class="text-center">Approving Manager</td>
+														<td class="text-center">Effective Date</td>
+														<td class="text-center">Employee Type</td>
+														<td class="text-center">Employment Status</td>
+														<td class="text-center">Union Member</td>
+														<td class="text-center">Insurance Entitlement</td>
+														<td class="text-center">Type of Separation</td>
+														<td class="text-center">Company Statutory Numbers</td>
+														<td class="text-center">Medical Condition</td>
+														<td class="text-center">Job Description</td>
+														<td class="text-center">Employee Biometrics No.</td>
+														<!-- <td class="text-center" width="80">Status</td> -->
+														<% if(user_role.modify){ %>
+														<td class="text-center" width="80">Action</td>
+														<% } %>
+													</tr>
+													<tr v-for="(employment,index) in employments">
+														<td v-text="employment.employment.employee_number ? employment.employment.employee_number : ''"></td>
+														<td v-text="employment.cost_center ? employment.cost_center : ''"></td>
+														<td v-text="employment.company ? employment.company.name : ''"></td>
+														<td v-text="employment.division ? employment.division.name : ''"></td>
+														<td v-text="employment.department ? employment.department.department_name : ''"></td>
+														<td v-text="employment.section ? employment.section.section_name : ''"></td>
+														<td v-text="employment.position ? employment.position.name : ''"></td>
+														<td v-text="employment.position_classification ? employment.position_classification.name : ''"></td>
+														<td v-text="employment.position_category ? employment.position_category.name : ''"></td>
+														<td v-text="employment.location ? employment.location.location : ''"></td>
+														<td v-text="employment.work_area ? employment.work_area.name : ''"></td>
+														<td v-text="employment.approving_organization"></td>
+														<td>
+															<span v-if="employment.approving_organization == 'division'" v-text="employment.division ? employment.division.manager.first_name+' '+employment.division.manager.last_name:''"></span>
+															<span v-if="employment.approving_organization == 'department'" v-text="employment.department ? employment.department.manager.first_name+' '+employment.department.manager.last_name:''"></span>
+															<span v-if="employment.approving_organization == 'section'" v-text="employment.section ? employment.section.supervisor.first_name+' '+employment.section.supervisor.last_name:''"></span>
+														</td>
+														<td v-text="moment(employment.date_entry).format('MM/DD/YYYY')"></td>													  
+														<td v-text="employment.employee_type === '1' ? 'Regular' : employment.employee_type === '2' ? 'Probationary' : employment.employee_type === '3' ? 'Project Based' : employment.employee_type === '4' ? 'Casual' : '' "></td>
+														<td v-text="employment.status == 1 ? 'Active' : employment.status == 2 ? 'Inactive' : employment.status == 3 ? 'Resigned' : 'Terminated'"></td>
+														<td v-text="employment.union_member ? 'Yes' : 'No'"></td>
+														<td v-text="employment.insurance_entitlement ? 'Yes' : 'No'"></td>
+														<td v-text="employment.type_of_separation"></td>
+														<td v-text="employment.statutory_number"></td>
+														<td v-text="employment.medical_condition == '1' ? 'Fit To Work' : 'Light Job'"></td>
+														<td v-text="employment.job_description"></td>
+														<td v-text="biometric_number"></td>
+														<% if(user_role.modify){ %>
+														<td class="text-center">
+															<button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="editEmployement(index)">
+																<i class="mdi mdi-lead-pencil"></i>
+															</button>
+														</td>
+														<% } %>
+													</tr>
+												</tbody>
+											</table>
+											</div>
+										</div><!-- Work -->
+
+										<!-- Education -->
+										<!--
+											<div class="card">
+											<div class="card-header">
+											    Education
+											    <% if(user_role.modify){ %>
+											    <a href="javascript:void(0);" class="edit" v-on:click="edit('<%= employee.shortid %>', 'education')"><i class="mdi mdi-square-edit-outline"></i></a>
+											    <% } %>
+											</div>
+											<div class="card-body">
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-12">
+														<label>College/University</label>
+														<div class="uppercase"><%= education != null && education.school != null ? education.school : '---' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Degree</label>
+														<div class="uppercase"><%= education != null && education.degree != null ? education.degree : '---' %></div>
+													</div>
+													<div class="col col-sm-12 col-md-12 col-lg-6">
+														<label>Year Attended</label>
+														<div class="uppercase"><%= education != null && education.year_attended != null ? education.year_attended : '---' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-12">
+														<label>Post Graduate Courses</label>
+														<div class="uppercase"><%= education != null && education.post_graduate != '' ? education.post_graduate : '---' %></div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col col-sm-12 col-md-12 col-lg-12">
+														<label>Others</label>
+														<div class="uppercase"><%= education != null && education.others != '' ? education.others : '---' %></div>
+													</div>
+												</div>
+											</div>
+										</div>
+										-->	
+											<!-- Education -->
+
+										<!-- Emergency Contact -->
+										<div class="card">
+											<div class="card-header">
+											    Emergency Contact
+											    <% if(user_role.modify){ %>
+											    <button class="btn btn-primary" v-on:click="addEmergencyContact('<%= employee.id %>')">Add New</button>
+											    <% } %>
+											</div>
+											<div class="table-responsive">
+												<table class="table table-bordered noBorderLeftRight">
+													<tbody>
+														<tr>
+															<td class="text-center">Full Name</td>
+															<td class="text-center">Relationship</td>
+															<td class="text-center">Personal Contact Number</td>
+															<td class="text-center">Permanent Address</td>
+															<% if(user_role.modify){ %>
+															<td class="text-center" width="80">Action</td>
+															<% } %>
+														</tr>
+														<tr v-for="(emergencyContact, index) in emergencyContactsDisplay">
+															<td width="150" v-text="`${emergencyContact.first_name} ${emergencyContact.middle_name} ${emergencyContact.last_name}`"></td>
+															<td v-text="emergencyContact.relationship ? emergencyContact.relationship : '--'"></td>                                   
+															<td v-text="emergencyContact.contact_number ? emergencyContact.contact_number : '--'"></td>
+															<td>
+																		{{ emergencyContact.address.unit_building_residence_number || '' }}
+																		{{ emergencyContact.address.street || '' }}
+																		{{ emergencyContact.address.brgy || '' }}
+																		{{ emergencyContact.address.city || '' }}
+																		{{ emergencyContact.address.state_or_province || '' }}
+																		{{ emergencyContact.address.region || '' }}
+																		{{ emergencyContact.address.country || '' }}
+																		{{ emergencyContact.address.zip_code || '' }}
+															</td>
+															<% if(user_role.modify){ %>
+															  <td class="text-center">
+																<button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="editEmergencyContact(index)">
+																  <i class="mdi mdi-lead-pencil"></i>
+																</button>
+															  </td>
+															<% } %>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div><!-- Emergency Contact -->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./form %>
+					<% include ./forms/employment %>
+					<% include ./forms/emergencyContact %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+		</employee-general>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

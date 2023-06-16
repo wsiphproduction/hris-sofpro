@@ -1,0 +1,33 @@
+.approval{
+	max-width: 350px;
+	margin: 50px auto;
+	background: $white;
+	padding: 70px 20px 50px 20px;
+	border-radius: 5px;
+	box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -7px rgba(0,0,0,0.2);
+	text-align: center;
+	& .icon{
+		& img{
+			height: 96px;
+		}
+	}
+	& h1{
+		font-size: 22px;
+		font-weight: 300;
+		margin-top: 15px;
+	}
+	& a{
+		margin-top: 20px;
+		display: inline-block;
+		border: #2368ff solid 1px;
+		padding: 8px 25px;
+		border-radius: 30px;
+		background: -webkit-linear-gradient(#2368ff, #c025ff);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+	}
+	& .app_name{
+		font-size: 12px;
+		margin-top: 30px;
+	}
+}

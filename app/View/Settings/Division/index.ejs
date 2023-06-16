@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Divisions</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-division inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Divisions</span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<a href="<%= baseUrl+'/settings/division/export' %>" class="btn btn-primary btn-sm"><i class="mdi mdi-download"></i> Export</a>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openImport()"><i class="mdi mdi-upload"></i> Import</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Divisions</h5>
+							<div class="">
+								<div class="form-inline">
+									<label class="mb-2 mr-sm-2">Status</label>
+									<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.status">
+										<option value="">All</option>
+										<option value="1">Active</option>
+										<option value="0">Inactive</option>
+									</select>
+									<label class="mb-2 mr-sm-2">Limit</label>
+									<select class="form-control mb-2 mr-sm-2 form-control-sm" v-model="param.limit">
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="75">75</option>
+										<option value="100">100</option>
+									</select>
+									<button type="reset" v-on:click="reset" class="btn btn-light mb-2">Reset</button>
+								</div>
+							</div>
+							<div v-if="!fetching && records.length">
+								<table class="table table-bordered">
+									<thead class="bg-light">
+										<tr>
+											<th width="150" class="text-center">Company</th>
+											<th width="300" class="text-center">Division Name</th>
+											<th class="text-center">Division Code</th>
+											<th class="text-center">Main Approver</th>
+											<th class="text-center">Alternate Approver</th>
+											<th class="text-center">Secretary</th>
+											<th class="text-center">Alternate Secretary</th>
+											<th width="100" class="text-center">Status</th>
+											<th width="100" class="text-center">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(record, index) in records">
+											<td v-text="record.company.name"></td>
+											<td v-text="record.name"></td>
+											<td v-text="record.code"></td>
+											<td v-text="record.manager ? record.manager.last_name+', '+record.manager.first_name : ''"></td>
+											<td v-text="record.assistant_manager ? record.assistant_manager.last_name+', '+record.assistant_manager.first_name:''"></td>
+											<td v-text="record.secretary ? record.secretary.last_name+', '+record.secretary.first_name : ''"></td>
+											<td v-text="record.alt_secretary ? record.alt_secretary.last_name+', '+record.alt_secretary.first_name : ''"></td>
+											<td>
+												<div v-if="record.status == '1'"><span class="status primary"></span> Active</div>
+												<div v-if="record.status == '0'"><span class="status secondary"></span> Inactive</div>
+											</td>
+											<td class="text-center">
+												<button class="btn btn-outline-primary btn-sm" <%- user_role.modify ? 'v-on:click="edit(index)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+												<button class="btn btn-outline-warning btn-sm" <%- user_role.destroy ? 'v-on:click="archive(record.id, \'settings/division/archive\')"':'disabled' %>><i class="mdi mdi-trash-can-outline"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<ul class="pagination" v-if="counts">
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+									</li>
+									<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+										<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+									</li>
+									<li class="page-item">
+										<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+									</li>
+								</ul>
+							</div>
+							
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal -->
+					<% include ./form %>
+					<!-- Modal -->
+
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-division> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

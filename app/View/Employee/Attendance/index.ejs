@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-attendance inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+
+								<div class="row">
+									<div class="col-sm-12">
+										<h5>Attendance</h5>
+										<p></p>
+										<form class="form-inline">
+											<label class="mb-2 mr-sm-2">Month and Year</label>
+											<div class="mb-2">
+												<!-- <date-picker-2 type="month" v-model="monthYear" format="MMMM, YYYY" style="width: 150px;" ></date-picker-2> -->
+												<month-picker-input :no-default="false" :editable-year="true" :default-month="currentMonth" v-model="monthYear"></month-picker-input>
+											</div>
+										</form>
+										<p></p>
+									</div>
+									<div class="col col-sm-12">
+										<div v-if="!fetching && records.length">
+											<table class="table table-bordered table-hover">
+												<thead class="bg-light">
+													<tr>
+														<th class="text-center" width="200" scope="col">Date</th>
+														<th class="text-center" width="200" scope="col">Shift</th>
+														<th class="text-center" width="150" scope="col">Time In</th>
+														<th class="text-center" width="150" scope="col">Time Out</th>
+														<th class="text-center" width="150" scope="col">Regular Hours</th>
+														<th class="text-center" width="150" scope="col">Overtime</th>
+														<th class="text-center" width="150" scope="col">Tardiness</th>
+														<th class="text-center" scope="col">Note</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr v-for="(record, index) in records">
+														<td v-text="moment(record.date).format('ddd, MMMM DD, YYYY')"></td>
+														<td class="text-center">
+															<!-- 
+																<span v-if="record.type == '1'" v-text="moment(record.date +' '+ record.check_in).format('h:mmA') +'—'+ moment(record.date +' '+ record.check_out).format('h:mmA')"></span>
+																<span v-if="record.type == '2'">Flexible</span>
+																<span v-if="record.type == '3'" v-text="moment(record.date +' '+ record.between_start).format('h:mmA') +'—'+ moment(record.date +' '+ record.between_end).format('h:mmA')"></span> 
+															-->
+															<span v-text="$Attendance.actualTime(record.date, record.check_in, 'shift-in') +'—'+ $Attendance.actualTime(record.date, record.check_out, 'shift-out')"></span>
+														</td> 
+														<td class="text-center" v-bind:class="$Attendance.actualTime(record.date, record.actual_check_in, 'class-in') == '??' ? 'bg-tardy':''" v-text="$Attendance.actualTime(record.date, record.actual_check_in, 'text-in')"></td>
+														<td class="text-center" v-bind:class="$Attendance.actualTime(record.date, record.actual_check_out, 'class-out') == '??' ? 'bg-tardy':''" v-text="$Attendance.actualTime(record.date, record.actual_check_out, 'text-out')"></td>
+														<td class="text-center" v-text="record.paid_hours +' hrs'"></td>
+														<td v-text="record.overtime ? record.overtime.no_of_hours + ' hour(s)':''"></td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+
+										<div class="loading" v-if="fetching">
+											<img src="<%= baseUrl + '/img/loading.gif' %>">
+											<p>Loading.....</p>
+										</div>
+										<div class="norecord" v-if="!fetching && !records.length">
+											<img src="<%= baseUrl + '/img/info.png' %>">
+											<p>Sorry, we couldn't find any matches.</p>
+										</div>
+									</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+
+
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-attendance>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

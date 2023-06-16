@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> <%= employee.first_name +' '+ employee.last_name %></title>
+	<% include ../../Include/head %>
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<employee-license inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><a href="<%= baseUrl +'/employee' %>">Employee</a></li>
+						<li class="breadcrumb-item"><span class="active"><%= employee.first_name +' '+ employee.last_name %></span></li>
+					</ol>
+					<!--<button class="btn btn-primary btn-sm" v-on:click=""><i class="mdi mdi-download"></i> Export </button>-->
+				</div><!-- Breadcrumb -->
+
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<% include ../common/cover %>
+
+							<div class="account-body">
+								
+								<% include ../common/tabs %>
+								<div class="row">
+									<div class="col col-sm">
+										<div class="card">
+											<div class="card-header">
+												License
+												<% if(user_role.modify){ %>
+													<button class="btn btn-primary" v-on:click="addLicense('<%= employee.id %>')">Add New</button>
+												<% } %>
+											</div>
+											<div class="table-resposive">
+												<table class="table table-bordered noBorderLeftRight" v-if="license.length">
+													<tbody>
+														<tr>
+															<td class="text-center">License</td>
+															<td class="text-center">Description</td>
+															<td class="text-center">Date Issued</td>
+                                                            <td class="text-center">Expiration Date</td>
+															<td class="text-center">Start Date</td>
+															<td class="text-center">End Date</td>
+															<% if(user_role.modify){ %>
+																<td class="action text-center nowrap">Action</td>
+															<% } %>
+														</tr>
+														<tr v-for="(info, index) in license">
+															<td>{{info.license}}</td>
+															<td>{{info.description}}</td>
+															<td>{{info.date_issued}}</td>
+															<td>{{info.expiration}}</td>
+															<td>{{info.start_date}}</td>
+															<td>{{info.end_date}}</td>
+															<% if(user_role.modify){ %>
+															<td class="text-center">
+																<button class="btn btn-sm btn-outline-primary" title="Edit" v-on:click="editLicense(index)">
+																	<i class="mdi mdi-lead-pencil"></i>
+																</button>
+																<button class="btn btn-sm btn-outline-primary" title="Archive" v-on:click="archive(info.id, 'employee/license/archive')">
+																	<i class="uil uil-trash-alt"></i>
+																</button>
+															</td>
+															<% } %>
+														</tr>
+													</tbody>
+												</table>
+												<div class="norecord" v-if="!license.length">
+													<img src="<%= baseUrl + '/img/info.png' %>">
+													<p>Sorry, we couldn't find any matches.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<% include ./form %>
+					<% include ../../Include/alert %>
+				</div><!-- App Container -->
+
+			</div> <!-- Wrapper -->
+		</employee-license>
+		<!-- Inline Template -->
+		
+	</main>
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

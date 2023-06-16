@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Company</title>
+	<% include ../../Include/head %>
+
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+
+	<main v-bind:class="fluid ? 'full-width':''">
+		<!-- Inline Template -->
+		<setting-leave-policy inline-template>
+			<!-- Wrapper -->
+			<div class="wrapper">
+				<!-- Breadcrumb -->
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>" class="">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Leave Policy</span></li>
+					</ol>
+					<% if(user_role.write){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<% } %>
+				</div><!-- Breadcrumb -->
+
+				
+				<!-- App Container -->
+				<div class="app-container">
+					<div class="row">
+						<div class="col">
+							<h5>Leave Policy</h5>
+							<div v-if="!fetching && records.length">
+								<table class="table table-bordered">
+									<thead class="bg-light">
+										<tr>
+											<th width="300" class="text-center align-middle">Name</th>
+											<th class="text-center align-middle">Code</th>
+											<th class="text-center align-middle">Company</th>
+											<th class="text-center align-middle">Department</th>
+											<th class="text-center align-middle">Total per year</th>
+											<th class="text-center align-middle">Initial</th>
+											<th class="text-center align-middle">Specific Gender</th>
+											<th class="text-center align-middle">Probation period<br> before validity</th>
+											<th class="text-center align-middle">Cycle</th>
+											<th width="100" class="text-center align-middle">Status</th>
+											<th width="100" class="text-center align-middle">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(record, index) in records">
+											<td v-text="record.name"></td>
+											<td v-text="record.code"></td>
+											<td class="text-center" v-text="record.branch ? record.branch.company.name +' - '+ record.branch.location :'For All'"></td>
+											<td class="text-center" v-text="record.taxonomy ? record.taxonomy.title:'For All'"></td>
+											<td class="text-center" v-text="record.total_per_year"></td>
+											<td class="text-center" v-text="record.initial ? record.initial : '--'"></td>
+											<td class="text-center" v-text="record.gender ? record.gender : 'For All'"></td>
+											<td class="text-center" v-text="record.probation_validity + ' month(s)'"></td>
+											<td class="text-center">
+												<span v-if="record.cycle == 0">Anniversary</span>
+												<span v-if="record.cycle == 6">Six months</span>
+												<span v-if="record.cycle == 12">Every Year</span>
+											</td>
+											<td class="text-center" v-text="record.status == 0 ? 'Inactive':'Active'"></td>
+											<td class="text-center">
+												<button class="btn btn-outline-primary btn-sm" <%- user_role.modify ? 'v-on:click="edit(index)"':'disabled' %>><i class="mdi mdi-pen"></i></button>
+												<button class="btn btn-outline-warning btn-sm" <%- user_role.destroy ? 'v-on:click="archive(record.id, \'settings/leave-policy/archive\')"':'disabled' %>><i class="mdi mdi-trash-can-outline"></i></button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+						</div>
+					</div>
+					<% if(user_role.write || user_role.modify){ %>
+					<!-- Modal -->
+					<% include ./form %>
+					<!-- Modal -->
+					<% } %>
+				</div><!-- App Container -->
+
+				<% include ../../Include/alert %>
+
+			</div> <!-- Wrapper -->
+
+		</setting-leave-policy> <!-- Inline Template -->
+		
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+</body>
+</html>

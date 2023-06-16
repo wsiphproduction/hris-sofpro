@@ -1,0 +1,589 @@
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LEAVE, Leave credit created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, LEAVE, Leave credit created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, LEAVE, Leave credit created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, LEAVE, Leave credit created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, BACKUP, Database backup created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, SHIFT, Shift created! 
+2019-11-21 12:39:05, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LEAVE, Leave credit created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-05 10:14:09, LOAN, Loan created! 
+2019-12-05 10:14:09, BACKUP, Database backup created! 
+2019-12-05 10:14:09, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LEAVE, Leave credit created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, BACKUP, Database backup created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 
+2019-12-23 04:23:28, LOAN, Loan created! 
+2019-12-23 04:23:28, SHIFT, Shift created! 

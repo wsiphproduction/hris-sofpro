@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title><%= APP_NAME ? APP_NAME +' — ' : '' %> Dispute</title>
+	<% include ../../Include/head %>
+	
+</head>
+<body>
+	<div id="app">
+	<% include ../../Include/header %>
+	
+	<% include ../../Include/aside %>
+	
+	<main v-bind:class="fluid ? 'full-width':''">
+		<payment-dispute inline-template>
+			<div class="wrapper">
+				<div class="bread-crumb">
+					<ol>
+						<li class="breadcrumb-item"><a href="<%= baseUrl %>">Dashboard</a></li>
+						<li class="breadcrumb-item"><span class="active">Payment</span></li>
+						<li class="breadcrumb-item"><span class="active">Dispute</span></li>
+					</ol>
+					<% if(user_role.write == 1){ %>
+					<a href="javascript:void(0);" class="btn btn-primary btn-sm" v-on:click="openModal()"><i class="mdi mdi-plus"></i> New</a>
+					<% } %>
+				</div>
+				
+				<div class="app-container">
+					<div class="row">
+						<div class="col col-sm-12">
+							
+							<h5>Dispute</h5>
+							<div class="">
+								<form class="form-inline">
+									<select class="form-control mb-2 mr-sm-2" v-model="param.year">
+										<option value="">Year</option>
+										<% for(let i = moment().format('YYYY'); i >= 2018; i--){ %>
+										<option value="<%= i %>"><%= i %></option>
+										<% } %>
+									</select>
+									<select class="form-control mb-2 mr-sm-2" v-model="param.month">
+										<option value="">Month</option>
+										<option value="01">January</option>
+										<option value="02">February</option>
+										<option value="03">March</option>
+										<option value="04">April</option>
+										<option value="05">May</option>
+										<option value="06">June</option>
+										<option value="07">July</option>
+										<option value="08">August</option>
+										<option value="09">September</option>
+										<option value="10">October</option>
+										<option value="11">November</option>
+										<option value="12">December</option>
+									</select>
+									<select class="form-control mb-2 mr-sm-2" v-model="param.period">
+										<option value="">Period</option>
+										<option value="A">A</option>
+										<option value="B">B</option>
+									</select>
+									<select class="form-control mb-2 mr-sm-2" id="company" v-model="param.company">
+										<option value="">Company</option>
+										<option v-for="res in companies" v-bind:value="res.id" v-text="res.company.name +' - '+ res.location"></option>
+									</select>
+									<select class="form-control mb-2 mr-sm-2" id="department" v-model="param.department">
+										<option value="">Department</option>
+										<option v-for="res in departments" v-bind:value="res.id" v-text="res.title"></option>
+									</select>
+									<select class="form-control mb-2 mr-sm-2" id="job_title" v-model="param.job_title">
+										<option value="">Designation</option>
+										<option v-for="res in jobs" v-bind:value="res.id" v-text="res.title"></option>
+									</select>
+									
+									<select class="form-control mb-2 mr-sm-2" id="limit" v-model="param.limit">
+										<option value="25">25</option>
+										<option value="50">50</option>
+										<option value="75">75</option>
+										<option value="100">100</option>
+									</select>
+								</form>
+							</div>
+							<div v-if="!fetching && records.length">
+								<div class="table-responsive">
+									<table class="table table-bordered" v-if="!fetching && records.length">
+										<thead class="bg-light">
+											<tr>
+												<th class="text-center" width="200">Created</th>
+												<th class="text-center">Applicant</th>
+												<th class="text-center" width="150">Type</th>
+												<th class="text-center" width="150">Year</th>
+												<th class="text-center" width="150">Month</th>
+												<th class="text-center" width="150">Period</th>
+												<th class="text-center" width="150">Date</th>
+												<th class="text-center" width="120">Supervisor</th>
+												<th class="text-center" width="120">Head/Manager</th>
+												<th class="text-center" width="120">Admin Status</th>
+												<% if(user_role.modify){ %>
+												<th width="120" class="text-center">Action</th>
+												<% } %>
+											</tr>
+										</thead>
+										<tbody>
+											<tr v-for="(record, index) in records">
+												<td v-text="$Carbon(record.created_at)"></td>
+												<td v-text="record.applicant.first_name +' '+ record.applicant.last_name"></td>
+												<td class="text-center" v-text="record.year ? record.year : '—'"></td>
+												<td class="text-center">
+													<span v-if="record.type == '1'">Rest Day Pay</span>
+													<span v-if="record.type == '2'">Overtime</span>
+													<span v-if="record.type == '3'">Leave with Pay</span>
+													<span v-if="record.type == '4'">No Time in/ Time out</span>
+												</td>
+												<td class="text-center" v-text="record.month ? moment(record.year +'-'+ record.month).format('MMMM') : '—'"></td>
+												<td class="text-center" v-text="record.period ? record.period : '—'"></td>
+												<td class="text-center" v-text="moment(record.date).format('MM/DD/YYYY')"></td>
+												<td>
+													<div v-if="record.backup_status == '1'"><span class="status primary"></span> Pending</div>
+													<div v-if="record.backup_status == '2'"><span class="status success"></span> Approved</div>
+													<div v-if="record.backup_status == '3'"><span class="status warning"></span> Declined</div>
+													<div v-if="record.backup_status == '4'"><span class="status secondary"></span> Closed</div>
+												</td>
+												<td>
+													<div v-if="record.primary_status == '1'"><span class="status primary"></span> Pending</div>
+													<div v-if="record.primary_status == '2'"><span class="status success"></span> Approved</div>
+													<div v-if="record.primary_status == '3'"><span class="status warning"></span> Declined</div>
+													<div v-if="record.primary_status == '4'"><span class="status secondary"></span> Closed</div>
+												</td>
+												<td>
+													<div v-if="record.admin_status == '1'"><span class="status primary"></span> Pending</div>
+													<div v-if="record.admin_status == '2'"><span class="status success"></span> Approved</div>
+													<div v-if="record.admin_status == '3'"><span class="status warning"></span> Declined</div>
+												</td>
+												<% if(user_role.modify){ %>
+												<td class="text-center">
+													<div v-if="record.backup_status == '1' || record.backup_status == '2'">
+														<button class="btn btn-sm btn-outline-primary" v-on:click="edit(index)"><i class="mdi mdi-lead-pencil"></i></button>
+													</div>
+													<div v-if="record.backup_status == '3' || record.backup_status == '4'">
+														<button class="btn btn-sm btn-outline-primary" disabled><i class="mdi mdi-lead-pencil"></i></button>
+													</div>
+												</td>
+												<% } %>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<ul class="pagination" v-if="counts">
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(1)" class="page-link">First</a>
+								</li>
+								<li class="page-item" v-for="count in counts" v-bind:class="param.page == count ? 'active':''">
+									<a href="javascript:void(0);" v-on:click="setPage(count)" class="page-link">{{ count }}</a>
+								</li>
+								<li class="page-item">
+									<a href="javascript:void(0);" v-on:click="setPage(counts)" class="page-link">Last</a>
+								</li>
+							</ul>
+							<div class="loading" v-if="fetching">
+								<img src="<%= baseUrl + '/img/loading.gif' %>">
+								<p>Loading.....</p>
+							</div>
+							<div class="norecord" v-if="!fetching && !records.length">
+								<img src="<%= baseUrl + '/img/info.png' %>">
+								<p>Sorry, we couldn't find any matches.</p>
+							</div>
+							
+						</div>
+					</div>
+					
+					<% include ./components/form %>
+					<% include ./components/info %>
+				</div>
+				<% include ../../Include/alert %>
+			</div>
+		</payment-dispute>
+	</main>
+	
+	</div>
+	<% include ../../Include/javascript %>
+
+</body>
+</html>
